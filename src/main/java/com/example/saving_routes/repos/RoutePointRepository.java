@@ -1,14 +1,14 @@
-package com.example.saving_routes.repos;
+// package com.example.saving_routes.repos;
 
-import java.util.List;
+// import java.util.List;
 
-import com.example.saving_routes.entity.RoutePoint;
+// import com.example.saving_routes.entity.RoutePoint;
 
-import org.springframework.data.repository.CrudRepository;
+// import org.springframework.data.repository.CrudRepository;
 
-/**
- * RoutePointRepository
- */
-public interface RoutePointRepository extends CrudRepository<RoutePoint, Integer> {
-    List<RoutePoint> findByRouteId(Integer id);
-}
+// /**
+//  * RoutePointRepository
+//  */
+// public interface RoutePointRepository extends CrudRepository<RoutePoint, Integer> {
+//     List<RoutePoint> findByRouteId(Integer id);
+// }

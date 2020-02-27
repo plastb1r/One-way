@@ -4,10 +4,11 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -38,13 +39,17 @@ public class Route {
     private String name;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "route")
-    @Column(name = "route_points")
-    private Set<RoutePoint> points;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User owner;
 
-	@Override
-	public String toString() {
-		return "{\"id\":" + id + ", \"name\":\"" + name + "\"}";
-	}
+    @JsonIgnore
+    @OneToMany(mappedBy = "route")
+    @Column(name = "route_places")
+    private Set<Place> places;
+
+    //time_to_travel + edges + time_for_edge + type_transport;
+
+    //bind_to_city;
 
 }

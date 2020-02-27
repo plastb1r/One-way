@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = "com.example.saving_routes")
 public class DemoApplication {
-	public static void main(String[] args) {
+	static public void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		
 	}
 }
