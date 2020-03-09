@@ -1,0 +1,296 @@
+<section class="single-listing single-listing--layout-2">
+  <div class="header-container teal darken-3">
+  </div><!-- .listing-header-map-container -->
+  <div class="listing-main bg-wild-sand">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div id="info" class="listing-section bg-white hover-effect" data-matching-link="#info-link">
+            <div class="listing-section__header">
+              <div class="listing-header__main">
+                <div class="d-flex">
+                  <div class="listing-header__content">
+                    <div class="d-sm-flex align-items-sm-center">
+                      <h2 class="listing-header__title">{{name}}</h2>
+                    </div>
+
+                    <ul class="min-list listing-header__detail">
+                      <li>
+                        <span class="listing__score t-center">{{rating}}</span>
+                        <span class="listing__review c-dusty-gray">
+                        <span class="stars-outer" data-rating="4.5">
+                          <span class="stars-inner"></span>
+                        </span>
+                      </span>
+                      </li>
+                      <li>
+                        <span *ngFor="let type of types">{{type}} |</span>
+                      </li>
+                      <li>
+                      </li>
+                    </ul>
+                    <ul class="min-list inline-list listing-actions t-center">
+                      <li class="t-center listing-action listing-action--favorite">
+                        <a href="#">
+                          <i class="fa fa-heart c-silver-charlice"></i>
+                          Сохранить
+                        </a>
+                      </li>
+                      <li class="t-center listing-action listing-action--report">
+                        <a (click)="addToWay()">
+                          <i class="fa fa-exclamation c-silver-charlice"></i>
+                          Добавить к маршруту
+                        </a>
+                      </li>
+                      <li class="t-center listing-action listing-action--share">
+                        <a href="#">
+                          <i class="fa fa-share-alt c-silver-charlice"></i>
+                          Посмотреть на карте
+                        </a>
+                      </li>
+                    </ul><!-- .listing__header-detail -->
+                  </div><!-- .listing-header__content -->
+                </div><!-- .listing__wrapper -->
+              </div><!-- .listing-header__main -->
+            </div><!-- .listing-section__header -->
+            <nav class="listing-nav bg-white">
+              <div class="container">
+                <ul class="min-list inline-list listing-tabs">
+                  <li class="listing-tab is-active">
+                    <a href="#info" id="info-link" class="listing-nav-link">
+                      Кратко
+                    </a>
+                  </li><!-- .listing-tab -->
+
+                  <li class="listing-tab">
+                    <a href="#map" id="map-link" class="listing-nav-link">
+                      Карта
+                    </a>
+                  </li><!-- .listing-tab -->
+
+                  <li class="listing-tab">
+                    <a href="#gallery" id="gallery-link" class="listing-nav-link">
+                      Галерея
+                    </a>
+                  </li><!-- .listing-tab -->
+
+                  <li class="listing-tab">
+                    <a href="#add-review" id="add-review-link" class="listing-nav-link">
+                      Добавить отзыв
+                    </a>
+                  </li><!-- .listing-tab -->
+                </ul><!-- .listing-tabs -->
+              </div>
+            </nav>
+
+          </div><!-- .listing-section -->
+
+
+
+          <div id="gallery" class="listing-section-im bg-white hover-effect" data-matching-link="#gallery-link">
+            <div class="listing-section__header">
+              <h3 class="listing-section__title">Галерея</h3>
+            </div><!-- .listing-section__header -->
+            <mdb-carousel [isControls]="true" class="carousel slide carousel-fade" [animation]="'fade'">
+              <!--First slide-->
+              <mdb-carousel-item  *ngFor="let ph of photo, let i = index ">
+                <div class="view w-100">
+                  <img class="d-block" src={{ph}}
+                       alt="First slide">
+                  <div class="mask rgba-black-light waves-light" mdbWavesEffect></div>
+                </div>
+              </mdb-carousel-item>
+              <!--/5 slide-->
+            </mdb-carousel>
+          </div><!-- .listing-section -->
+
+          <div id="map" class="listing-section bg-white hover-effect" data-matching-link="#map-link">
+            <div class="listing-section__header">
+              <h3 class="listing-section__title">Карта</h3>
+            </div><!-- .listing-section__header -->
+                <a class="" routerLink="/mapPage">
+                  <div class="containerMap">
+                    <agm-map
+                      [latitude]="loc.lat"
+                      [longitude]="loc.lng"
+                      [zoom]="14"
+                      [disableDoubleClickZoom]="true"
+                      [showDefaultInfoWindow]="false">
+                      <agm-marker
+                      [markerDraggable]="true"
+                      [latitude]="loc.lat"
+                      [longitude]="loc.lng"
+                      >
+                      </agm-marker>
+                    </agm-map>
+                  </div>
+                </a>
+          </div><!-- .listing-section -->
+
+          <div id="add-review" class="listing-section bg-white hover-effect" data-matching-link="#add-review-link">
+            <div class="listing-section__header">
+              <h3 class="listing-section__title">Оставить отзыв</h3>
+            </div><!-- .listing-section__header -->
+
+            <form action="/" method="post">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <span class="form-label">Ваш рейтинг</span>
+                    <ul class="min-list inline-list stars">
+                      <li class="star" data-rating="1">
+                        <i class="fa fa-star"></i>
+                      </li>
+                      <li class="star" data-rating="2">
+                        <i class="fa fa-star"></i>
+                      </li>
+                      <li class="star" data-rating="3">
+                        <i class="fa fa-star"></i>
+                      </li>
+                      <li class="star" data-rating="4">
+                        <i class="fa fa-star"></i>
+                      </li>
+                      <li class="star" data-rating="5">
+                        <i class="fa fa-star"></i>
+                      </li>
+                    </ul>
+                  </div><!-- .form-group -->
+                </div><!-- .col -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="review-name">Имя и фамилия *</label>
+                    <input
+                      type="text"
+                      id="review-name"
+                      name="name"
+                      class="form-input form-input--large form-input--border-c-alto"
+                      placeholder="John Doe"
+                      required
+                    >
+                  </div><!-- .form-group -->
+                </div><!-- .col -->
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="review-email">Ваш email *</label>
+                    <input
+                      type="email"
+                      id="review-email"
+                      name="email"
+                      class="form-input form-input--large form-input--border-c-alto"
+                      placeholder="johndoe@gmail.com"
+                      required
+                    >
+                  </div><!-- .form-group -->
+                </div><!-- .col -->
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="review-message">Отзыв</label>
+                    <textarea
+                      name="message"
+                      id="review-message"
+                      rows="10"
+                      class="form-input form-input--large form-input--border-c-alto"
+                      placeholder="Your review"></textarea>
+                  </div><!-- .form-group -->
+                </div><!-- .col -->
+
+                <div class="col-md-12">
+                  <div class="form-group--submit">
+                    <button class="button button--large button--square button--primary" type="submit">Отправить отзыв
+                    </button>
+                  </div>
+                </div><!-- .col -->
+              </div><!-- .row -->
+            </form>
+          </div><!-- .listing-section -->
+        </div><!-- .col -->
+
+          <div class="widget-top">
+            <div class="listing-widget bg-white hover-effect">
+              <ul class="min-list listing-contact-list">
+                <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                  <i class="fa fa-compass listing-contact__icon"></i>
+                  <span class="c-primary">{{address}}</span>
+                </li>
+                <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                  <i class="fa fa-phone listing-contact__icon"></i>
+                  <span class="c-primary">{{number}}</span>
+                </li>
+              </ul><!-- .listing-contact-list -->
+
+              <div class="listing-social">
+                <span class="c-dove-gray">Мы в Social</span>
+                <ul class="min-list inline-list social-list">
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-facebook-f c-facebook"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-google-plus c-google-plus"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-instagram c-instagram"></i>
+                    </a>
+                  </li>
+                </ul><!-- .social-list -->
+              </div><!-- .listing-social -->
+
+              <button
+                class="button button--primary button--block button--pill button--large"
+              >Присоединиться
+              </button>
+              <!-- .listing-actions -->
+            </div><!-- .listing-widget -->
+
+
+            <div class="listing-widget bg-white hover-effect">
+              <h3 class="listing-widget__title">Свяжитесь с нами</h3>
+              <form action="/" method="post">
+                <div class="form-group">
+                  <label for="name">Имя *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    required
+                    class="form-input form-input--large form-input--border-c-gallery"
+                  >
+                </div><!-- .form-group -->
+
+                <div class="form-group">
+                  <label for="email">Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    class="form-input form-input--large form-input--border-c-gallery"
+                  >
+                </div><!-- .form-group -->
+
+                <div class="form-group">
+                  <label for="message">Письмо</label>
+                  <textarea
+                    name="message"
+                    id="message"
+                    rows="8"
+                    class="form-input form-input--large form-input--border-c-gallery"
+                  ></textarea>
+                </div><!-- .form-group -->
+
+                <div class="form-group--submit">
+                  <button class="button button--primary button--large button--pill" type="submit">Отправить письмо</button>
+                </div>
+              </form>
+          </div><!-- .col -->
+          </div><!-- .row -->
+    </div>
+  </div>
+</div>
+</section><!-- .single-listing -->

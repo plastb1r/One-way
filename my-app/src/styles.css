@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: normal;
+  max-width: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: normal;
+  margin: auto;
+  padding: 0;
+  display: block;
+}

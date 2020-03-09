@@ -1,0 +1,117 @@
+<section id="searchCity" class="page-banner page-banner--layout-3 parallax">
+  <div class="containerBG teal darken-3 ">
+    <div class="page-banner__container animated zoomIn">
+      <div class="page-banner__textcontent t-center">
+        <h2 class="page-banner__title c-white">Какой город ищем?</h2>
+      </div><!-- .page-banner__textcontent -->
+
+      <div class="main-search-container">
+        <form class="main-search main-search--layout-1 bg-white">
+          <div class="main-search__group main-search__group--primary">
+            <label for="main-search-name" class="c-primary">Давай введем город</label>
+            <input type="text" name="name" id="main-search-name"  (keydown.enter)="$event.preventDefault()" class="form-input form-input--pill form-input--border-c-gallery"  placeholder="Москва" autocorrect="off" autocapitalize="off" spellcheck="off" #search>
+          </div><!-- .main-search__group -->
+          <div class="main-search__group main-search__group--tertiary">
+            <button type="submit" class="button button--medium button--pill button--primary" (click)="_newLocation(-1)" routerLink="/popularLandmarksPage">
+              <i class="fa fa-search"></i> Найти
+            </button>
+          </div>
+        </form>
+      </div><!-- .main-search-container -->
+    </div><!-- .page-banner__container -->
+  </div><!-- .container -->
+</section><!-- .page-banner -->
+
+<!-- Section city portfolio-->
+<section id="portfolio">
+  <div class="container-fluid p-0">
+    <div class="row no-gutters">
+      <div class="col-lg-4 col-sm-6">
+        <a class="portfolio-box" (click)="_newLocation(0)" routerLink="/popularLandmarksPage">
+          <img class="img-fluid" src="/assets/img/Berlin.jpg" alt="">
+          <div class="portfolio-box-caption">
+            <div class="project-category text-white-50">
+              Германия
+            </div>
+            <div class="project-name">
+              Берлин
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <a class="portfolio-box" (click)="_newLocation(1)" routerLink="/popularLandmarksPage">
+          <img class="img-fluid" src="/assets/img/Budapesht.jpg" alt="">
+          <div class="portfolio-box-caption">
+            <div class="project-category text-white-50">
+              Венгрия
+            </div>
+            <div class="project-name">
+              Будапешт
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <a class="portfolio-box" (click)="_newLocation(2)" routerLink="/popularLandmarksPage">
+          <img class="img-fluid" src="/assets/img/London.jpg" alt="">
+          <div class="portfolio-box-caption">
+            <div class="project-category text-white-50">
+              Великобритания
+            </div>
+            <div class="project-name">
+              Лондон
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <a class="portfolio-box" (click)="_newLocation(3)" routerLink="/popularLandmarksPage">
+          <img class="img-fluid" src="/assets/img/Saint-P.jpg" alt="">
+          <div class="portfolio-box-caption">
+            <div class="project-category text-white-50">
+              Россия
+            </div>
+            <div class="project-name">
+              Санкт-Петебург
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <a class="portfolio-box" (click)="_newLocation(4)" routerLink="/popularLandmarksPage">
+          <img class="img-fluid" src="/assets/img/Moscow.jpg" alt="">
+          <div class="portfolio-box-caption">
+            <div class="project-category text-white-50">
+              Россия
+            </div>
+            <div class="project-name">
+              Москва
+            </div>
+          </div>
+          </a>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+          <a class="portfolio-box" (click)="_newLocation(5)" routerLink="/popularLandmarksPage">
+          <img class="img-fluid" src="/assets/img/Paris.jpg" alt="">
+          <div class="portfolio-box-caption p-3">
+            <div class="project-category text-white-50">
+              Франция
+            </div>
+            <div class="project-name">
+              Париж
+            </div>
+          </div>
+          </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to action section -->
+<section class="page-section mdb-color darken-4 text-white">
+  <div class="page-banner__textcontent t-center">
+    <h2 class="page-banner__title c-white">Присоединяйся к нам уже сейчас!</h2>
+    <a class="btn btn-outline-white btn-xl" routerLink="/signUpPage">Регистрация</a>
+  </div><!-- .page-banner__textcontent -->
+</section>

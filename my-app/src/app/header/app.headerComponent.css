@@ -1,0 +1,8 @@
+a {
+  color: #3C1010;
+  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.fa-user:before {
+  content: "";
+}

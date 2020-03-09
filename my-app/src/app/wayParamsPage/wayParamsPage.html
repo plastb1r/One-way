@@ -1,0 +1,296 @@
+<div class="header-container teal darken-3">
+</div><!-- .listing-header-map-container -->
+<div class="d-xl-flex">
+
+<div class="order-xl-1 listing-column listing-column--xl-50 listing-column--content ">
+  <div class="c-black">
+    популярные места <span class="keyword">{{cityName}}</span>
+  </div>
+
+  <div class="listing-filter-container">
+    <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
+      <div class="listing-filter-container">
+        <div class="d-lg-flex">
+          <ul class="min-list inline-list listing-filter listing-filter--list">
+            <li>
+              <a href="#">
+                <i class="fa fa-star-o"></i>
+                По рейтингу
+              </a>
+            </li>
+            <li>
+              <a (click)="changePopularLocations()" routerLink="/mapPage">
+                <i class="fa fa-location"></i>
+                Посмотреть на карте
+              </a>
+            </li>
+          </ul><!-- .listing-filter -->
+          <a (click)="toggle()" class="listing-expand">
+            Больше фильтров
+            <i class="fa fa-angle-down"></i>
+          </a>
+        </div><!-- d-flex -->
+      </div><!-- .listing-filter-container -->
+
+    </div><!-- .d-md-flex -->
+    <div [ngClass]="{invisible: visibility}" class="d-lg-flex justify-content-lg-between align-items-lg-center hideDiv listing-keyword--on-map ">
+        <ul class="min-list inline-list listing-filter listing-filter--list">
+          <li>
+            <div class="form-group">
+              <label for="accommodation" class="icheck_label">
+                <input type="checkbox" (click)="setIndex(0)" name="accommodation" id="accommodation">
+                Гастрономический гид
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="form-group">
+              <label for="apartments" class="icheck_label">
+                <input type="checkbox" (click)="setIndex(1)" name="apartments" id="apartments">
+                Отели
+              </label>
+            </div>
+          </li>
+
+          <li>
+            <div class="form-group">
+              <label for="car-rental" class="icheck_label">
+                <input type="checkbox" (click)="setIndex(2)" name="car-rental" id="car-rental">
+                Бары
+              </label>
+            </div>
+          </li>
+
+          <li>
+            <div class="form-group">
+              <label for="street-parking" class="icheck_label">
+                <input type="checkbox" (click)="setIndex(3)" name="street-parking" id="street-parking">
+                Активный отдых
+              </label>
+            </div>
+          </li>
+
+          <li>
+            <div class="form-group">
+              <label for="smoking-allowed" class="icheck_label">
+                <input type="checkbox" (click)="setIndex(4)" name="smoking-allowed" id="smoking-allowed">
+                Галереи и музеи
+              </label>
+            </div>
+          </li>
+
+          <li>
+            <div class="form-group">
+              <label for="wireless-internet" class="icheck_label">
+                <input type="checkbox" (click)="setIndex(5)" name="wireless-internet" id="wireless-internet">
+                Аутлеты и ТЦ
+              </label>
+            </div>
+          </li>
+        </ul>
+        <button class="button button--primary  button--larges button--pill" type="submit" (click)="setPopPlaces()" routerLink="/wayParamsPage">Посмотреть</button>
+      </div>
+  </div><!-- .listing-filter-container -->
+  <div class="d-md-flex flex-md-wrap justify-content-between list-view " *ngFor="let lm of dataLM, let i = index">
+    <div class="list-view__item">
+      <div class="listing hover-effect">
+        <div class="d-sm-flex align-items-sm-center listing__wrapper">
+          <div class="listing__thumbnail">
+            <a href="single-listing-1.html">
+              <img src="{{lm.photo}}">
+              <span class="favorite c-white">
+                <i class="fa fa-heart-o"></i>
+              </span>
+            </a>
+          </div><!-- .listing__thumbnail -->
+          <div class="d-flex justify-content-between align-items-center listing__detail">
+            <div class="listing__detail-left">
+              <h3 class="listing__title">
+                <a href="single-listing-1.html">{{lm.name}}</a>
+              </h3>
+              <p class="listing__review c-dusty-gray">
+                <span class="stars-outer" data-rating="5">
+                  <span class="stars-inner"></span>
+                </span>
+                <span></span>
+              </p>
+              <p class="listing__location c-dusty-gray no-b-margin">
+                <i class="fa fa-map-marker"></i>
+                  {{lm.address}}
+              </p>
+            </div>
+
+            <div class="listing__detail-right">
+              <button class="action remove" (click)="addToWay(lm.index)" type="submit">
+              Добавить к маршруту
+              </button>
+              <button class="action remove" type="submit" (click)="newLocation(lm.index)" routerLink="/landmarkPage">
+              Подробнее
+              </button>
+            </div>
+          </div><!-- .listing__detail -->
+        </div><!-- .listing__wrapper -->
+      </div><!-- .listing -->
+    </div><!-- .list-view__item -->
+
+  </div><!-- .d-md-flex -->
+
+</div><!-- .listing-column -->
+<div class="order-xl-0 listing-column listing-column--xl-50 bg-wild-sand">
+  <div class="pricing-table bg-white head">
+   <div class="pricing-table__body ">
+    <ul class="min-list inline-list listing-tabs">
+     <li class="listing-tab">
+       <h5 class="c-black">
+         Создай свой маршрут уже сейчас!
+       </h5>
+     </li><!-- .listing-tab -->
+    </ul>
+   </div>
+  </div><!-- .pricing-table -->
+  <div class="pricing-table bg-white ">
+   <div class="pricing-table__body">
+     <ul class="pricing-table__features min-list">
+       <div class="main-search-container">
+         <form class="main-search bg-white">
+           <div class="main-search__group main-search__group--primary">
+             <label for="main-search-name" class="c-primary">Введите начало маршрута</label>
+             <input type="text" name="name" id="main-search-name" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь">
+           </div><!-- .main-search__group -->
+
+           <div class="main-search__group">
+             <label for="main-search-location" class="c-primary">Введите конец маршрута</label>
+             <input type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Парк Победы">
+           </div><!-- .main-search__group -->
+
+           <div class="main-search__group">
+             <label for="main-search-time" class="c-primary">Количество свободного времени</label>
+             <input type="text" name="time" id="main-search-time" class="form-input form-input--pill form-input--border-c-gallery" placeholder="2 часа">
+           </div><!-- .main-search__group -->
+
+           <div class="main-search__group main-search__group--tertiary">
+             <button type="submit" class="button button--medium button--pill button--primary">
+               <i class="fa fa-search"></i> Построить маршрут
+             </button>
+           </div>
+         </form>
+      </div><!-- .main-search-container -->
+     </ul>
+   </div>
+</div><!-- .pricing-table -->
+
+<div class="pricing-table bg-white params">
+ <div class="pricing-table__body ">
+
+       <form  #searchform="ngForm" (ngSubmit)="onSubmit()" class="bg-white">
+         <div class="main-search__group main-search__group--primary">
+           <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
+           <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
+         </div><!-- .main-search__group -->
+
+         <ul class="pricing-table__features min-list">
+             <div class="main-search__group main-search__group--primary">
+               <label for="main-search-relax-types" class="c-primary bold">Вид отдыха</label>
+           </div><!-- .main-search__group -->
+           <li>
+              <div class="form-group">
+                <label for="accommodation" class="icheck_label">
+                  <input type="checkbox" name="accommodation" id="accommodation">
+                  Культурный
+                </label>
+              </div>
+            </li>
+            <li>
+           <div class="form-group">
+             <label for="car-rental" class="icheck_label">
+               <input type="checkbox" name="car-rental" id="car-rental">
+               По музеям
+             </label>
+           </div>
+         </li>
+
+         <li>
+           <div class="form-group">
+             <label for="street-parking" class="icheck_label">
+               <input type="checkbox" name="street-parking" id="street-parking">
+               По историческим местам
+             </label>
+           </div>
+         </li>
+
+         <li>
+           <div class="form-group">
+             <label for="smoking-allowed" class="icheck_label">
+               <input type="checkbox" name="smoking-allowed" id="smoking-allowed">
+               Активный
+             </label>
+           </div>
+         </li>
+
+         <li>
+           <div class="form-group">
+             <label for="wireless-internet" class="icheck_label">
+               <input type="checkbox" name="wireless-internet" id="wireless-internet">
+               Гастрономический гид
+             </label>
+           </div>
+         </li>
+   </ul>
+
+   <ul class="pricing-table__features min-list">
+       <div class="main-search__group main-search__group--primary">
+         <label for="main-search-transport-types" class="c-primary bold">Вид транспорта</label>
+     </div><!-- .main-search__group -->
+     <li>
+        <div class="form-group">
+          <label for="accommodation" class="icheck_label">
+            <input type="checkbox" name="accommodation" id="accommodation">
+            Пеший
+          </label>
+        </div>
+      </li>
+      <li>
+     <div class="form-group">
+       <label for="car-rental" class="icheck_label">
+         <input type="checkbox" name="car-rental" id="car-rental">
+         Велосипедный
+       </label>
+     </div>
+   </li>
+
+   <li>
+     <div class="form-group">
+       <label for="street-parking" class="icheck_label">
+         <input type="checkbox" name="street-parking" id="street-parking">
+         На машине
+       </label>
+     </div>
+   </li>
+
+   <li>
+     <div class="form-group">
+       <label for="smoking-allowed" class="icheck_label">
+         <input type="checkbox" name="smoking-allowed" id="smoking-allowed">
+         На автобусе
+       </label>
+     </div>
+   </li>
+
+   <li>
+     <div class="form-group">
+       <label for="wireless-internet" class="icheck_label">
+         <input type="checkbox" name="wireless-internet" id="wireless-internet">
+         На метро
+       </label>
+     </div>
+   </li>
+</ul>
+ <div class="main-search__group">
+   <label for="main-search-number-of-pl" class="c-primary bold">Количество мест для посещения</label>
+   <input type="text" name="places" id="main-search-number-of-pl" class="form-input form-input--pill form-input--border-c-gallery" placeholder="3">
+ </div><!-- .main-search__group -->
+</form>
+ </div>
+</div><!-- .pricing-table -->
+</div><!-- .listing-column -->
+</div>

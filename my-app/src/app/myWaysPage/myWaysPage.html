@@ -1,0 +1,57 @@
+<div class="container">
+   <div class="row">
+     <div class="col-lg-3">
+     <profile-sidebar></profile-sidebar>
+       </div>
+     <div class="col-lg-9 marg-top marg-bottom">
+       <table class="listing-table">
+ <tr class="listing-row c-white bg--primary">
+   <th>
+     <i class="fa fa-clipboard"></i>
+     Маршруты
+   </th>
+   <th>
+     <i class="fa fa-calendar-alt"></i>
+     Город
+   </th>
+   <th></th>
+ </tr><!-- .listing-row -->
+
+ <tr class="listing-row"  *ngFor="let d of myWays, let i = index">
+   <td class="listing listing-cell">
+     <div class="listing__wrapper">
+       <div class="listing__thumbnail">
+         <a >
+           <img src={{photo[d.index]}}>
+         </a>
+       </div><!-- .listing__thumbnail -->
+       <div class="listing__detail">
+         <h3 class="listing__title">
+           <a href="single-listing-1.html">{{d.name}}</a>
+         </h3>
+       </div><!-- .listing__detail -->
+     </div>
+   </td>
+   <td>{{d.cityAddress}}</td>
+   <td class="listing-action">
+     <ul class="min-list">
+       <li>
+         <button class="action edit" type="button" (click)="newLocation(d.index)" routerLink="/wayPage">
+           <i class="fa fa-pencil"></i>
+           Подробнее
+         </button>
+       </li>
+
+       <li>
+         <button class="action remove" type="button" >
+           <i class="fa fa-trash"></i>
+           Удалить
+         </button>
+       </li>
+     </ul>
+   </td>
+ </tr><!-- .listing-row -->
+</table><!-- .listing-table -->
+     </div><!-- .col -->
+   </div><!-- .row -->
+ </div><!-- .container -->

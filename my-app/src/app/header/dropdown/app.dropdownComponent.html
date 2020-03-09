@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col">
+    <div ngbDropdown #myDrop="ngbDropdown" [autoClose]="false" class="d-inline-block">
+      <button class="btn btn-outline-white" id="dropdownForm1" ngbDropdownToggle>Выбрать город</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownForm1">
+        <form class="px-4 py-3">
+          <div class="form-group">
+            <label for="exampleDropdownFormEmail1">Какой город ищем?</label>
+            <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Москва" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #searche>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="dropdownCheck">
+            <label class="form-check-label" for="dropdownCheck">
+              Запомнить город
+            </label>
+          </div>
+          <button class="btn btn-grey my-2 my-sm-2" type="submit" (click)="_newLocation(); myDrop.close();" routerLink="/mapPage">Найти</button>
+        </form>
+        <div class="dropdown-divider"></div>
+        <button ngbDropdownItem>Впервые на сайте? Зарегистрируйся!</button>
+      </div>
+    </div>
+  </div>
+</div>

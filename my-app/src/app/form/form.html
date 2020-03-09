@@ -1,0 +1,125 @@
+<!-- Parameters form with sidebar function-->
+<div class="containerMain">
+  <div ng-sidebar-content>
+      <div><button class="btn btn-grey" (click)="_toggleOpened()">Построить маршрут</button></div>
+  </div>
+  <ng-sidebar-container class="sidebar-container-searchform">
+      <ng-sidebar [(opened)]="_opened">
+        <div class="containerSearchForm" >
+          <div class="title mdb-color darken-4 d-flex justify-content-center">
+            <h1 class="">Задайте параметры для построения маршрута</h1>
+          </div>
+              <div class="infoForm teal darken-3" [hidden]="submitted">
+              <form #searchform="ngForm" (ngSubmit)="onSubmit()" class="searchForm">
+                  <div class="form-group">
+                    <label for="startPoint">Начало маршрута</label>
+                    <input type="text" class="form-control" id="startPoint" placeholder="Красная площадь"
+                    required [(ngModel)]="model.startPoint" name="startPoint" #startPoint="ngModel"
+                    >
+                  </div>
+
+                  <div [hidden]="startPoint.valid || startPoint.pristine"
+                    class="alert alert-danger ">| Введите начало маршрута
+                  </div>
+
+                  <div class="form-group">
+                    <label for="endPoint">Конец маршрута</label>
+                    <input type="text" class="form-control" id="endPoint" placeholder="Павелецкий вокзал"
+                    required [(ngModel)]="model.endPoint" name="endPoint" #endPoint="ngModel"
+                    >
+                  </div>
+
+                  <div [hidden]="endPoint.valid || endPoint.pristine"
+                    class="alert alert-danger ">| Введите конец маршрута
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="time">Количество свободных часов</label>
+                      <select class="form-control" id="time"
+                        required [(ngModel)]="model.time" name="time" #time="ngModel"
+                        >
+                          <option *ngFor="let t of hours" [value]="t">{{t}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="amountOfPlaces">Количество мест для посещения</label>
+                      <input type="text" class="form-control" id="amountOfPlaces" placeholder="3"
+                      required [(ngModel)]="model.amountOfPlaces" name="amountOfPlaces" #amountOfPlaces="ngModel">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="finance">Финансовые затраты</label>
+                    <div class="input-group">
+                     <div class="input-group-prepend">
+                       <div class="input-group-text">руб</div>
+                     </div>
+                      <input type="text" class="form-control" id="finance" placeholder="500"
+                      required [(ngModel)]="model.finance" name="finance" #finance="ngModel">
+                    <div class="input-group-append">
+                      <span class="input-group-text">.00</span>
+                    </div>
+                  </div>
+                  </div>
+
+                <div class="form">
+                <div class="transportTypes">
+                  <label for="transportTypes">Выберите вид передвижения</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                    <label class="form-check-label" for="inlineCheckbox1">На автобусе</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                    <label class="form-check-label" for="inlineCheckbox2">На метро</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+                    <label class="form-check-label" for="inlineCheckbox3">Пешком</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
+                    <label class="form-check-label" for="inlineCheckbox4">На машине</label>
+                  </div>
+                </div>
+
+                <div class="wayTypes mt-4">
+                  <label for="wayTypes">Выберите вид отдыха</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="wayType1" value="option1">
+                    <label class="form-check-label" for="wayType1">По историческим местам</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="wayType2" value="option2">
+                    <label class="form-check-label" for="wayType2">Активный</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="wayType3" value="option3">
+                    <label class="form-check-label" for="wayType3">Велосипедная прогулка</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="wayType4" value="option4">
+                    <label class="form-check-label" for="wayType4">Гастрономический гид</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="wayType5" value="option5">
+                    <label class="form-check-label" for="wayType5">Культурный</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="wayType6" value="option6">
+                    <label class="form-check-label" for="wayType6">По святым местам</label>
+                  </div>
+
+                </div>
+
+                </div>
+                <div class="d-flex justify-content-end">
+                  <button type="submit" class="btn btn-grey" name="button">Submit</button>
+                </div>
+                </form>
+              </div>
+        </div>
+      </ng-sidebar>
+    </ng-sidebar-container>
+</div>

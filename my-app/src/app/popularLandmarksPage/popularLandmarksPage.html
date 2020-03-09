@@ -1,0 +1,141 @@
+<div class="header-container teal darken-3">
+</div><!-- .listing-header-map-container -->
+<div class="page-content-bg page-content--no-t-bottom">
+  <div class="container">
+  <div class="row">
+    <div class="col-md-12 listing-search-container listing-search-container--on-map">
+      <div class="listing-keyword listing-keyword--on-map">
+        популярные места <span class="keyword">{{cityName}}</span>
+      </div><!-- .listing-keyword -->
+
+      <div class="listing-search bg-white">
+        <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
+          <div class="listing-filter-container">
+            <div class="d-lg-flex">
+
+              <ul class="min-list inline-list listing-filter listing-filter--list">
+                <li>
+                  <a href="#">
+                    <i class="fa fa-star-o"></i>
+                    По рейтингу
+                  </a>
+                </li>
+                <li>
+                  <a (click)="changePopularLocations()" routerLink="/mapPage">
+                    <i class="fa fa-location"></i>
+                    Посмотреть на карте
+                  </a>
+                </li>
+              </ul><!-- .listing-filter -->
+              <a (click)="toggle()" class="listing-expand">
+                Больше фильтров
+                <i class="fa fa-angle-down"></i>
+              </a>
+            </div><!-- d-flex -->
+          </div><!-- .listing-filter-container -->
+        </div><!-- .d-md-flex -->
+      </div><!-- .listing-search -->
+      <div [ngClass]="{invisible: visibility}" class="d-lg-flex justify-content-lg-between align-items-lg-center hideDiv listing-keyword--on-map ">
+          <ul class="min-list inline-list listing-filter listing-filter--list">
+            <li>
+              <div class="form-group">
+                <label for="accommodation" class="icheck_label">
+                  <input type="checkbox" (click)="setIndex(0)" name="accommodation" id="accommodation">
+                  Гастрономический гид
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-group">
+                <label for="apartments" class="icheck_label">
+                  <input type="checkbox" (click)="setIndex(1)" name="apartments" id="apartments">
+                  Отели
+                </label>
+              </div>
+            </li>
+
+            <li>
+              <div class="form-group">
+                <label for="car-rental" class="icheck_label">
+                  <input type="checkbox" (click)="setIndex(2)" name="car-rental" id="car-rental">
+                  Бары
+                </label>
+              </div>
+            </li>
+
+            <li>
+              <div class="form-group">
+                <label for="street-parking" class="icheck_label">
+                  <input type="checkbox" (click)="setIndex(3)" name="street-parking" id="street-parking">
+                  Активный отдых
+                </label>
+              </div>
+            </li>
+
+            <li>
+              <div class="form-group">
+                <label for="smoking-allowed" class="icheck_label">
+                  <input type="checkbox" (click)="setIndex(4)" name="smoking-allowed" id="smoking-allowed">
+                  Галереи и музеи
+                </label>
+              </div>
+            </li>
+
+            <li>
+              <div class="form-group">
+                <label for="wireless-internet" class="icheck_label">
+                  <input type="checkbox" (click)="setIndex(5)" name="wireless-internet" id="wireless-internet">
+                  Аутлеты и ТЦ
+                </label>
+              </div>
+            </li>
+          </ul>
+          <button class="button button--primary  button--larges button--pill" type="submit" (click)="setPopPlaces()" routerLink="/popularLandmarksPage">Посмотреть</button>
+        </div>
+  </div><!-- .row -->
+</div><!-- .container -->
+
+<section class="listing-list listing-list--layout-1">
+  <div class="container" >
+    <div class="row" >
+      <div class="col-md-4" *ngFor="let lm of dataLM, let i = index ">
+        <div class="listing hover-effect">
+          <div class="listing__wrapper">
+            <div class="listing__thumbnail">
+              <a>
+                <img src={{lm.photo}}>
+                <a>
+                  <span *ngIf="lm.isAddedToWay" class="favoriteLabel c-white">{{label}}
+                  </span>
+                </a>
+                <a >
+                  <span class="favorite c-white" (click)="addToFavP(lm.index)">
+                    <i class="fa fa-heart-o"></i>
+                  </span>
+                  <span *ngIf="lm.isAddedToFav" class="favorite c-white" (click)="addToFavP(lm.index)">
+                    <i class="fa fa-heart-o bg-danger" ></i>
+                  </span>
+                </a>
+              </a>
+            </div><!-- .listing__thumbnail -->
+            <div class="listing__detail">
+              <h3 class="listing__title">
+                <a>{{lm.name}}</a>
+              </h3>
+              <p class="listing__location c-dusty-gray">
+                <i class="fa fa-map-marker"></i>
+                {{lm.address}}
+              </p>
+                <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
+                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="newLocation(lm.index)" routerLink="/landmarkPage">Подробнее</button>
+                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(lm.index)" >Добавить к маршруту</button>
+                </div>
+            </div><!-- .listing__detail -->
+          </div><!-- .listing__wrapper -->
+        </div><!-- .listing -->
+      </div><!-- .col -->
+    </div><!-- .row -->
+  </div><!-- .container -->
+</section><!-- .listing-list -->
+</div>
+<!-- .page-content -->
