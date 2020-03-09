@@ -1,0 +1,36 @@
+{
+  "name": "route4",
+  "timeToGo": 3.0,
+  "city": {
+    "name": "Moscow"
+  },
+  "places": [
+    {
+      "place": {
+        "id": "tttt",
+        "coordinates": "coordinates11"
+      },
+      "index": 1,
+      "timeToNext": 2.0,
+      "transportToNext": 1
+    },
+    {
+      "place": {
+        "id": "yyyy",
+        "coordinates": "coordinates22"
+      },
+      "index": 2,
+      "timeToNext": 1.0,
+      "transportToNext": 1
+    },
+    {
+      "place": {
+        "id": "uuuu",
+        "coordinates": "coordinates33"
+      },
+      "index": 3,
+      "timeToNext": 0,
+      "transportToNext": 0
+    }
+  ]
+}

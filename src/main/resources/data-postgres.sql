@@ -1,19 +1,41 @@
-INSERT INTO users(user_id, user_name, user_password, user_email) VALUES (1,'Tom',1,'tom123@mail.ru');
-INSERT INTO users(user_id, user_name, user_password, user_email) VALUES (2,'Bob',2,'bob76@gmail.com');
+INSERT INTO users(user_id, user_name, user_password, user_email, user_phone_number)
+VALUES 
+  (1,'Tom',1,'tom123@mail.ru', '88003215465'),
+  (2,'Bob',2,'bob76@gmail.com', '88345674970');
 
-INSERT INTO routes(route_id, route_name, user_id) VALUES (1,'route1',1);
-INSERT INTO routes(route_id, route_name, user_id) VALUES (2,'route2',2);
-INSERT INTO routes(route_id, route_name, user_id) VALUES (3,'route3',2);
+INSERT INTO cities(city_id,city_name)
+VALUES
+(1,'Moscow'),
+(2,'Rome');
 
-INSERT INTO places(place_id, route_id, place_index) VALUES ('wewrgdfsi',1,1);
-INSERT INTO places(place_id, route_id, place_index) VALUES ('kihjyftgf',1,2);
-INSERT INTO places(place_id, route_id, place_index) VALUES ('uighfdljs',1,3);
-INSERT INTO places(place_id, route_id, place_index) VALUES ('uhjgdfghr',2,1);
-INSERT INTO places(place_id, route_id, place_index) VALUES ('okmfdxhjf',2,2);
+INSERT INTO routes(route_id, route_name, route_time_to_go, city_id, user_id)
+VALUES
+  (1,'route1',1,1,1),
+  (2,'route2',2,2,1),
+  (3,'route3',2,2,2);
 
--- INSERT INTO route_points(route_id, point_id, point_index) VALUES (1,1,1);
--- INSERT INTO route_points(route_id, point_id, point_index) VALUES (1,2,2);
--- INSERT INTO route_points(route_id, point_id, point_index) VALUES (1,3,3);
--- INSERT INTO route_points(route_id, point_id, point_index) VALUES (2,4,1);
--- INSERT INTO route_points(route_id, point_id, point_index) VALUES (2,5,2);
--- INSERT INTO route_points(route_id, point_id, point_index) VALUES (1,5,4);
+INSERT INTO places(place_id, place_coordinates, user_id)  -- map route owner column to place?
+VALUES
+  ('aaaa','coordinates1',null),
+  ('bbbb','coordinates2',null),
+  ('cccc','coordinates3',null),
+  ('dddd','coordinates4',null),
+  ('eeee','coordinates5',null),
+  ('ffff','coordinates6',null),
+  ('zzzz','coordinates51',null),
+  ('ssss','coordinates61',null),
+  ('gggg','coordinates7',1),
+  ('hhhh','coordinates8',2),
+  ('iiii','coordinates9',2);
+
+INSERT INTO places_on_route(place_on_route_id, place_id, route_id,
+            place_index, time_to_next_place, transport_to_next_place)
+VALUES 
+  (1,'aaaa',1,1,1,1),
+  (2,'bbbb',1,2,0,0),
+  (3,'cccc',2,1,2,5),
+  (4,'dddd',2,2,0,0),
+  (5,'eeee',3,1,0.5,2),
+  (8,'ffff',3,2,0.5,4),
+  (6,'zzzz',3,3,1,5),
+  (7,'ssss',3,4,0,0); 

@@ -11,4 +11,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface RouteRepository extends CrudRepository<Route, Integer> {
   Iterable<Route> findAllById(Integer id);
   Iterable<Route> findByOwner(User owner);
+  
 }

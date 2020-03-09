@@ -19,9 +19,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Route
- */
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,13 +28,21 @@ import lombok.NoArgsConstructor;
 public class Route {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "route_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "route_name")
     private String name;
 
+    
+    @Column(name = "route_time_to_go") // hours
+    private float timeToGo;
+    
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
+    
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -46,10 +51,6 @@ public class Route {
     @JsonIgnore
     @OneToMany(mappedBy = "route")
     @Column(name = "route_places")
-    private Set<Place> places;
-
-    //time_to_travel + edges + time_for_edge + type_transport;
-
-    //bind_to_city;
+    private Set<PlaceOnRoute> places;
 
 }

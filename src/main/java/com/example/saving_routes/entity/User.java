@@ -26,8 +26,8 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "user_name")
@@ -40,11 +40,19 @@ public class User {
     @Column(name = "user_email")
     private String email;
 
+    @Column(name = "user_phone_number")
+    private String phoneNumber;
+
     @JsonIgnore
     @OneToMany(mappedBy = "owner")
     @Column(name = "user_routes")
     private Set<Route> routes;
 
-    //instagram_login + favorite_places
+    @JsonIgnore
+    @OneToMany(mappedBy = "owner")
+    @Column(name = "user_places")
+    private Set<Place> places;
+
+    // google_login
 
 }

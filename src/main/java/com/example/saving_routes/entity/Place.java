@@ -14,9 +14,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Places
- */
 @Data
 @Builder
 @AllArgsConstructor
@@ -29,18 +26,12 @@ public class Place {
     @Column(name = "place_id")
     private String id;
 
+    @Column(name = "place_coordinates")
+    private String coordinates;
+
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "route_id")
-    private Route route;
+    @JoinColumn(name = "user_id")
+    private User owner;
 
-    @Column(name = "place_index")
-    private int index;
-
-    @Override
-    public String toString() {
-        return "{\"id\":" + this.id + ", \"googleId\":\"" + this.index + "\"}";
-    }
-
-    //coordinates_of_places
 }
