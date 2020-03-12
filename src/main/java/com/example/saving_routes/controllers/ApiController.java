@@ -1,5 +1,7 @@
 package com.example.saving_routes.controllers;
 
+import java.security.Principal;
+
 import com.example.saving_routes.entity.Place;
 import com.example.saving_routes.entity.PlaceOnRoute;
 import com.example.saving_routes.entity.Route;
@@ -33,6 +35,11 @@ public class ApiController {
     @GetMapping(path = "/users")
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @GetMapping(path = "/authuser")
+    public Principal authUser(Principal principal) {
+        return principal;
     }
 
     // @GetMapping(path = "/users/{id}")

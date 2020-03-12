@@ -16,7 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    
+
     @Autowired
     private UserService userService;
 
@@ -24,10 +24,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/static/**").permitAll()
+            .antMatchers(new String[]{"/", "/not-restricted"}).permitAll()
             .anyRequest().authenticated()
             .and()
-            .formLogin().defaultSuccessUrl("/home").permitAll()
+            .oauth2Login()
+            //.and()
+            //.formLogin().defaultSuccessUrl("/home").permitAll()
             .and()
             .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
     }
@@ -39,8 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-            .passwordEncoder(bcryptPasswordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(bcryptPasswordEncoder());
     }
-    
+
 }
