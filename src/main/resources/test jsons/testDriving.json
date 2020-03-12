@@ -1,0 +1,126 @@
+{
+  "destination_addresses" : [
+    "Гринвич, Великобритания",
+    "Стокгольм, Швеция",
+    "Dlouhá 609/2, 110 00 Praha-Staré Město, Чехия"
+  ],
+  "origin_addresses" : [
+    "Гринвич, Великобритания",
+    "Стокгольм, Швеция",
+    "Dlouhá 609/2, 110 00 Praha-Staré Město, Чехия"
+  ],
+  "rows" : [
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 201 мил.",
+            "value" : 1932264
+          },
+          "duration" : {
+            "text" : "21 ч. 6 мин.",
+            "value" : 75983
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "782 мил.",
+            "value" : 1258603
+          },
+          "duration" : {
+            "text" : "12 ч. 59 мин.",
+            "value" : 46730
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "1 197 мил.",
+            "value" : 1927170
+          },
+          "duration" : {
+            "text" : "21 ч. 12 мин.",
+            "value" : 76344
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "909 мил.",
+            "value" : 1463445
+          },
+          "duration" : {
+            "text" : "16 ч. 52 мин.",
+            "value" : 60709
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "782 мил.",
+            "value" : 1258246
+          },
+          "duration" : {
+            "text" : "13 ч. 1 мин.",
+            "value" : 46858
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "909 мил.",
+            "value" : 1462714
+          },
+          "duration" : {
+            "text" : "16 ч. 56 мин.",
+            "value" : 60962
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        }
+      ]
+    }
+  ],
+  "status" : "OK"
+}

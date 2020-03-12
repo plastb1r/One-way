@@ -1,0 +1,314 @@
+{
+  "destination_addresses" : [
+    "б-р Победы, 23Б, Воронеж, Воронежская обл., Россия, 394077",
+    "ул. Кольцовская, 35, Воронеж, Воронежская обл., Россия, 394030",
+    "Университетская пл., 1, Воронеж, Воронежская обл., Россия, 394045",
+    "Комиссаржевской ул., 4, Воронеж, Воронежская обл., Россия, 394036",
+    "ул. 20-летия Октября, 119, Воронеж, Воронежская обл., Россия, 394006"
+  ],
+  "origin_addresses" : [
+    "б-р Победы, 23Б, Воронеж, Воронежская обл., Россия, 394077",
+    "ул. Кольцовская, 35, Воронеж, Воронежская обл., Россия, 394030",
+    "Университетская пл., 1, Воронеж, Воронежская обл., Россия, 394045",
+    "Комиссаржевской ул., 4, Воронеж, Воронежская обл., Россия, 394036",
+    "ул. 20-летия Октября, 119, Воронеж, Воронежская обл., Россия, 394006"
+  ],
+  "rows" : [
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "4,1 мил.",
+            "value" : 6525
+          },
+          "duration" : {
+            "text" : "1 час. 21 мин.",
+            "value" : 4884
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "4,8 мил.",
+            "value" : 7718
+          },
+          "duration" : {
+            "text" : "1 час. 36 мин.",
+            "value" : 5767
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "4,5 мил.",
+            "value" : 7179
+          },
+          "duration" : {
+            "text" : "1 час. 29 мин.",
+            "value" : 5315
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "4,9 мил.",
+            "value" : 7923
+          },
+          "duration" : {
+            "text" : "1 час. 39 мин.",
+            "value" : 5950
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "4,1 мил.",
+            "value" : 6522
+          },
+          "duration" : {
+            "text" : "1 час. 22 мин.",
+            "value" : 4920
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1711
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1291
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1590
+          },
+          "duration" : {
+            "text" : "20 мин.",
+            "value" : 1199
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1573
+          },
+          "duration" : {
+            "text" : "20 мин.",
+            "value" : 1216
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "4,8 мил.",
+            "value" : 7715
+          },
+          "duration" : {
+            "text" : "1 час. 37 мин.",
+            "value" : 5820
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1711
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1308
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1709
+          },
+          "duration" : {
+            "text" : "21 мин.",
+            "value" : 1277
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1713
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1295
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "4,5 мил.",
+            "value" : 7176
+          },
+          "duration" : {
+            "text" : "1 час. 30 мин.",
+            "value" : 5379
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1590
+          },
+          "duration" : {
+            "text" : "21 мин.",
+            "value" : 1238
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1709
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1298
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,6 мил.",
+            "value" : 2517
+          },
+          "duration" : {
+            "text" : "32 мин.",
+            "value" : 1933
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "4,9 мил.",
+            "value" : 7919
+          },
+          "duration" : {
+            "text" : "1 час. 39 мин.",
+            "value" : 5965
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1573
+          },
+          "duration" : {
+            "text" : "20 мин.",
+            "value" : 1195
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1713
+          },
+          "duration" : {
+            "text" : "21 мин.",
+            "value" : 1255
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,6 мил.",
+            "value" : 2517
+          },
+          "duration" : {
+            "text" : "31 мин.",
+            "value" : 1879
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        }
+      ]
+    }
+  ],
+  "status" : "OK"
+}

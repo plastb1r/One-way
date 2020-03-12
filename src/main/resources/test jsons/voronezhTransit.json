@@ -1,0 +1,354 @@
+{
+  "destination_addresses" : [
+    "б-р Победы, 23Б, Воронеж, Воронежская обл., Россия, 394077",
+    "ул. Кольцовская, 35, Воронеж, Воронежская обл., Россия, 394030",
+    "Университетская пл., 1, Воронеж, Воронежская обл., Россия, 394045",
+    "Комиссаржевской ул., 4, Воронеж, Воронежская обл., Россия, 394036",
+    "ул. 20-летия Октября, 119, Воронеж, Воронежская обл., Россия, 394006"
+  ],
+  "origin_addresses" : [
+    "б-р Победы, 23Б, Воронеж, Воронежская обл., Россия, 394077",
+    "ул. Кольцовская, 35, Воронеж, Воронежская обл., Россия, 394030",
+    "Университетская пл., 1, Воронеж, Воронежская обл., Россия, 394045",
+    "Комиссаржевской ул., 4, Воронеж, Воронежская обл., Россия, 394036",
+    "ул. 20-летия Октября, 119, Воронеж, Воронежская обл., Россия, 394006"
+  ],
+  "rows" : [
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "4,3 мил.",
+            "value" : 6969
+          },
+          "duration" : {
+            "text" : "48 мин.",
+            "value" : 2863
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "23,00 ₽",
+            "value" : 23
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "6,0 мил.",
+            "value" : 9587
+          },
+          "duration" : {
+            "text" : "1 час. 19 мин.",
+            "value" : 4748
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "23,00 ₽",
+            "value" : 23
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "6,1 мил.",
+            "value" : 9781
+          },
+          "duration" : {
+            "text" : "56 мин.",
+            "value" : 3356
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "23,00 ₽",
+            "value" : 23
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "5,5 мил.",
+            "value" : 8841
+          },
+          "duration" : {
+            "text" : "50 мин.",
+            "value" : 3009
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "23,00 ₽",
+            "value" : 23
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "4,4 мил.",
+            "value" : 7111
+          },
+          "duration" : {
+            "text" : "53 мин.",
+            "value" : 3207
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "46,00 ₽",
+            "value" : 46
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1711
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1291
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1590
+          },
+          "duration" : {
+            "text" : "20 мин.",
+            "value" : 1199
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1573
+          },
+          "duration" : {
+            "text" : "20 мин.",
+            "value" : 1216
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "5,2 мил.",
+            "value" : 8302
+          },
+          "duration" : {
+            "text" : "45 мин.",
+            "value" : 2676
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "23,00 ₽",
+            "value" : 23
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1711
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1308
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1709
+          },
+          "duration" : {
+            "text" : "21 мин.",
+            "value" : 1277
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1713
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1295
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "5,2 мил.",
+            "value" : 8430
+          },
+          "duration" : {
+            "text" : "50 мин.",
+            "value" : 2998
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "23,00 ₽",
+            "value" : 23
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1590
+          },
+          "duration" : {
+            "text" : "21 мин.",
+            "value" : 1238
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1709
+          },
+          "duration" : {
+            "text" : "22 мин.",
+            "value" : 1298
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,6 мил.",
+            "value" : 2517
+          },
+          "duration" : {
+            "text" : "32 мин.",
+            "value" : 1933
+          },
+          "status" : "OK"
+        }
+      ]
+    },
+    {
+      "elements" : [
+        {
+          "distance" : {
+            "text" : "5,7 мил.",
+            "value" : 9233
+          },
+          "duration" : {
+            "text" : "54 мин.",
+            "value" : 3269
+          },
+          "fare" : {
+            "currency" : "RUB",
+            "text" : "23,00 ₽",
+            "value" : 23
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,0 мил.",
+            "value" : 1573
+          },
+          "duration" : {
+            "text" : "20 мин.",
+            "value" : 1195
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,1 мил.",
+            "value" : 1713
+          },
+          "duration" : {
+            "text" : "21 мин.",
+            "value" : 1255
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1,6 мил.",
+            "value" : 2517
+          },
+          "duration" : {
+            "text" : "31 мин.",
+            "value" : 1879
+          },
+          "status" : "OK"
+        },
+        {
+          "distance" : {
+            "text" : "1 фт",
+            "value" : 0
+          },
+          "duration" : {
+            "text" : "1 мин.",
+            "value" : 0
+          },
+          "status" : "OK"
+        }
+      ]
+    }
+  ],
+  "status" : "OK"
+}
