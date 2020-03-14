@@ -3,7 +3,7 @@
     <div class="col-md-4 offset-md-4">
       <div class="form-login js-login-form">
         <div class="form-login__block js-form-block is-selected" id="signin">
-          <form action="/" method="post">
+          <form #myform="ngForm" (ngSubmit)="register(myform)">
             <div class="form-container">
             <h3 class="form-title t-center">Регистрация</h3>
             <div class="form-social">
@@ -25,10 +25,10 @@
               <label for="signup-email">E-mail *</label>
               <input
                 type="email"
-                name="signup-email"
-                id="signup-email"
+                name="email"
+                id="email"
                 class="form-input form-input--pill form-input--border-c-gallery"
-                required
+                required [(ngModel)]="email" name="email"
                 placeholder="johndoe@gmail.com"
               >
             </div><!-- .form-group -->
@@ -37,10 +37,10 @@
               <label for="signup-name">Имя *</label>
               <input
                 type="text"
-                name="signup-name"
-                id="signup-name"
+                name="username"
+                id="username"
                 class="form-input form-input--pill form-input--border-c-gallery"
-                required
+               required [(ngModel)]="username" name="username"
                 placeholder="John Doe"
               >
             </div><!-- .form-group -->
@@ -49,10 +49,10 @@
               <label for="signup-password">Введите пароль *</label>
               <input
                 type="password"
-                name="signup-password"
-                id="signup-password"
+                name="password"
+                id="password"
                 class="form-input form-input--pill form-input--border-c-gallery"
-                required
+                required  [(ngModel)]="password" name="password"
                 placeholder="******"
               >
             </div><!-- .form-group -->
