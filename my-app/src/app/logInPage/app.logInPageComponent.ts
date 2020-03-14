@@ -20,7 +20,6 @@ export class LogInPageComponent implements OnInit {
               private route: ActivatedRoute,
               private authService: GoogleAuthService,
               private gapiService: GoogleApiService) {
-     // First make sure gapi is loaded can be in AppInitilizer
      this.gapiService.onLoad().subscribe();
   }
 
