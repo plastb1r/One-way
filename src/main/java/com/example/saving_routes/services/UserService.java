@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 import com.example.saving_routes.entity.SecurityUser;
 import com.example.saving_routes.entity.User;
-import com.example.saving_routes.repos.UserRepository;
+import com.example.saving_routes.repositories.UserRepository;
 
 @Service
 public class UserService implements UserDetailsService {

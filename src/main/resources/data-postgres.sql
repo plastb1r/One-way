@@ -14,7 +14,7 @@ VALUES
   (2,'route2',2,2,1),
   (3,'route3',2,2,2);
 
-INSERT INTO places(place_id, place_coordinates, user_id)  -- map route owner column to place?
+INSERT INTO places(place_id, place_coordinates, user_id)
 VALUES
   ('aaaa','coordinates1',null),
   ('bbbb','coordinates2',null),
