@@ -2,21 +2,16 @@ package com.example.saving_routes.controllers;
 
 import java.security.Principal;
 
-import com.example.saving_routes.entity.Place;
 import com.example.saving_routes.entity.PlaceOnRoute;
 import com.example.saving_routes.entity.Route;
 import com.example.saving_routes.entity.User;
 import com.example.saving_routes.repositories.PlaceOnRouteRepository;
-import com.example.saving_routes.repositories.PlaceRepository;
 import com.example.saving_routes.repositories.RouteRepository;
 import com.example.saving_routes.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,8 +23,6 @@ public class AdminController {
     private RouteRepository routeRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PlaceRepository placeRepository;
     @Autowired
     private PlaceOnRouteRepository placeOnRouteRepository;
 
@@ -54,4 +47,4 @@ public class AdminController {
         return placeOnRouteRepository.findAllByRoute(route);
     }
 
-  }
+}

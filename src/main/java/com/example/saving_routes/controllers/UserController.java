@@ -1,12 +1,8 @@
 package com.example.saving_routes.controllers;
 
-import java.security.Principal;
-
 import com.example.saving_routes.entity.Place;
-import com.example.saving_routes.entity.PlaceOnRoute;
 import com.example.saving_routes.entity.Route;
 import com.example.saving_routes.entity.User;
-import com.example.saving_routes.repositories.PlaceOnRouteRepository;
 import com.example.saving_routes.repositories.PlaceRepository;
 import com.example.saving_routes.repositories.RouteRepository;
 import com.example.saving_routes.repositories.UserRepository;
@@ -31,8 +27,11 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private PlaceRepository placeRepository;
-    @Autowired
-    private PlaceOnRouteRepository placeOnRouteRepository;
+
+    @GetMapping(path = "/opentest")
+    public String test() {
+        return "you in";
+    }
 
     @GetMapping(path = "/user/{user_id}")
     public User getUser(@PathVariable(name = "user_id") String user_id) {

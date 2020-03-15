@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 
@@ -32,11 +34,11 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(@NotNull String username) throws UsernameNotFoundException {
-        SecurityUser user = new SecurityUser(userRepository.findByName(username));
-        if (user.equals(null)) {
-            throw new UsernameNotFoundException("user " + username + " was not found!");
+        Optional<User> user = userRepository.findByName(username);
+        if (user.isPresent()) {
+            return new SecurityUser(user.get());
         } else {
-            return user;
+            throw new UsernameNotFoundException("user " + username + " was not found!");
         }
     }
     
