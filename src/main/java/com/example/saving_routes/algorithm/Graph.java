@@ -61,36 +61,56 @@ public class Graph {
         return res;
     }
 
-    public List<Edge> shortGamiltoneWay(Node startPoint, Node endPoint, LinkedList<Edge> resArray,
-            LinkedList<Edge> minResArray, int counter, Long curSum, Long minSum) {
+public LinkedList<Edge> shortGamiltoneWay(Node startPoint,
+                                      Node endPoint,
+                                      LinkedList<Edge> resArray,
+                                      LinkedList<Edge> minResArray,
+                                      int counter,
+                                      Long curSum,
+                                      Long minSum) {
         Edge minEdge;
-        if (counter == nodes.size() - 1) {
-            allNotVisited(startPoint);
-            resArray.clear();
-            return minResArray;
-        }
+
         startPoint.setVisited(true);
+        LinkedList<Edge> usedNeighbors= new LinkedList<Edge>();
+
+
         for (Edge edge : startPoint.getEdges()) {
             counter = resArray.size();
+            if (counter == nodes.size()-1||usedNeighbors.size()==nodes.size()-1) {
+                counter=0;
+                curSum=0L;
+                allNotVisited(startPoint);
+                minResArray.addAll(resArray);
+                resArray.clear();
+                return minResArray;
+            }
+            if(counter==0 && usedNeighbors.size()==nodes.size()-1)
+            {
+                return minResArray;
+            }
             if (edge.getEndNode().getId().equals(endPoint.getId()) && counter == nodes.size() - 2) {
                 minEdge = edge;
                 minEdge.getEndNode().setVisited(true);
                 resArray.add(minEdge);
+                usedNeighbors.add(edge);
                 curSum += minEdge.getDuration();
                 if (curSum < minSum) {
-
-                    shortGamiltoneWay(minEdge.getEndNode(), endPoint, resArray, resArray, counter,
-                            curSum += minEdge.getDuration(), curSum);
+                    minResArray.clear();
+                    minSum=curSum;
                 }
-            } else if (edge.getEndNode().isVisited() == false && !edge.getEndNode().getId().equals(endPoint.getId())) {
+                curSum=Long.valueOf(0);
+            } else if (!edge.getEndNode().isVisited() && !usedNeighbors.contains(edge) && !edge.getEndNode().getId().equals(endPoint.getId())) {
                 minEdge = edge;
                 minEdge.getEndNode().setVisited(true);
+                usedNeighbors.add(edge);
                 resArray.add(minEdge);
                 curSum += minEdge.getDuration();
                 if (curSum > minSum) {
                     break;
                 }
+                System.out.print("A");
                 shortGamiltoneWay(minEdge.getEndNode(), endPoint, resArray, minResArray, counter, curSum, minSum);
+                System.out.print("A");
             }
 
         }
