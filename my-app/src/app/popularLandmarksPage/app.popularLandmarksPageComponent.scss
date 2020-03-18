@@ -3597,6 +3597,7 @@ a:hover, a:active {
 
 .fa-heart:before {
   content: "";
+  color: red;
 }
 
 .fa-star:before {
@@ -16779,7 +16780,7 @@ a.pswp__share--download:hover {
 }
 
 .c-secondary {
-  color: #fcc400;
+  color: #f15636;;
 }
 
 .c-white {
@@ -18976,8 +18977,8 @@ a.pswp__share--download:hover {
 
 .favoriteLabel {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
+  top: 305px;
+  left: 12px;
   cursor: pointer;
 }
 

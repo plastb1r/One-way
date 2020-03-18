@@ -92,13 +92,13 @@
            </div><!-- .listing-section__header -->
 
            <div class="accordion-container">
-             <div class="accordion" *ngFor="let d of data, let i = index ">
-               <div class="accordion__header" >
+             <div class="accordion"  *ngFor="let d of data, let i = index ">
+               <div class="accordion__header" (click)="toggle(d.index)">
                    <h4>{{d.name}}</h4>
                </div><!-- .accordion__header -->
 
-               <div id="{{d.index}}" class="accordion__content" >
-                 <div class="d-sm-flex accordion__inner">
+               <div class=" toggle" *ngIf="visibility[d.index]">
+                 <div class="d-sm-flex accordion__inner ">
                    <div class="c-dove-gray accordion__desc" >
                      <ul class="min-list listing-contact-list">
                        <li class="d-flex align-items-center c-silver-charlice listing-contact">

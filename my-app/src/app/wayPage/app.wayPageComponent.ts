@@ -20,9 +20,9 @@ export class WayPageComponent{
   rating: Array<number> = new Array<number>();
   way: Way;
   index: number = -1;
-  visibility: boolean = false;
   photos: Array<Array<string>> = new Array<Array<string>>();
   dir = undefined;
+  visibility: Array<boolean> = new Array<boolean>();
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
@@ -32,8 +32,8 @@ export class WayPageComponent{
     private httpService: HttpService
   ) { }
 
-  toggle(){
-    this.visibility=!this.visibility;
+  toggle(index: number){
+    this.visibility[index] = !this.visibility[index];
   }
 
   ngOnInit() {

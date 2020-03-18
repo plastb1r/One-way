@@ -104,22 +104,32 @@
             <div class="listing__thumbnail">
               <a>
                 <img src={{lm.photo}}>
-                <a>
-                  <span *ngIf="lm.isAddedToWay" class="favoriteLabel c-white">{{label}}
-                  </span>
-                </a>
-                <a >
+                <a *ngIf="lm.isAddedToFav; then redHeart else whiteHeart"> </a>
+                    <ng-template #redHeart>
+                      <span class="favorite c-white" (click)="addToFavP(lm.index)">
+                        <i class="fa fa-heart"></i>
+                      </span>
+                    </ng-template>
+                    <ng-template #whiteHeart>
+                      <span class="favorite c-white" (click)="addToFavP(lm.index)">
+                        <i class="fa fa-heart-o"></i>
+                      </span>
+                    </ng-template>
                   <span class="favorite c-white" (click)="addToFavP(lm.index)">
                     <i class="fa fa-heart-o"></i>
                   </span>
                   <span *ngIf="lm.isAddedToFav" class="favorite c-white" (click)="addToFavP(lm.index)">
-                    <i class="fa fa-heart-o bg-danger" ></i>
+                    <i class="fa fa-heart" ></i>
                   </span>
-                </a>
               </a>
             </div><!-- .listing__thumbnail -->
             <div class="listing__detail">
+              <a>
+                <span *ngIf="lm.isAddedToWay" class="favoriteLabel c-secondary">Добавлена к маршруту
+                </span>
+              </a>
               <h3 class="listing__title">
+                
                 <a>{{lm.name}}</a>
               </h3>
               <p class="listing__location c-dusty-gray">
@@ -128,7 +138,14 @@
               </p>
                 <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
                   <button class="button button--primary  button--larges button--pill b" type="submit" (click)="newLocation(lm.index)" routerLink="/landmarkPage">Подробнее</button>
-                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(lm.index)" >Добавить к маршруту</button>
+                  <div *ngIf="lm.isAddedToWay; then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>
+                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(lm.index)">Удалить из маршрута</button>
+                    </ng-template>
+                    <ng-template #elseBlock>
+                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="removeFromWay(lm.index)">Добавить к маршруту</button>
+                    </ng-template>
+                  
                 </div>
             </div><!-- .listing__detail -->
           </div><!-- .listing__wrapper -->

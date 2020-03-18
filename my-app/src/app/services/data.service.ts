@@ -48,9 +48,10 @@ export class DataService{
   constructor() {}
 
   changeFavP(loc: Location, f: Array<Location>) {
-    this.favP = f;
-    this.favP.push(loc);
-    this.favPSourse.next(this.favP);
+    
+      this.favP = f;
+      this.favP.push(loc);
+      this.favPSourse.next(this.favP);
   }
 
   changeFavPRemove(loc: Location, f: Array<Location>){
@@ -65,10 +66,15 @@ export class DataService{
     this.cityNameSourse.next(cityName)
   }
 
-  changeWay(loc: Location, way: Way){
-    this.way = way;
-    this.way.points.push(loc);
-    this.waySourse.next(this.way);
+  changeWay(loc: Location, way: Way, RemOrDel: number){
+    if(RemOrDel == 1){
+      this.way = way;
+      this.way.points.push(loc);
+      this.waySourse.next(this.way);
+    }
+    else {
+
+    }
   }
 
   changeWayLocations(loc: Location){

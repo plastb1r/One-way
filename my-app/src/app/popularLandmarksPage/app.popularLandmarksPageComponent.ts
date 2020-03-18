@@ -14,7 +14,6 @@ import { Way } from 'src/app/domens/way';
 export class PopularLandmarksPageComponent implements OnInit{
   locations: Array<Location>;
   test;
-  label = "Добавлено";
   photo: Array<string>;
   name:Array<string>;
   cityName: string;
@@ -31,6 +30,7 @@ export class PopularLandmarksPageComponent implements OnInit{
   pt: string = "";
   wayArray: Array<Location> = new Array<Location>();
   ind: number = 0;
+  ind2: number = 0;
   prev = this.locations;
   way: Way;
   favP: Array<Location>;
@@ -168,7 +168,7 @@ export class PopularLandmarksPageComponent implements OnInit{
     this.way.points.forEach(l => {
       if (l.lat == this.locations[i].lat && l.lng == this.locations[i].lng)
       {
-        this.ind = 1;
+        this.ind2 = 1;
       }
     });
   }
@@ -178,8 +178,17 @@ export class PopularLandmarksPageComponent implements OnInit{
     this.way.name = 'Тестовый путь 2';
     this.way.index = 1;
     this.data.currentCityName.subscribe(w => this.way.cityAddress = w);
-    if(this.ind == 0){
-      this.data.changeWay(this.locations[i], this.way);
+    if(this.ind2 == 0){
+      this.data.changeWay(this.locations[i], this.way, 1);
+    }
+    console.log(this.way);
+    this.dataLM[i].isAddedToWay = !this.dataLM[i].isAddedToWay;
+  }
+
+  removeFromWay(i: number){
+    this.checkLocInArray(i);
+    if(this.ind2 == 1){
+      this.data.changeWay(this.locations[i], this.way, 2);
     }
     console.log(this.way);
     this.dataLM[i].isAddedToWay = !this.dataLM[i].isAddedToWay;

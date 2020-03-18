@@ -24,6 +24,7 @@
     "@ng-bootstrap/ng-bootstrap": "^5.1.5",
     "@types/gapi": "0.0.39",
     "agm-direction": "^0.7.9",
+    "angular-crypto-js": "^1.0.7",
     "angular-google-oauth2": "^0.2.0",
     "ng-gapi": "0.0.73",
     "ng-sidebar": "^9.2.0",
