@@ -226,7 +226,7 @@ export class WayParamsPageComponent implements OnInit{
       this.way.name = 'Тестовый путь';
       this.data.currentCityName.subscribe(w => this.way.cityAddress = w);
       if(this.ind == 0){
-        this.data.changeWay(this.locations[i], this.way);
+        this.data.changeWay(this.locations[i], this.way, 1);
       }
       console.log(this.way);
       this.dataLM[i].isAddedToWay = !this.dataLM[i].isAddedToWay;

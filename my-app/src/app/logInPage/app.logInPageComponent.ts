@@ -304,9 +304,10 @@ export class LogInPageComponent implements OnInit {
   }
 
   getRequest(){
-    var url = '';
+    var url = 'http://localhost:8181/api/user/1/routes';
 		
     // create digest request object
+    var CryptoJS = require('crypto-js');
     var getRequest = new this.digestAuthRequest('GET', url, this.username, this.password);
         
     // make the request

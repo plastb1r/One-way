@@ -163,18 +163,21 @@ export class PopularLandmarksPageComponent implements OnInit{
 
   }
 
-  checkLocInArray(i: number){
+  changeIndInArray(i: number){
+    var loc;
     this.data.currentWay.subscribe(w => this.way = w);
     this.way.points.forEach(l => {
       if (l.lat == this.locations[i].lat && l.lng == this.locations[i].lng)
       {
         this.ind2 = 1;
+        loc = this.locations[i];
       }
     });
+    return loc;
   }
 
   addToWay(i: number){
-    this.checkLocInArray(i);
+    var loc = this.changeIndInArray(i);
     this.way.name = 'Тестовый путь 2';
     this.way.index = 1;
     this.data.currentCityName.subscribe(w => this.way.cityAddress = w);
@@ -186,7 +189,7 @@ export class PopularLandmarksPageComponent implements OnInit{
   }
 
   removeFromWay(i: number){
-    this.checkLocInArray(i);
+    this.changeIndInArray(i);
     if(this.ind2 == 1){
       this.data.changeWay(this.locations[i], this.way, 2);
     }

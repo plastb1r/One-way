@@ -57,7 +57,7 @@ export class LandmarkPageComponent implements OnInit{
     this.data.currentCityName.subscribe(w => this.way.cityAddress = w);
     this.way.index = 1;
     if(this.ind == 0){
-      this.data.changeWay(this.loc, this.way);
+      this.data.changeWay(this.loc, this.way, 1);
     }
     console.log(this.way);
   }
