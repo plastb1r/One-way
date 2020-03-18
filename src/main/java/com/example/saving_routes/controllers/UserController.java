@@ -87,7 +87,8 @@ public class UserController {
         // userRepository.findById(Integer.parseInt(userId)).get().getPlaces().remove(place);//?
         return placeRepository.existsById(Integer.parseInt(place.getId())) ? "error" : "deleted";
     }
-
-    // callandparse
-    // principal
+    // @PreAuthorize
+    // Callandparse
+    // Principal
+    // Authention
 }

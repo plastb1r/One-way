@@ -7,10 +7,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 
 import com.example.saving_routes.entity.SecurityUser;
@@ -23,15 +23,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @PostConstruct
-    public void init() {
-        Iterable<User> users = userRepository.findAll();
-        for (User user : users) {
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            userRepository.save(user);
-        }
-    }
-
     @Override
     public UserDetails loadUserByUsername(@NotNull String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByName(username);
@@ -41,5 +32,5 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("user " + username + " was not found!");
         }
     }
-    
+
 }
