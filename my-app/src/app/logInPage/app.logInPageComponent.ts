@@ -6,6 +6,7 @@ import { FooService } from 'src/app/services/foo.service';
 import {ActivatedRoute} from '@angular/router';
 import {NgForm} from '@angular/forms';
 import {User} from 'src/app/domens/user';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
   templateUrl: './logInPage.html',
@@ -26,7 +27,9 @@ export class LogInPageComponent implements OnInit {
               private sheetResource: FooService,
               private route: ActivatedRoute,
               private authService: GoogleAuthService,
-              private gapiService: GoogleApiService) {
+              private gapiService: GoogleApiService,
+              private http: HttpClient
+              ) {
      this.gapiService.onLoad().subscribe();
   }
 
@@ -305,11 +308,41 @@ export class LogInPageComponent implements OnInit {
 
   getRequest(){
     var url = 'http://localhost:8181/api/user/1/routes';
-		
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Accept": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "X-Requested-With": "XMLHttpRequest",
+        "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
+        "WWW-Authenticate" : "Digest",
+        "realm":"DigestAuthRealm", 
+        "domain": "/",       
+        "nonce":"", 
+        "algorithm":"MD5", 
+        "qop":"auth",
+      })
+    };
+    let headers = new HttpHeaders().set('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+    headers = headers.set('WWW-Authenticate', 'Digest');
+    headers = headers.set('Access-Control-Allow-Origin', '*');
+    headers = headers.set('Accept', 'application/json');
+    headers = headers.set('X-Requested-With', 'XMLHttpRequest');
+    headers = headers.set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    headers = headers.set('realm', 'DigestAuthRealm');
+    headers = headers.set('domain', '/api/user/1/routes');
+    headers = headers.set('nonce', 'MTU4NDU3MDA3MjgyNDoxZmQzYjIxZTA0N2Y0NGU5YTVhZjM0ZDFhZjYzY2EyZA==');
+    headers = headers.set('algorithm', 'MD5');
+    headers = headers.set('qop', 'auth');
+    headers = new HttpHeaders({
+    })
     // create digest request object
-    var CryptoJS = require('crypto-js');
-    var getRequest = new this.digestAuthRequest('GET', url, this.username, this.password);
-        
+    //var CryptoJS = require('crypto-js');
+    return this.http.get(url, {headers: headers});
+
+    /*var getRequest = new this.digestAuthRequest('GET', url, this.username, this.password);
+    
+
     // make the request
     getRequest.request(function(data) { 
       // success callback
@@ -317,8 +350,12 @@ export class LogInPageComponent implements OnInit {
     },function(errorCode) { 
       // error callback
       // tell user request failed
-    });
+    });*/
 
+  }
+
+  test(){
+    this.getRequest().subscribe(data => {console.log("data" + data)});
   }
 
   postRequest(){
@@ -328,12 +365,12 @@ export class LogInPageComponent implements OnInit {
       state: 'Colorado'
    }
    var url = '';
+
    
    // create new digest request object
    // because method (POST vs GET) is different
    // otherwise we could re-use the first one
    var postReq = new this.digestAuthRequest('POST', url, this.username, this.password);
-   
    postReq.request(function(data) { 
      // success callback
      // data probably a success message
