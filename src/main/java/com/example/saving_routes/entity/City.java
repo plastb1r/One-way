@@ -24,8 +24,8 @@ public class City {
   
   @JsonIgnore
   @Id
-  @Column(name = "city_id")
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "city_id")
   private Integer id;
 
   @Column(name = "city_name")

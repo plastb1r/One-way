@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin( origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(path = "/api/user")
 public class UserController {
 
@@ -84,9 +84,10 @@ public class UserController {
         // userRepository.findById(Integer.parseInt(userId)).get().getPlaces().remove(place);//?
         return placeRepository.existsById(Integer.parseInt(place.getId())) ? "error" : "deleted";
     }
-    
+
     // @PreAuthorize
     // Callandparse
     // Principal
-    // Authention
+    // AuthenticationPrincipal
+    // SecurityContextHolder.getContext().getAuthentication().getPrincipal()
 }

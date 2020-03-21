@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
-import com.example.saving_routes.entity.SecurityUser;
 import com.example.saving_routes.entity.User;
 import com.example.saving_routes.repositories.UserRepository;
 
@@ -25,7 +24,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(@NotNull String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByName(username);
         if (user.isPresent()) {
-            return new SecurityUser(user.get());
+            return user.get();
         } else {
             throw new UsernameNotFoundException("user " + username + " was not found!");
         }

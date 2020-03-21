@@ -28,14 +28,13 @@ import lombok.NoArgsConstructor;
 public class Route {
 
     @Id
-    @Column(name = "route_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "route_id")
     private Integer id;
 
     @Column(name = "route_name")
     private String name;
 
-    
     @Column(name = "route_time_to_go") // hours
     private float timeToGo;
     

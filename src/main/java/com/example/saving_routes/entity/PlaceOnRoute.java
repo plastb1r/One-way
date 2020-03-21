@@ -1,4 +1,3 @@
-
 package com.example.saving_routes.entity;
 
 import javax.persistence.Column;
@@ -27,8 +26,8 @@ public class PlaceOnRoute {
   
   @JsonIgnore
   @Id
-  @Column(name = "place_on_route_id")
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "place_on_route_id")
   private String id;
 
   @ManyToOne
