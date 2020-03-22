@@ -2,6 +2,10 @@ package com.example.saving_routes.algorithm;
 
 import java.util.*;
 
+import org.springframework.stereotype.Service;
+
+
+@Service
 public class Graph {
     private HashMap<String, Node> nodes;
 
@@ -61,8 +65,13 @@ public class Graph {
         return res;
     }
 
-    public List<Edge> shortGamiltoneWay(Node startPoint, Node endPoint, LinkedList<Edge> resArray,
-            LinkedList<Edge> minResArray, int counter, Long curSum, Long minSum) {
+    public List<Edge> shortGamiltoneWay(Node startPoint,
+                                  Node endPoint,
+                                  LinkedList<Edge> resArray,
+                                  LinkedList<Edge> minResArray,
+                                  int counter,
+                                  Long curSum,
+                                  Long minSum) {
         Edge minEdge;
         if (counter == nodes.size() - 1) {
             allNotVisited(startPoint);
@@ -79,8 +88,7 @@ public class Graph {
                 curSum += minEdge.getDuration();
                 if (curSum < minSum) {
 
-                    shortGamiltoneWay(minEdge.getEndNode(), endPoint, resArray, resArray, counter,
-                            curSum += minEdge.getDuration(), curSum);
+                    shortGamiltoneWay(minEdge.getEndNode(), endPoint, resArray, resArray, counter, curSum += minEdge.getDuration(), curSum);
                 }
             } else if (edge.getEndNode().isVisited() == false && !edge.getEndNode().getId().equals(endPoint.getId())) {
                 minEdge = edge;
@@ -111,7 +119,8 @@ public class Graph {
                 minEdge.getEndNode().setVisited(true);
                 resArray.add(minEdge);
                 curSum += minEdge.getDuration();
-            } else if (edge.getDuration() < minEdge.getDuration() && !edge.getEndNode().isVisited()
+            } else if (edge.getDuration() < minEdge.getDuration()
+                    && !edge.getEndNode().isVisited()
                     && !edge.getEndNode().getId().equals(endPoint.getId())) {
                 minEdge = edge;
                 minEdge.getEndNode().setVisited(true);
@@ -121,27 +130,5 @@ public class Graph {
         }
     }
 
-    public ArrayList<Node> combinations(Node startPoint, Node endPoint) {
-        ArrayList<Node> res = new ArrayList<Node>();
-        res.add(startPoint);
-        for (Map.Entry<String, Node> node : nodes.entrySet()) {
-            res.add(node.getValue());
-        }
-        res.add(endPoint);
-        Long minDurat = Long.valueOf(0);
-        for (int i = 0; i < res.size() - 1; i++) {
-            for (Edge edge : res.get(i).getEdges()) {
-                if (edge.getEndNode() == res.get(i + 1)) {
-                    minDurat += edge.getDuration();
-                }
-            }
-        }
-        return res;
-    }
-
-    public void burntAlg(Node startNode, Node endNode, LinkedList<Edge> resArray) {
-        for (Map.Entry<String, Node> node : nodes.entrySet()) {
-            node.getValue();
-        }
-    }
+   
 }
