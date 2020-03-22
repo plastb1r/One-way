@@ -42,7 +42,7 @@ public class Graph {
             }
         }
     }
-
+//Near Neighbour
     public Long shortestWay(Node startPoint, Node endPoint, LinkedList<Node> resArray) {
         resArray.add(startPoint);
         if (startPoint.getEdges() == null) {
@@ -64,7 +64,7 @@ public class Graph {
         }
         return res;
     }
-
+// CUSTOM ALG
     public List<Edge> shortGamiltoneWay(Node startPoint,
                                   Node endPoint,
                                   LinkedList<Edge> resArray,
@@ -104,31 +104,5 @@ public class Graph {
         }
 
         return minResArray;
-    }
-
-    public void shortestWay(Node startPoint, Node endPoint, LinkedList<Edge> resArray, int counter, Long curSum) {
-        startPoint.setVisited(true);
-        Edge minEdge = startPoint.getEdges().get(0);
-        if (counter == nodes.size() - 1) {
-            return;
-        }
-        for (Edge edge : startPoint.getEdges()) {
-            counter = resArray.size();
-            if (edge.getEndNode().getId().equals(endPoint.getId()) && counter == nodes.size() - 2) {
-                minEdge = edge;
-                minEdge.getEndNode().setVisited(true);
-                resArray.add(minEdge);
-                curSum += minEdge.getDuration();
-            } else if (edge.getDuration() < minEdge.getDuration()
-                    && !edge.getEndNode().isVisited()
-                    && !edge.getEndNode().getId().equals(endPoint.getId())) {
-                minEdge = edge;
-                minEdge.getEndNode().setVisited(true);
-                resArray.add(minEdge);
-                shortestWay(minEdge.getEndNode(), endPoint, resArray, counter, curSum += minEdge.getDuration());
-            }
-        }
-    }
-
-   
+    }   
 }
