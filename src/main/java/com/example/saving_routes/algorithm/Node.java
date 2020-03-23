@@ -8,12 +8,13 @@ public class Node {
     private  Double rating;
     private boolean isOpen;
     private boolean visited;
-    private LinkedList<Edge> edges;//hashmap
+    //private LinkedList<Edge> edges;//hashmap
+    private ArrayList<Edge> edges;
 
     public Node(){
-        this("",0.0,false,false,new LinkedList<Edge>());
+        this("",0.0,false,false,new ArrayList<Edge>());
     }
-    public Node(String id, Double rating, boolean isOpen, boolean visited, LinkedList<Edge> edges) {
+    public Node(String id, Double rating, boolean isOpen, boolean visited, ArrayList<Edge> edges) {
         this.id = id;
         this.rating = rating;
         this.isOpen = isOpen;
@@ -53,11 +54,19 @@ public class Node {
         this.visited = visited;
     }
 
-    public LinkedList<Edge> getEdges() {
+    /*public LinkedList<Edge> getEdges() {
         return edges;
     }
 
     public void setEdges(LinkedList<Edge> edges) {
+        this.edges = edges;
+    }*/
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(ArrayList<Edge> edges) {
         this.edges = edges;
     }
 }

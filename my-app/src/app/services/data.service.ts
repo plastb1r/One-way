@@ -67,14 +67,19 @@ export class DataService{
   }
 
   changeWay(loc: Location, way: Way, RemOrDel: number){
+    this.way = way;
     if(RemOrDel == 1){
-      this.way = way;
       this.way.points.push(loc);
-      this.waySourse.next(this.way);
     }
     else {
-
+      this.way.points.forEach(f => {
+        if (f.lat == loc.lat && f.lng == loc.lng)
+        {
+          const index: number = this.way.points.indexOf(f);
+          this.way.points.splice(index, 1);}
+      })
     }
+    this.waySourse.next(this.way);
   }
 
   changeWayLocations(loc: Location){

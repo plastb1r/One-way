@@ -30,6 +30,21 @@ public class JsonReader {
         return res;
     }
 
+    public ArrayList<Node> readNodesToArray(String path) throws IOException, ParseException {
+        ArrayList<Node> res = new ArrayList<Node>();
+        JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader(path);
+        Object obj = jsonParser.parse(reader);
+        JSONObject jsonObject = (JSONObject) obj;
+        JSONArray origins = (JSONArray) jsonObject.get("origin_addresses");
+        for (Object o : origins) {
+            Node newNode = new Node();
+            newNode.setId((String) o);
+            res.add(newNode);
+        }
+        return res;
+    }
+
     public void readEdges(HashMap<String, Node> nodes, String path, String travelMode)
             throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
@@ -63,4 +78,41 @@ public class JsonReader {
             counter1++;
         }
     }
+
+
+    public void readEdgesArray(ArrayList<Node> nodes, String path, String travelMode)
+            throws IOException, ParseException {
+        JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader(path);
+        Object obj = jsonParser.parse(reader);
+        JSONObject jsonObject = (JSONObject) obj;
+        JSONArray origins = (JSONArray) jsonObject.get("origin_addresses");
+        JSONArray destinations = (JSONArray) jsonObject.get("destination_addresses");
+        JSONArray rows = (JSONArray) jsonObject.get("rows");
+        int counter1 = 0;
+        for (int i = 0; i <  origins.size(); i++){
+            Node startNode = nodes.get(i);
+            int counter2 = 0;
+            for(int j = 0; j < destinations.size(); j++){
+                Node endNode = nodes.get(j);
+                if (!destinations.get(j).equals(origins.get(i))) {
+                    JSONObject array = (JSONObject) rows.get(counter1);
+                    JSONArray elements = (JSONArray) array.get("elements");
+                    JSONObject element = (JSONObject) elements.get(counter2);
+                    JSONObject duration = (JSONObject) element.get("duration");
+                    Object val = duration.get("value");
+                    Edge edge = new Edge();
+                    edge.setStartNode(startNode);
+                    edge.setEndNode(endNode);
+                    edge.setDuration((Long) val);
+                    edge.setTravelMode(travelMode);
+                    startNode.getEdges().add(edge);
+                }
+                counter2++;
+            }
+            counter1++;
+        }
+    }
+
+    
 }

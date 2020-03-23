@@ -300,7 +300,7 @@ export class LogInPageComponent implements OnInit {
     }
     this.log = function(str) {
       if (self.loggingOn) {
-        console.log('[digestAuthRequest] '+str);
+        console.log('[digestAuthRequest] '+str); // this error shows up in console
       }
     }
     this.version = function() { return '0.8.0' }

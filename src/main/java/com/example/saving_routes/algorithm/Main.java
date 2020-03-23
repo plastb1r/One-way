@@ -28,23 +28,37 @@ public class Main {
         distances.createTreeFromNodes(start);
          */
         HashMap<String,Node> rs = new HashMap<String, Node>();
-        rs = reader.readNodes("C:\\Users\\павел\\Desktop\\DistanceAlg\\src\\main\\resources\\voronezhDdriving.json");
-        reader.readEdges(rs,"C:\\Users\\павел\\Desktop\\DistanceAlg\\src\\main\\resources\\voronezhDdriving.json","DRIVING");
-        reader.readEdges(rs,"C:\\Users\\павел\\Desktop\\DistanceAlg\\src\\main\\resources\\voronezhTransit.json","TRANSIT");
-        reader.readEdges(rs,"C:\\Users\\павел\\Desktop\\DistanceAlg\\src\\main\\resources\\voronezhWalking.json","WALKING");
-        distances.setNodes(rs);
+        rs = reader.readNodes("src/main/resources/test jsons/voronezhDdriving.json");
+        reader.readEdges(rs,"src/main/resources/test jsons/voronezhDdriving.json","DRIVING");
+        reader.readEdges(rs,"src/main/resources/test jsons/voronezhTransit.json","TRANSIT");
+        reader.readEdges(rs,"src/main/resources/test jsons/voronezhWalking.json","WALKING");
+        //distances.setNodes(rs);
+        ArrayList<Node> test = new ArrayList<Node>();
+        test = reader.readNodesToArray("src/main/resources/test jsons/voronezhDdriving.json");
+        reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhDdriving.json","DRIVING");
+        //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhTransit.json","TRANSIT");
+        //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhWalking.json","WALKING");
+        distances.setNodes(test);
+        ArrayList<Node> test1 = new ArrayList<Node>(test);
+        test1.remove(4);
+        test1.remove(0);
         Node start;
-        start=distances.getNodes().get("б-р Победы, 23Б, Воронеж, Воронежская обл., Россия, 394077");
+        start=distances.getNodes().get(0);
         Node end;
-        end=distances.getNodes().get("ул. 20-летия Октября, 119, Воронеж, Воронежская обл., Россия, 394006");
+        end=distances.getNodes().get(4);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
        // LinkedList<Edge> minResWay=new LinkedList<Edge>();
       //  Long a = distances.shortestWay(start,end,resWay);
         int counter=0;
-       Long sum = Long.valueOf(0);
+        Long sum = Long.valueOf(0);
+        Long sums[] = new Long[10];
+        sums = distances.shortWayPermute(start, end, test1, sum, 3);
+
        //Long minSum=Long.valueOf(999999999);
+       //ArrayList<ArrayList<Long>> test = distances.getPermutations(3);
+
        // distances.shortGamiltoneWay(start,end, resWay, minResWay, counter,sum,minSum);
-        distances.shortestWay(start,end,resWay,counter,sum);
+        //distances.shortestWay(start,end,resWay,counter,sum);
         System.out.println("A");
     }
 }

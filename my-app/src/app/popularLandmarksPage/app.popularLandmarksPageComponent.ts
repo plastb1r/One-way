@@ -164,26 +164,25 @@ export class PopularLandmarksPageComponent implements OnInit{
   }
 
   changeIndInArray(i: number){
-    var loc;
     this.data.currentWay.subscribe(w => this.way = w);
     this.way.points.forEach(l => {
       if (l.lat == this.locations[i].lat && l.lng == this.locations[i].lng)
       {
         this.ind2 = 1;
-        loc = this.locations[i];
       }
+      else {this.ind2 = 0;}
     });
-    return loc;
   }
 
   addToWay(i: number){
-    var loc = this.changeIndInArray(i);
+    this.changeIndInArray(i);
     this.way.name = 'Тестовый путь 2';
     this.way.index = 1;
     this.data.currentCityName.subscribe(w => this.way.cityAddress = w);
     if(this.ind2 == 0){
       this.data.changeWay(this.locations[i], this.way, 1);
     }
+    //this.data.currentWay.subscribe(w => this.way = w);
     console.log(this.way);
     this.dataLM[i].isAddedToWay = !this.dataLM[i].isAddedToWay;
   }
@@ -193,6 +192,7 @@ export class PopularLandmarksPageComponent implements OnInit{
     if(this.ind2 == 1){
       this.data.changeWay(this.locations[i], this.way, 2);
     }
+    //this.data.currentWay.subscribe(w => this.way = w);
     console.log(this.way);
     this.dataLM[i].isAddedToWay = !this.dataLM[i].isAddedToWay;
   }

@@ -116,10 +116,10 @@
                       </span>
                     </ng-template>
                   <span class="favorite c-white" (click)="addToFavP(lm.index)">
-                    <i class="fa fa-heart-o"></i>
+                    <i class="fa fa-heart-o heart"></i>
                   </span>
                   <span *ngIf="lm.isAddedToFav" class="favorite c-white" (click)="addToFavP(lm.index)">
-                    <i class="fa fa-heart" ></i>
+                    <i class="fa fa-heart heart" ></i>
                   </span>
               </a>
             </div><!-- .listing__thumbnail -->
@@ -140,10 +140,10 @@
                   <button class="button button--primary  button--larges button--pill b" type="submit" (click)="newLocation(lm.index)" routerLink="/landmarkPage">Подробнее</button>
                   <div *ngIf="lm.isAddedToWay; then thenBlock else elseBlock"></div>
                     <ng-template #thenBlock>
-                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(lm.index)">Удалить из маршрута</button>
+                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="removeFromWay(lm.index)">Удалить из маршрута</button>
                     </ng-template>
                     <ng-template #elseBlock>
-                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="removeFromWay(lm.index)">Добавить к маршруту</button>
+                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(lm.index)">Добавить к маршруту</button>
                     </ng-template>
                   
                 </div>
