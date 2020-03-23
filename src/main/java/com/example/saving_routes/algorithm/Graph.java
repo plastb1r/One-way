@@ -207,6 +207,35 @@ public class Graph {
     }
 
 
+    
+    public void simplifyGraph()
+    {
+
+        for (Map.Entry<String, Node> node : getNodes().entrySet()) {
+            LinkedList<Edge> minEdges=new LinkedList<Edge>();
+            for(Edge edge:node.getValue().getEdges())
+            {
+                if(edge.getTravelMode().equals("WALKING"))
+                {
+                    minEdges.add(edge);
+                }
+            }
+            int counter=0;
+            for(Edge edge0 : minEdges) {
+                Edge minEdge = edge0;
+                for (Edge edge:node.getValue().getEdges()) {
+                    if (!edge.getTravelMode().equals(edge0.getTravelMode())&&edge0.getEndNode().equals(edge.getEndNode()) && edge.getDuration()<minEdge.getDuration())
+                    {
+                       minEdge=edge;
+                    }
+                }
+                minEdges.set(counter,minEdge);
+                counter++;
+            }
+            node.getValue().setEdges(minEdges);
+            nodes.replace(node.getKey(),node.getValue());
+        }
+        
 //Near Neighbour
     public Long shortestWay(Node startPoint, Node endPoint, LinkedList<Node> resArray) {
         resArray.add(startPoint);
