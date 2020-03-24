@@ -70,23 +70,6 @@ public class Graph {
         }
     }*/
 
-    public ArrayList<ArrayList<Integer>> getPermutations(int resSize){
-        int counter = resSize;
-        Integer[] firstpermutation = new Integer[counter];
-        for(int i = 0; i< counter; i++){
-            firstpermutation[i] = i + 1;
-        }
-        ArrayList<ArrayList<Integer>> permutations = new ArrayList<ArrayList<Integer>>();
-        /*Permutations<Integer> perm = new Permutations<Integer>(firstpermutation);
-        while(perm.hasNext()){
-            Integer[] t = new Integer[counter];
-            System.out.println(Arrays.toString(perm.next()));
-            permutations.add(Arrays.toString(perm.next()));
-        }*/
-        permutations.addAll(permute(firstpermutation));
-        return permutations;
-    }
-
     /*public int shortWayPermute(Node startPoint,
                                 Node endPoint,
                                 ArrayList<Node> nodeArray,
@@ -124,6 +107,10 @@ public class Graph {
 
     }*/
 
+
+    // function uses permutations to combine all nodes between start and end;
+    // then shouls check edges(-) and count durations - sum;
+    // returns time for each permutation ;
     public Long[] shortWayPermute(Node startPoint,
                                 Node endPoint,
                                 ArrayList<Node> nodeArray,
@@ -160,7 +147,7 @@ public class Graph {
 
     }
 
-    public Long getDuration(Node n1, Node n2){
+    public Long getDuration(Node n1, Node n2){ // function returns durations between 2 nodes
         Long res = null;
         for (Edge edge : n1.getEdges()) {
             if(edge.getEndNode() == n2){
@@ -170,7 +157,7 @@ public class Graph {
         return res;
     }
 
-    public boolean haveEdge(Node n1, Node n2){
+    public boolean haveEdge(Node n1, Node n2){ // function checks if there is an edge between two nodes
         boolean res = false;
         for (Edge edge : n1.getEdges()) {
             if(edge.getEndNode() == n2){
@@ -181,8 +168,8 @@ public class Graph {
     }
 
 
-
-    public ArrayList<ArrayList<Integer>> permute(Integer[] nums) {
+    // function returns ArrayList of permutations
+    public ArrayList<ArrayList<Integer>> permute(Integer[] nums) { 
         ArrayList<ArrayList<Integer>> results = new ArrayList<ArrayList<Integer>>();
         if (nums == null || nums.length == 0) {
             return results;
@@ -192,7 +179,9 @@ public class Graph {
         return results;
     }
     
-    public void dfs(Integer[] nums, ArrayList<ArrayList<Integer>> results, ArrayList<Integer> result) {
+
+    
+    public void dfs(Integer[] nums, ArrayList<ArrayList<Integer>> results, ArrayList<Integer> result) { 
         if (nums.length == result.size()) {
             ArrayList<Integer> temp = new ArrayList<>(result);
             results.add(temp);
