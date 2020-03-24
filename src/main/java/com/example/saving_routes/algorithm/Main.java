@@ -27,15 +27,17 @@ public class Main {
         Long res=distances.shortestWay(start,end,ex);
         distances.createTreeFromNodes(start);
          */
-        HashMap<String,Node> rs = new HashMap<String, Node>();
-        rs = reader.readNodes("src/main/resources/test jsons/voronezhDdriving.json");
-        reader.readEdges(rs,"src/main/resources/test jsons/voronezhDdriving.json","DRIVING");
-        reader.readEdges(rs,"src/main/resources/test jsons/voronezhTransit.json","TRANSIT");
-        reader.readEdges(rs,"src/main/resources/test jsons/voronezhWalking.json","WALKING");
+        //HashMap<String,Node> rs = new HashMap<String, Node>();
+        //rs = reader.readNodes("src/main/resources/test jsons/voronezhDdriving.json");
+        //reader.readEdges(rs,"src/main/resources/test jsons/voronezhDdriving.json","DRIVING");
+        //reader.readEdges(rs,"src/main/resources/test jsons/voronezhTransit.json","TRANSIT");
+        //reader.readEdges(rs,"src/main/resources/test jsons/voronezhWalking.json","WALKING");
         //distances.setNodes(rs);
         ArrayList<Node> test = new ArrayList<Node>();
-        test = reader.readNodesToArray("src/main/resources/test jsons/voronezhDdriving.json");
-        reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhDdriving.json","DRIVING");
+        //test = reader.readNodesToArray("src/main/resources/test jsons/voronezhDdriving.json");
+        //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhDdriving.json","DRIVING");
+        test = reader.readNodesToArray("src/main/resources/test jsons/example2.json");
+        reader.readEdgesArray(test,"src/main/resources/test jsons/example2.json","DRIVING");
         //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhTransit.json","TRANSIT");
         //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhWalking.json","WALKING");
         distances.setNodes(test);
@@ -51,7 +53,7 @@ public class Main {
       //  Long a = distances.shortestWay(start,end,resWay);
         int counter=0;
         Long sum = Long.valueOf(0);
-        Long sums[] = new Long[10];
+        Long sums[] = new Long[6];
         sums = distances.shortWayPermute(start, end, test1, sum, 3);
 
        //Long minSum=Long.valueOf(999999999);

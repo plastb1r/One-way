@@ -137,24 +137,24 @@ public class Graph {
             firstpermutation[i] = i;
         }
         ArrayList<ArrayList<Integer>> permutations = new ArrayList<ArrayList<Integer>>();
+
+        permutations.addAll(permute(firstpermutation));
         int permuteArraySize = permutations.size();
         Long[] sums = new Long[permuteArraySize];
 
-        permutations.addAll(permute(firstpermutation));
-
-        for (int i = 0; i < permutations.size(); i++) { 
-            for (int j = 0; j < permutations.get(i).size(); j++) { 
-                curSum += getDuration(startPoint, nodeArray.get(permutations.get(i).get(j)));
-                for(int f = 0; f < permutations.get(i).size() - 1; f++)
-                {
-                    curSum += getDuration(nodeArray.get(permutations.get(i).get(f)),  nodeArray.get(permutations.get(i).get(f+1)));
-                    
+        for (int i = 0; i < permutations.size() ; i++) { 
+            for (int j = 0; j < permutations.get(i).size() - 1; j++) { 
+                if(j == 0) {
+                    curSum += getDuration(startPoint, nodeArray.get(permutations.get(i).get(j)));
                 }
-                curSum += getDuration(nodeArray.get(permutations.get(i).get(counter-1)), endPoint);
+                curSum += getDuration(nodeArray.get(permutations.get(i).get(j)),  nodeArray.get(permutations.get(i).get(j+1)));
+                if(j + 1 == permutations.get(i).size() - 1)
+                { 
+                    curSum += getDuration(nodeArray.get(permutations.get(i).get(j)), endPoint);
+                }
             } 
             sums[i] = curSum;
             curSum =  Long.valueOf(0);;
-
         } 
         return sums;
 
@@ -208,7 +208,7 @@ public class Graph {
 
 
     
-    public void simplifyGraph()
+    /*public void simplifyGraph()
     {
 
         for (Map.Entry<String, Node> node : getNodes().entrySet()) {
@@ -234,7 +234,7 @@ public class Graph {
             }
             node.getValue().setEdges(minEdges);
             nodes.replace(node.getKey(),node.getValue());
-        }
+        }*/
         
 //Near Neighbour
     public Long shortestWay(Node startPoint, Node endPoint, LinkedList<Node> resArray) {
