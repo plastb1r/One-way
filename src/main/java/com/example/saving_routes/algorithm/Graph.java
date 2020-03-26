@@ -35,6 +35,17 @@ public class Graph {
     }*/
 
     private ArrayList<Node> nodes;
+    private ArrayList<Node> minWay = new ArrayList<>();
+
+    public void setMinWay(Node startPoint, ArrayList<Node> nodes, Node endPoint){
+        minWay.add(startPoint);
+        minWay.addAll(nodes);
+        minWay.add(endPoint);
+    }
+
+    public ArrayList<Node> getMinWay() {
+        return minWay;
+    }
 
     public Graph() {
         nodes = new ArrayList<Node>();
@@ -141,10 +152,28 @@ public class Graph {
                 }
             } 
             sums[i] = curSum;
-            curSum =  Long.valueOf(0);;
+            curSum =  Long.valueOf(0);
         } 
+        ArrayList<Node> permuteNodes = new ArrayList<Node>();
+        int index = getIndexOfMinTime(sums);
+        for (int i = 0; i < nodeArray.size(); i++){
+            permuteNodes.add( nodeArray.get(permutations.get(index).get(i))); 
+        }
+        setMinWay(startPoint, permuteNodes, endPoint);
         return sums;
 
+    }
+
+    public int getIndexOfMinTime(Long[] sums){
+        int indexOfMin = 0;
+        for (int i = 1; i < sums.length; i++)
+        {
+            if (sums[i] < sums[indexOfMin])
+            {
+                indexOfMin = i;
+            }
+        }
+        return indexOfMin;
     }
 
     public Long getDuration(Node n1, Node n2){ // function returns durations between 2 nodes

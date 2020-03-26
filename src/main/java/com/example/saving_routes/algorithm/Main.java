@@ -43,9 +43,9 @@ public class Main {
         distances.setNodes(test);
         ArrayList<Node> test1 = new ArrayList<Node>(test);
         test1.remove(4);
-        test1.remove(0);
+        test1.remove(1);
         Node start;
-        start=distances.getNodes().get(0);
+        start=distances.getNodes().get(1);
         Node end;
         end=distances.getNodes().get(4);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
@@ -55,7 +55,8 @@ public class Main {
         Long sum = Long.valueOf(0);
         Long sums[] = new Long[6];
         sums = distances.shortWayPermute(start, end, test1, sum, 3);
-
+        ArrayList<Node> minWay =  new ArrayList<Node>();
+        minWay = distances.getMinWay();
        //Long minSum=Long.valueOf(999999999);
        //ArrayList<ArrayList<Long>> test = distances.getPermutations(3);
 
