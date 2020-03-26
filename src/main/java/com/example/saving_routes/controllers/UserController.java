@@ -1,8 +1,11 @@
 package com.example.saving_routes.controllers;
 
+import com.example.saving_routes.entity.City;
 import com.example.saving_routes.entity.Place;
 import com.example.saving_routes.entity.Route;
 import com.example.saving_routes.entity.User;
+import com.example.saving_routes.repositories.CityRepository;
+import com.example.saving_routes.repositories.PlaceOnRouteRepository;
 import com.example.saving_routes.repositories.PlaceRepository;
 import com.example.saving_routes.repositories.RouteRepository;
 import com.example.saving_routes.repositories.UserRepository;
@@ -12,7 +15,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,10 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private PlaceRepository placeRepository;
+    @Autowired
+    private PlaceOnRouteRepository placeOnRouteRepository;
+    @Autowired
+    private CityRepository cityRepository;
 
     @GetMapping(path = "/{user_id}")
     public User getUser(@PathVariable(name = "user_id") String user_id) {
@@ -37,7 +43,7 @@ public class UserController {
 
     @PutMapping(path = "/{user_id}")
     public User updateUser(@PathVariable(name = "user_id") String user_id, @RequestBody User user) {
-        User savedUser = userRepository.save(user);
+        User savedUser = userRepository.saveAndFlush(user);
         return savedUser;
     }
 
@@ -47,20 +53,33 @@ public class UserController {
         return routeRepository.findByOwner(user);
     }
 
-    @PostMapping(path = "/{user_id}/routes/route")
-    public Route addRoute(@PathVariable(name = "user_id") String userId, @RequestBody Route route) {
+    @PutMapping(path = "/{user_id}/routes")
+    public Iterable<Route> saveRoute(@PathVariable(name = "user_id") String userId, @RequestBody Route route) {
+        Route newRoute = new Route();
+        newRoute.setTimeToGo(route.getTimeToGo());
+        newRoute.setName(route.getName());
+
+        City city = cityRepository.saveAndFlush(route.getCity());
+        newRoute.setCity(city);
+
         User user = userRepository.findById(Integer.parseInt(userId)).get();
-        route.setOwner(user);
-        // user.getRoutes().add(route); ???
-        Route savedRoute = routeRepository.save(route);
-        return savedRoute;
+        newRoute.setOwner(user);
+
+        routeRepository.saveAndFlush(newRoute);
+
+        route.getPlaces().forEach(placeOnRoute -> {
+            Place place = placeRepository.saveAndFlush(placeOnRoute.getPlace());
+            placeOnRoute.setRoute(newRoute);
+            placeOnRoute.setPlace(place);
+            placeOnRouteRepository.saveAndFlush(placeOnRoute);
+        });
+        return routeRepository.findByOwner(user);
     }
 
-    @DeleteMapping(path = "/{user_id}/routes/route")
-    public String deleteRoute(@PathVariable(name = "user_id") String userId, @RequestBody Route route) {
-        routeRepository.delete(route);
-        // userRepository.findById(Integer.parseInt(userId)).get().getRoutes().remove(route);//?
-        return routeRepository.existsById(route.getId()) ? "error" : "deleted";
+    @DeleteMapping(path = "/{user_id}/routes/{route_id}")
+    public String deleteRoute(@PathVariable(name = "route_id") Integer routeId) {
+        routeRepository.deleteById(routeId);
+        return routeRepository.existsById(routeId) ? "error" : "deleted";
     }
 
     @GetMapping(path = "/{user_id}/places")
@@ -69,20 +88,18 @@ public class UserController {
         return placeRepository.findAllByOwner(user);
     }
 
-    @PostMapping(path = "/{user_id}/places/place")
-    public Place addPlace(@PathVariable(name = "user_id") String userId, @RequestBody Place place) {
+    @PutMapping(path = "/{user_id}/places")
+    public Place savePlace(@PathVariable(name = "user_id") String userId, @RequestBody Place place) {
         User user = userRepository.findById(Integer.parseInt(userId)).get();
         place.setOwner(user);
-        Place savedPlace = placeRepository.save(place);
-        // user.getPlaces().add(place); ???
+        Place savedPlace = placeRepository.saveAndFlush(place);
         return savedPlace;
     }
 
-    @DeleteMapping(path = "/{user_id}/places/place")
-    public String deletePlace(@PathVariable(name = "user_id") String userId, @RequestBody Place place) {
-        placeRepository.delete(place);
-        // userRepository.findById(Integer.parseInt(userId)).get().getPlaces().remove(place);//?
-        return placeRepository.existsById(Integer.parseInt(place.getId())) ? "error" : "deleted";
+    @DeleteMapping(path = "/{user_id}/places/{place_id}")
+    public String deletePlace(@PathVariable(name = "user_id") String placeId) {
+        placeRepository.deleteById(placeId);
+        return placeRepository.existsById(placeId) ? "error" : "deleted";
     }
 
     // @PreAuthorize
@@ -90,4 +107,6 @@ public class UserController {
     // Principal
     // AuthenticationPrincipal
     // SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+    // responseEntity
+    // saveAndFlush
 }
