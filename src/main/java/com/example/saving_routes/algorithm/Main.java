@@ -1,5 +1,7 @@
 package com.example.saving_routes.algorithm;
 
+import jdk.nashorn.api.scripting.JSObject;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -55,7 +57,8 @@ public class Main {
         Long sum = Long.valueOf(0);
         Long sums[] = new Long[6];
         sums = distances.shortWayPermute(start, end, test1, sum, 3);
-
+        JsonWriter writer = new JsonWriter();
+        JSONObject obj = writer.writeResultWay(test1);
        //Long minSum=Long.valueOf(999999999);
        //ArrayList<ArrayList<Long>> test = distances.getPermutations(3);
 
