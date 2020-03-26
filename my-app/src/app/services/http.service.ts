@@ -22,6 +22,10 @@ export class HttpService{
       return this.http.request('GET',this.url);
     }
 
+    sendPlacesToAlgorythm(places: Array<string>){
+      return this.http.post('http://localhost:8181/generate', places); 
+    }
+
     getPopPlaces(loc: Location, index: number, pt: string){
       var latit = String(loc.lat);
       var longt = String(loc.lng);

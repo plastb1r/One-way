@@ -1,5 +1,6 @@
 <button class="btn btn-outline-dark" type="submit"  routerLink="/profilePage">Профиль</button>
 <button class="btn btn-outline-dark" type="submit"  routerLink="/wayParamsPage">Параметры</button>
+<button class="btn btn-outline-dark" type="submit" (click)="placesFromAlg()">Построить маршрут</button>
 <div class="containerMap">
   <div class="input-place-container">
     <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #searchplace>
