@@ -11,12 +11,12 @@ public class JsonWriter {
         JSONObject res = new JSONObject();
         JSONArray arrayNodes = new JSONArray();
         JSONArray arrayEdges = new JSONArray();
-        for(Node node: nodes)
+        for(int i =0; i<nodes.size()-1;i++)
         {
-            arrayNodes.add(node.getId());
-            if(node.getEdges().size()!=0)
+            arrayNodes.add(nodes.get(i).getId());
+            if(nodes.get(i).getEdges().size()!=0)
             {
-                arrayEdges.add(node.getEdges());
+                arrayEdges.add(nodes.get(i).getEdges().get(0).getDuration());
             }
 
         }
