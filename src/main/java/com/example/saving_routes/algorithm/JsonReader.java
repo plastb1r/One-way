@@ -113,6 +113,4 @@ public class JsonReader {
             counter1++;
         }
     }
-
-    
 }

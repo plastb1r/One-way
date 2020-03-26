@@ -43,6 +43,20 @@ public class Graph {
         minWay.add(endPoint);
     }
 
+    public void filterMinWay(){
+        for(int i=0; i<minWay.size()-1; i++)
+        {
+            int j=0;
+            while (minWay.get(i).getEdges().get(j).getEndNode()!=minWay.get(i+1))
+            {
+                j++;
+            }
+            Edge rEdge=minWay.get(i).getEdges().get(j);
+            minWay.get(i).getEdges().clear();
+            minWay.get(i).getEdges().add(rEdge);
+        }
+    }
+
     public ArrayList<Node> getMinWay() {
         return minWay;
     }

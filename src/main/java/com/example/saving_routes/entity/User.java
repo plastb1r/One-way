@@ -1,6 +1,5 @@
 package com.example.saving_routes.entity;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -10,12 +9,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.example.saving_routes.entity.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +35,8 @@ public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "user_seq", sequenceName = "users_user_id_seq", allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     @Column(name = "user_id")
     private Integer id;
 
@@ -62,7 +60,6 @@ public class User implements UserDetails {
     @Column(name = "user_places")
     private Set<Place> places;
 
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
     @Column(name = "user_authorities")
     private List<Role> authorities;
@@ -78,7 +75,6 @@ public class User implements UserDetails {
 
     @Column(name = "user_enable")
     private boolean enabled;
-
 
     @Override
     public String getUsername() {
