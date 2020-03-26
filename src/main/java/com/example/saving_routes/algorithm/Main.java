@@ -1,5 +1,6 @@
 package com.example.saving_routes.algorithm;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -57,6 +58,9 @@ public class Main {
         sums = distances.shortWayPermute(start, end, test1, sum, 3);
         ArrayList<Node> minWay =  new ArrayList<Node>();
         minWay = distances.getMinWay();
+        distances.filterMinWay();
+        JsonWriter writer = new JsonWriter();
+        JSONObject obj = writer.writeResultWay(minWay);
        //Long minSum=Long.valueOf(999999999);
        //ArrayList<ArrayList<Long>> test = distances.getPermutations(3);
 
