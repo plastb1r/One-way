@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,29 +24,30 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "places_on_route")
 public class PlaceOnRoute {
-  
-  @JsonIgnore
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "place_on_route_id")
-  private String id;
 
-  @ManyToOne
-  @JoinColumn(name = "place_id")
-  private Place place;
+    @JsonIgnore
+    @Id
+    @SequenceGenerator(name = "place_on_route_seq", sequenceName = "places_on_route_place_on_route_id_seq", allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "place_on_route_seq")
+    @Column(name = "place_on_route_id")
+    private Integer id;
 
-  @JsonIgnore
-  @ManyToOne
-  @JoinColumn(name = "route_id")
-  private Route route;
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place;
 
-  @Column(name = "place_index")
-  private int index;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "route_id")
+    private Route route;
 
-  @Column(name = "time_to_next_place") // hours
-  private float timeToNext;
+    @Column(name = "place_index")
+    private int index;
 
-  @Column(name = "transport_to_next_place")
-  private Transports transportToNext; 
+    @Column(name = "time_to_next_place") // hours
+    private float timeToNext;
+
+    @Column(name = "transport_to_next_place")
+    private Transports transportToNext;
 
 }

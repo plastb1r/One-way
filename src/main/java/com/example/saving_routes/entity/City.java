@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,10 +22,11 @@ import lombok.Data;
 @Entity
 @Table(name = "cities")
 public class City {
-  
+
   @JsonIgnore
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @SequenceGenerator(name = "city_seq", sequenceName = "cities_city_id_seq", allocationSize = 1, initialValue = 100)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_seq")
   @Column(name = "city_id")
   private Integer id;
 

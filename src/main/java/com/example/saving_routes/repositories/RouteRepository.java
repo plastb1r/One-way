@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RouteRepository extends JpaRepository<Route, Integer> {
   Iterable<Route> findAllById(Integer id);
+
   Iterable<Route> findByOwner(User owner);
-  
+
+  Iterable<Route> findByCity(String city);
+
 }
