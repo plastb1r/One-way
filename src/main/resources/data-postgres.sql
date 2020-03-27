@@ -21,19 +21,19 @@ VALUES
   (2,'route2',2,2,1),
   (3,'route3',2,2,2);
 
-INSERT INTO places(place_id, place_coordinates, user_id)
+INSERT INTO places(place_id, place_lat,place_lng, user_id)
 VALUES
-  ('aaaa','coordinates1',null),
-  ('bbbb','coordinates2',null),
-  ('cccc','coordinates3',null),
-  ('dddd','coordinates4',null),
-  ('eeee','coordinates5',null),
-  ('ffff','coordinates6',null),
-  ('zzzz','coordinates51',null),
-  ('ssss','coordinates61',null),
-  ('gggg','coordinates7',1),
-  ('hhhh','coordinates8',2),
-  ('iiii','coordinates9',2);
+  ('aaaa',12,31,null),
+  ('bbbb',13,32,null),
+  ('cccc',13,33,null),
+  ('dddd',14,34,null),
+  ('eeee',14,35,null),
+  ('ffff',15,36,null),
+  ('zzzz',16,37,null),
+  ('ssss',17,38,null),
+  ('gggg',18,35,1),
+  ('hhhh',19,36,2),
+  ('iiii',143,11,2);
 
 INSERT INTO places_on_route(place_on_route_id, place_id, route_id,
     place_index, time_to_next_place, transport_to_next_place)
