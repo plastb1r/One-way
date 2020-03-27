@@ -7,9 +7,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -79,6 +79,28 @@ public class JsonReader {
         }
     }
 
+    private String callAndParse(String endpoint) {
+        URL url;
+        try {
+            url = new URL(endpoint);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer content = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+            return content.toString();
+        } catch (IOException e) {
+            JSONObject error = new JSONObject();
+            error.put("error", e.getMessage());
+            return e.getMessage();
+        }
+    }
 
     public void readEdgesArray(ArrayList<Node> nodes, String path, String travelMode)
             throws IOException, ParseException {

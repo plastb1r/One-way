@@ -68,7 +68,23 @@ export class MapFormComponent implements OnInit{
      private httpService: HttpService
    ) { }
 
-   createWay(){
+   // sends places to alg 
+   placesFromAlg(){
+    var pl = new Array<string>();
+    for(var i = 0; i <  this.locations2.length; i++){
+      pl.push(this.locations2[i].placeId);
+    }
+
+    // what returns algorythm?? 
+    this.httpService.sendPlacesToAlgorythm(pl).subscribe(
+      //(data: Array<Location>) => {this.locations2=data;},
+      //error => console.log(error)
+    );
+    //createWay(arr);
+   }
+
+
+   createWay(arr: Array<Location>){
     this.allow = false;
     this.notallow = true;
     //this.data.currentWay.subscribe(w => this.way = w);
@@ -86,6 +102,7 @@ export class MapFormComponent implements OnInit{
       destination: {lat: this.locations2[length].lat, lng: this.locations2[length].lng},
       waypoints: directs,
       travelMode: google.maps.TravelMode.DRIVING
+      
     }
 
     /*this.mapsAPILoader.load().then(() => {
@@ -125,7 +142,7 @@ export class MapFormComponent implements OnInit{
        autocomplete.addListener("place_changed", () => {
          this.ngZone.run(() => {
            //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
            //verify result
            if (place.geometry === undefined || place.geometry === null) {
              return;
