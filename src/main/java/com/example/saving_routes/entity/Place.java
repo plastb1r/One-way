@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +22,19 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "places")
 public class Place {
-
+    
+    @JsonProperty(value = "placeId")
     @Id
     @Column(name = "place_id")
     private String id;
 
-    @Column(name = "place_coordinates")
-    private String coordinates;
+    @JsonProperty(value = "lat")
+    @Column(name = "place_lat")
+    private String lat;
+
+    @JsonProperty(value = "lng")
+    @Column(name = "place_lng")
+    private String lng;
 
     @JsonIgnore
     @ManyToOne
