@@ -42,10 +42,13 @@ class RouteGeneratorController {
     @PostMapping(path = "/generate")
     public List<Place> genereateRoutes(@RequestBody(required = false) List<Place> places)
             throws IOException, ParseException {
+        ArrayList<String> placeId=new ArrayList();
         String str =""; 
         str += "place_id:" + places.get(0).getId();
+        placeId.add(places.get(0).getId());
         for(int i = 1; i < places.size(); i++){
             str += "|place_id:" + places.get(i).getId();
+            placeId.add(places.get(i).getId());
         }
         String query = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+ str +"&destinations=" + str +"&key=AIzaSyCefImCcqdUPi-r6wfGymGrtSD9jzADZOI";
         final StringBuilder content = new StringBuilder();
@@ -65,7 +68,7 @@ class RouteGeneratorController {
         Graph distances=new Graph();
         JsonReader reader = new JsonReader();
         ArrayList<Node> test = new ArrayList<Node>();;
-        test = reader.readNodesToArray(content.toString());
+        test = reader.readNodesToArray(placeId);
         reader.readEdgesArray(test,content.toString(),"DRIVING");
         
         distances.setNodes(test);

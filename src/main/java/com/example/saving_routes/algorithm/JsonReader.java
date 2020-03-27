@@ -15,31 +15,27 @@ import java.util.HashMap;
 
 public class JsonReader {
 
-    public HashMap<String, Node> readNodes(String path) throws IOException, ParseException {
+    public HashMap<String, Node> readNodes(String path, ArrayList<String> placesIds) throws IOException, ParseException {
         HashMap<String, Node> res = new HashMap<String, Node>();
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader(path);
         Object obj = jsonParser.parse(reader);
         JSONObject jsonObject = (JSONObject) obj;
         JSONArray origins = (JSONArray) jsonObject.get("origin_addresses");
-        for (Object o : origins) {
+        for (String id : placesIds) {
             Node newNode = new Node();
-            newNode.setId((String) o);
-            res.put((String) o, newNode);
+            newNode.setId(id);
+            res.put(id, newNode);
         }
         return res;
     }
 
-    public ArrayList<Node> readNodesToArray(String path) throws IOException, ParseException {
+
+    public ArrayList<Node> readNodesToArray(ArrayList<String> placesIds) throws IOException, ParseException {
         ArrayList<Node> res = new ArrayList<Node>();
-        JSONParser jsonParser = new JSONParser();
-        //FileReader reader = new FileReader(path);
-        Object obj = jsonParser.parse(path);
-        JSONObject jsonObject = (JSONObject) obj;
-        JSONArray origins = (JSONArray) jsonObject.get("origin_addresses");
-        for (Object o : origins) {
+        for (String id : placesIds) {
             Node newNode = new Node();
-            newNode.setId((String) o);
+            newNode.setId(id);
             res.add(newNode);
         }
         return res;

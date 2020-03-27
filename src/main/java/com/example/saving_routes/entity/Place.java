@@ -30,11 +30,11 @@ public class Place {
 
     @JsonProperty(value = "lat")
     @Column(name = "place_lat")
-    private Double lat;
+    private String lat;
 
     @JsonProperty(value = "lng")
     @Column(name = "place_lng")
-    private Double lng;
+    private String lng;
 
     @JsonIgnore
     @ManyToOne
