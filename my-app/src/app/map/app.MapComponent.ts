@@ -70,17 +70,17 @@ export class MapFormComponent implements OnInit{
 
    // sends places to alg 
    placesFromAlg(){
-    var pl = new Array<string>();
-    for(var i = 0; i <  this.locations2.length; i++){
-      pl.push(this.locations2[i].placeId);
-    }
+    //var pl = new Array<string>();
+   // for(var i = 0; i <  this.locations2.length; i++){
+      //pl.push(this.locations2[i].placeId);
+    //}
 
     // what returns algorythm?? 
-    this.httpService.sendPlacesToAlgorythm(pl).subscribe(
+    this.httpService.sendPlacesToAlgorythm(this.way.points).subscribe(
       //(data: Array<Location>) => {this.locations2=data;},
       //error => console.log(error)
     );
-    //createWay(arr);
+    //createWay(arr)
    }
 
 
