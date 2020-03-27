@@ -33,8 +33,8 @@ public class JsonReader {
     public ArrayList<Node> readNodesToArray(String path) throws IOException, ParseException {
         ArrayList<Node> res = new ArrayList<Node>();
         JSONParser jsonParser = new JSONParser();
-        FileReader reader = new FileReader(path);
-        Object obj = jsonParser.parse(reader);
+        //FileReader reader = new FileReader(path);
+        Object obj = jsonParser.parse(path);
         JSONObject jsonObject = (JSONObject) obj;
         JSONArray origins = (JSONArray) jsonObject.get("origin_addresses");
         for (Object o : origins) {
@@ -48,8 +48,8 @@ public class JsonReader {
     public void readEdges(HashMap<String, Node> nodes, String path, String travelMode)
             throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
-        FileReader reader = new FileReader(path);
-        Object obj = jsonParser.parse(reader);
+        //FileReader reader = new FileReader(path);
+        Object obj = jsonParser.parse(path);
         JSONObject jsonObject = (JSONObject) obj;
         JSONArray origins = (JSONArray) jsonObject.get("origin_addresses");
         JSONArray destinations = (JSONArray) jsonObject.get("destination_addresses");
@@ -105,8 +105,8 @@ public class JsonReader {
     public void readEdgesArray(ArrayList<Node> nodes, String path, String travelMode)
             throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
-        FileReader reader = new FileReader(path);
-        Object obj = jsonParser.parse(reader);
+        //FileReader reader = new FileReader(path);
+        Object obj = jsonParser.parse(path);
         JSONObject jsonObject = (JSONObject) obj;
         JSONArray origins = (JSONArray) jsonObject.get("origin_addresses");
         JSONArray destinations = (JSONArray) jsonObject.get("destination_addresses");

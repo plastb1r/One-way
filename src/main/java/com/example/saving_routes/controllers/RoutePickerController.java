@@ -3,15 +3,25 @@ package com.example.saving_routes.controllers;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+import javax.validation.constraints.Min;
+
+import com.example.saving_routes.algorithm.Edge;
+import com.example.saving_routes.algorithm.Graph;
+import com.example.saving_routes.algorithm.JsonReader;
+import com.example.saving_routes.algorithm.Node;
 import com.example.saving_routes.entity.Place;
 import com.example.saving_routes.entity.Route;
 import com.example.saving_routes.repositories.RouteRepository;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +40,14 @@ class RouteGeneratorController {
     RouteRepository routeRepository;
 
     @PostMapping(path = "/generate")
-    public Iterable<Route> genereateRoutes(@RequestBody(required = false) Iterable<Place> places) {
-        String query = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling&language=fr-FR&key=AIzaSyCefImCcqdUPi-r6wfGymGrtSD9jzADZOI";
+    public Iterable<Route> genereateRoutes(@RequestBody(required = false) List<Place> places)
+            throws IOException, ParseException {
+        String str =""; 
+        str += "place_id:" + places.get(0).getId();
+        for(int i = 1; i < places.size(); i++){
+            str += "|place_id:" + places.get(i).getId();
+        }
+        String query = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+ str +"&destinations=" + str +"&key=AIzaSyCefImCcqdUPi-r6wfGymGrtSD9jzADZOI";
         final StringBuilder content = new StringBuilder();
 
         try {
@@ -46,10 +62,37 @@ class RouteGeneratorController {
         } catch (final Exception ex) {
             ex.printStackTrace();
         }
+        Graph distances=new Graph();
+        JsonReader reader = new JsonReader();
+        ArrayList<Node> test = new ArrayList<Node>();;
+        test = reader.readNodesToArray(content.toString());
+        reader.readEdgesArray(test,content.toString(),"DRIVING");
+        
+        distances.setNodes(test);
+        ArrayList<Node> test1 = new ArrayList<Node>(test);
+        test1.remove(4);
+        test1.remove(1);
+        Node start;
+        start=distances.getNodes().get(1);
+        Node end;
+        end=distances.getNodes().get(4);
+        LinkedList<Edge> resWay = new LinkedList<Edge>();
+        int counter=0;
+        Long sum = Long.valueOf(0);
+        Long sums[] = new Long[6];
+        sums = distances.shortWayPermute(start, end, test1, sum, 3);
+        ArrayList<Node> minWay =  new ArrayList<Node>();
+        minWay = distances.getMinWay();
 
-        System.out.println("\n\n" + content.toString() + "\n\n");
+        distances.filterMinWay();
 
-        return new ArrayList<Route>();
+        //System.out.println("\n\n" + content.toString() + "\n\n");
+        List<Place> res = new ArrayList<Place>();
+        for(Node p: minWay){
+            res.add(new Place(p.getId(), p.getLat(), p.getLng()));
+        }
+       
+        return ;
     }
 
     @GetMapping(path = "/find")
