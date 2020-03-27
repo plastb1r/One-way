@@ -77,10 +77,9 @@ export class MapFormComponent implements OnInit{
 
     // what returns algorythm?? 
     this.httpService.sendPlacesToAlgorythm(this.way.points).subscribe(
-      //(data: Array<Location>) => {this.locations2=data;},
-      //error => console.log(error)
+      (data: Array<Location>) => {this.locations2=data;}
     );
-    //createWay(arr)
+    this.createWay(this.locations2);
    }
 
 

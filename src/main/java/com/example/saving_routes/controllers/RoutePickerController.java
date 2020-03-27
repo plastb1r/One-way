@@ -40,7 +40,7 @@ class RouteGeneratorController {
     RouteRepository routeRepository;
 
     @PostMapping(path = "/generate")
-    public Iterable<Route> genereateRoutes(@RequestBody(required = false) List<Place> places)
+    public List<Place> genereateRoutes(@RequestBody(required = false) List<Place> places)
             throws IOException, ParseException {
         String str =""; 
         str += "place_id:" + places.get(0).getId();
@@ -86,13 +86,18 @@ class RouteGeneratorController {
 
         distances.filterMinWay();
 
+
         //System.out.println("\n\n" + content.toString() + "\n\n");
         List<Place> res = new ArrayList<Place>();
         for(Node p: minWay){
-            res.add(new Place(p.getId(), p.getLat(), p.getLng()));
+            for(Place pl: places){
+                if(p.getId() == pl.getId()){
+                    res.add(new Place(p.getId(), pl.getLat(), pl.getLng(), null));
+                }
+                    
+            }
         }
-       
-        return ;
+        return res;
     }
 
     @GetMapping(path = "/find")
