@@ -30,6 +30,7 @@
     "ng-sidebar": "^9.2.0",
     "ng5-slider": "^1.2.4",
     "npm": "^6.14.2",
+    "request-digest": "^1.0.13",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

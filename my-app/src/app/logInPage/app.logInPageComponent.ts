@@ -354,8 +354,31 @@ export class LogInPageComponent implements OnInit {
 
   }
 
+  getRequestTest() {
+    var digestRequest = require('request-digest')('username', 'password');
+    digestRequest.requestAsync({
+      host: 'http://test.com',
+      path: '/api/v1/test.json',
+      port: 80,
+      method: 'GET',
+      excludePort: false,
+      headers: {
+        'Custom-Header': 'OneValue',
+        'Other-Custom-Header': 'OtherValue'
+      }
+    })
+    .then(function (response) {
+      console.log(response.body);
+    })
+    .catch(function (error) {
+      console.log(error.statusCode);
+      console.log(error.body);
+    });
+  }
+
   test(){
-    this.getRequest().subscribe(data => {console.log("data" + data)});
+
+    //this.getRequest().subscribe(data => {console.log("data" + data)});
   }
 
   postRequest(){
