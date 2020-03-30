@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import javax.validation.constraints.Min;
 
@@ -42,6 +40,8 @@ class RouteGeneratorController {
     @PostMapping(path = "/generate")
     public List<Place> genereateRoutes(@RequestBody(required = false) List<Place> places)
             throws IOException, ParseException {
+        String[] travelModes={"DRIVING","WALKING","TRANSIT","BICYCLING"};
+        String[] transitModes={"BUS","SUBWAY","TRAIN","TRAM","RAIL"};
         ArrayList<String> placeId=new ArrayList();
         String str =""; 
         str += "place_id:" + places.get(0).getId();
@@ -50,27 +50,34 @@ class RouteGeneratorController {
             str += "|place_id:" + places.get(i).getId();
             placeId.add(places.get(i).getId());
         }
-        String query = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+ str +"&destinations=" + str +"&key=AIzaSyCefImCcqdUPi-r6wfGymGrtSD9jzADZOI";
-        final StringBuilder content = new StringBuilder();
+        HashMap<String,String> queryContent = new HashMap<>();
+        String query = new String();
+        for(String travelMode:transitModes)
+        {
+            query= "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+ str +"&destinations=" + str +"&mode="+travelMode+"&key=AIzaSyCefImCcqdUPi-r6wfGymGrtSD9jzADZOI";
+            final StringBuilder content = new StringBuilder();
 
-        try {
-            
-            HttpURLConnection connection = (HttpURLConnection) new URL(query).openConnection();
-            final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(query).openConnection();
+                final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                queryContent.put(travelMode,content.toString());
+
+            } catch (final Exception ex) {
+                ex.printStackTrace();
             }
-
-        } catch (final Exception ex) {
-            ex.printStackTrace();
         }
         Graph distances=new Graph();
         JsonReader reader = new JsonReader();
         ArrayList<Node> test = new ArrayList<Node>();;
         test = reader.readNodesToArray(placeId);
-        reader.readEdgesArray(test,content.toString(),"DRIVING");
-        
+        for(Map.Entry<String,String> mode: queryContent.entrySet())
+        {
+            reader.readEdgesArray(test,mode.getValue(),mode.getKey());
+        }
         distances.setNodes(test);
         ArrayList<Node> test1 = new ArrayList<Node>(test);
         test1.remove(4);
