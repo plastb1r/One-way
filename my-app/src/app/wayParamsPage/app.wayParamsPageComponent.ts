@@ -6,6 +6,8 @@ import { Way } from 'src/app/domens/way';
 import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
+import {Parameters} from 'src/app/domens/params';
+import {NgForm} from '@angular/forms';
 
 @Component({
   templateUrl: './wayParamsPage.html',
@@ -37,9 +39,18 @@ export class WayParamsPageComponent implements OnInit{
     way: Way;
     favP: Array<Location>;
     submitted = false;
+    parameters: Parameters;
+    startPoint: Location;
+    endPoint: Location;
 
     @ViewChild('searchpl', {static: true})
     public searchElementRef: ElementRef;
+
+    @ViewChild('startPoint', {static: true})
+    public searchElementRefStart: ElementRef;
+
+    @ViewChild('endPoint', {static: true})
+    public searchElementRefEnd: ElementRef;
 
     toggle(){
       this.visibility=!this.visibility;
@@ -47,6 +58,7 @@ export class WayParamsPageComponent implements OnInit{
 
     constructor(
       private mapsAPILoader: MapsAPILoader,
+      private mapsAPILoader2: MapsAPILoader,
       private ngZone: NgZone,
       private data: DataService,
       private httpService: HttpService
@@ -56,6 +68,9 @@ export class WayParamsPageComponent implements OnInit{
       this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
       this.setPopPlaces();
       this.data.currentCityName.subscribe(ads => this.cityName = ads);
+
+      this.setAutocompliteToStartPoint();
+      this.setAutocompliteToEndPoint();
 
       this.mapsAPILoader.load().then(() => {
         let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
@@ -70,7 +85,7 @@ export class WayParamsPageComponent implements OnInit{
               return;
             }
             //set latitude, longitude and zoom
-
+            
             this.locations = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: 15, placeId: place.place_id,choose: false}];
             this.getDetails(place.place_id);
             var data = [];
@@ -87,6 +102,39 @@ export class WayParamsPageComponent implements OnInit{
        });
     }
 
+    setParams(form: NgForm) { 
+      
+      var freeHours = form.controls['freeHours'].value;
+      var placesToVisit =  form.controls['placesToVisit'].value;
+      var transportations = new Array<string>();
+
+      if(form.controls['WALKING'].value)
+      {
+        transportations.push("WALKING");
+      }
+      if(form.controls['DRIVING'].value)
+      {
+        transportations.push("DRIVING");
+      }
+      if(form.controls['TRANSIT'].value)
+      {
+        transportations.push("TRANSIT");
+      }
+
+      console.log("transport " +  transportations);
+     
+      this.parameters = new Parameters(this.startPoint, this.endPoint, freeHours, new Array<string>(),transportations, placesToVisit);
+      console.log("parameters" +  this.parameters);
+      console.log("hours " +  this.parameters.freeHours);
+      console.log("places " +  this.parameters.placesToVisit);
+      console.log("transport " +  this.parameters.typesOfTransport);
+
+     // this.httpService.sendPlacesToAlgorythm(this.way.points).subscribe(
+        //(data: Array<Location>) => {this.locations2=data;}
+      //);
+        //this.createWay(this.locations2);
+    }
+
     findPlace(){
       var data = [];
       data.push({photo: this.photo[0],
@@ -97,6 +145,43 @@ export class WayParamsPageComponent implements OnInit{
       });
       this.dataLM=data;
     }
+
+    setAutocompliteToStartPoint(){
+      this.mapsAPILoader2.load().then(() => {
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefStart.nativeElement, {
+
+        });
+        autocomplete.addListener("place_changed", () => {
+          this.ngZone.run(() => {
+           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+            this.startPoint = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: 15, placeId: place.place_id,choose: false};
+          });
+        });
+       });
+       
+    }
+
+    setAutocompliteToEndPoint(){
+      this.mapsAPILoader2.load().then(() => {
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefEnd.nativeElement, {
+
+        });
+        autocomplete.addListener("place_changed", () => {
+          this.ngZone.run(() => {
+           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+            this.endPoint = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: 15, placeId: place.place_id,choose: false};
+          });
+        });
+       });
+       
+    }
+
 
     loadMorePopPlaces(){
       this.prev = this.locations;

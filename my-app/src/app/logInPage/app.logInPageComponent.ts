@@ -354,7 +354,7 @@ export class LogInPageComponent implements OnInit {
 
   }
 
-  getRequestTest() {
+  /*getRequestTest() {
     var digestRequest = require('request-digest')('username', 'password');
     digestRequest.requestAsync({
       host: 'http://test.com',
@@ -374,7 +374,7 @@ export class LogInPageComponent implements OnInit {
       console.log(error.statusCode);
       console.log(error.body);
     });
-  }
+  }*/
 
   test(){
 
