@@ -52,7 +52,7 @@ class RouteGeneratorController {
         }
         HashMap<String,String> queryContent = new HashMap<>();
         String query = new String();
-        for(String travelMode:transitModes)
+        for(String travelMode:travelModes)
         {
             query= "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+ str +"&destinations=" + str +"&mode="+travelMode+"&key=AIzaSyCefImCcqdUPi-r6wfGymGrtSD9jzADZOI";
             final StringBuilder content = new StringBuilder();
@@ -79,18 +79,19 @@ class RouteGeneratorController {
             reader.readEdgesArray(test,mode.getValue(),mode.getKey());
         }
         distances.setNodes(test);
+        distances.simplifyGraph();
         ArrayList<Node> test1 = new ArrayList<Node>(test);
-        test1.remove(4);
-        test1.remove(1);
+        test1.remove(test1.size());
+        test1.remove(0);
         Node start;
-        start=distances.getNodes().get(1);
+        start=distances.getNodes().get(0);
         Node end;
-        end=distances.getNodes().get(4);
+        end=distances.getNodes().get(test1.size());
         LinkedList<Edge> resWay = new LinkedList<Edge>();
         int counter=0;
         Long sum = Long.valueOf(0);
-        Long sums[] = new Long[6];
-        sums = distances.shortWayPermute(start, end, test1, sum, 3);
+        Long sums[] = new Long[distances.factorial(test1.size())];
+        sums = distances.shortWayPermute(start, end, test1, sum, test1.size()-2);
         ArrayList<Node> minWay =  new ArrayList<Node>();
         minWay = distances.getMinWay();
 
