@@ -37,7 +37,7 @@ public class Main {
         ArrayList<Node> test = new ArrayList<Node>();
         //test = reader.readNodesToArray("src/main/resources/test jsons/voronezhDdriving.json");
         //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhDdriving.json","DRIVING");
-        test = reader.readNodesToArray("src/main/resources/test jsons/example2.json");
+        //test = reader.readNodesToArray("src/main/resources/test jsons/example2.json");
         reader.readEdgesArray(test,"src/main/resources/test jsons/example2.json","DRIVING");
         //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhTransit.json","TRANSIT");
         //reader.readEdgesArray(test,"src/main/resources/test jsons/voronezhWalking.json","WALKING");
