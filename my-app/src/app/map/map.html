@@ -15,10 +15,35 @@
       <!-- A sidebar -->
       <ng-sidebar [(opened)]="_opened" position="right">
         <div class="ways-sidebar">
-          <div *ngFor="let loc of locations; let i = index">
-            <button class="btn btn-outline-dark btn-md w-100" (click)="setNumber(i)" type="submit">Путь {{i+1}}</button>
+          <div  *ngFor="let d of dataw, let i = index " class="accordion">
+              <div class="accordion-container">
+                  <div class="accordion__header" (click)="toggle(d.index)">
+                    <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                      <i class="fa fa-compass listing-contact__icon"></i>
+                      {{d.address}}
+                    </li>
+                  </div><!-- .accordion__header -->
+   
+                  <div class=" toggle" *ngIf="visibility[d.index]">
+                    <div class="d-sm-flex accordion__inner ">
+                      <div class="c-dove-gray accordion__desc" >
+                        <ul class="min-list listing-contact-list">
+                            <a href="#">
+                              <i class="fa fa-heart c-silver-charlice"></i>
+                              Сохранить
+                            </a>
+   
+                            <a (click)="newLocation(way.points[d.index], photosw[d.index], ratingw[d.index], dataw[d.index].address, dataw[d.index].name,typesw[d.index], numberw[i])" routerLink="/landmarkPage">
+                              <i class="fa fa-share-alt c-silver-charlice"></i>
+                              Подробнее
+                            </a>
+                        </ul><!-- .listing-contact-list -->
+                      </div><!-- .accordion__desc -->
+                    </div><!-- .accordion__inner -->
+                  </div><!-- .accordion__content -->
+            </div><!-- .listing-section -->
         </div>
-      </div>
+        </div>
       </ng-sidebar>
 
     </ng-sidebar-container>
@@ -54,7 +79,7 @@
           <img height="200" width="300" src={{photo}}>
         </div>
         <div class="col100 mt-4 d-flex justify-content-center">
-          <button class="btn btn-outline-dark" type="submit" (click)="newLocation()" routerLink="/landmarkPage">Подробнее</button>
+          <button class="btn btn-outline-dark" type="submit" (click)="newLocation(loc, photos, rating, address, name, number, types)" routerLink="/landmarkPage">Подробнее</button>
         </div>
       </div>
   </agm-info-window >

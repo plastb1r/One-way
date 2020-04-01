@@ -87,6 +87,16 @@ public class Graph {
         return res;
     }
 
+    public int factorial(int number)
+    {
+        int res=1;
+        for(int i = 1; i<=number; i++)
+        {
+            res*=i;
+        }
+        return  res;
+    }
+
     /*public void allNotVisited(Node startPoint) {
         for (Map.Entry<String, Node> node : nodes.entrySet()) {
             if (!node.getValue().getId().equals(startPoint.getId())) {
@@ -240,33 +250,29 @@ public class Graph {
 
 
     
-    /*public void simplifyGraph()
-    {
+    public void simplifyGraph() {
 
-        for (Map.Entry<String, Node> node : getNodes().entrySet()) {
-            LinkedList<Edge> minEdges=new LinkedList<Edge>();
-            for(Edge edge:node.getValue().getEdges())
-            {
-                if(edge.getTravelMode().equals("WALKING"))
-                {
+        for (Node node : nodes) {
+            ArrayList<Edge> minEdges = new ArrayList<Edge>();
+            for (Edge edge : node.getEdges()) {
+                if (edge.getTravelMode().equals("WALKING")) {
                     minEdges.add(edge);
                 }
             }
-            int counter=0;
-            for(Edge edge0 : minEdges) {
+            int counter = 0;
+            for (Edge edge0 : minEdges) {
                 Edge minEdge = edge0;
-                for (Edge edge:node.getValue().getEdges()) {
-                    if (!edge.getTravelMode().equals(edge0.getTravelMode())&&edge0.getEndNode().equals(edge.getEndNode()) && edge.getDuration()<minEdge.getDuration())
-                    {
-                       minEdge=edge;
+                for (Edge edge : node.getEdges()) {
+                    if (!edge.getTravelMode().equals(edge0.getTravelMode()) && edge0.getEndNode().equals(edge.getEndNode()) && edge.getDuration() < minEdge.getDuration()) {
+                        minEdge = edge;
                     }
                 }
-                minEdges.set(counter,minEdge);
+                minEdges.set(counter, minEdge);
                 counter++;
             }
-            node.getValue().setEdges(minEdges);
-            nodes.replace(node.getKey(),node.getValue());
-        }*/
+            node.setEdges(minEdges);
+        }
+    }
         
 //Near Neighbour
     public Long shortestWay(Node startPoint, Node endPoint, LinkedList<Node> resArray) {

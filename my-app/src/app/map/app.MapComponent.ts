@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Way } from 'src/app/domens/way';
+import { Data } from '../domens/data';
 
 @Component({
   selector: 'map-form',
@@ -18,15 +19,21 @@ import { Way } from 'src/app/domens/way';
 @Injectable()
 export class MapFormComponent implements OnInit{
   public locations2: Array<Location>;
+  dataw: Array<Data> = new Array<Data>();
   private geoCoder;
   private _opened: boolean = false;
   index: number;
+  indexw: number = -1;
   rating: number;
   zoom: number = 12;
   address: string;
   photo: string;
   photos:  Array<string>;
   name: string;
+  typesw:  Array<any> = new Array<any>();
+  numberw: Array<string> = new Array<string>();
+  ratingw: Array<number> = new Array<number>();
+  photosw: Array<Array<string>> = new Array<Array<string>>();
   previous;
   number: string;
   types: Array<string>;
@@ -37,6 +44,7 @@ export class MapFormComponent implements OnInit{
   allow = true;
   way: Way;
   notallow = false;
+  visibility: Array<boolean> = new Array<boolean>();
   locations = [ [
       {lat:51.6723005, lng:39.2089039, zoom: 15,placeId: 'fff',  choose: false},
       {lat:51.672590, lng:39.2085639, zoom: 15,placeId:  'fff',  choose: false},
@@ -77,32 +85,50 @@ export class MapFormComponent implements OnInit{
 
     // what returns algorythm?? 
     this.httpService.sendPlacesToAlgorythm(this.way.points).subscribe(
-      (data: Array<Location>) => {this.locations2=data;}
+      (data: Array<Location>) => {
+        this.way.points=data;
+      }
     );
-    this.createWay(this.locations2);
+    this.createWay(this.way.points);
+
    }
+
+   toggle(index: number){
+    this.visibility[index] = !this.visibility[index];
+  }
 
 
    createWay(arr: Array<Location>){
+    this.dataw =  new Array<Data>();
+    this.typesw = new Array<any>();
+    this.numberw = new Array<string>();
+    this.ratingw = new Array<number>();
+    this.photosw = new Array<Array<string>>();
+    console.log("hhhhh" +  arr);
+    this.locations2 = this.way.points;
+    arr.forEach(p => {
+      this.getDetailsForWay(p.placeId);
+    });
     this.allow = false;
     this.notallow = true;
     //this.data.currentWay.subscribe(w => this.way = w);
-    this.locations2 = this.way.points;
-    var length = this.locations2.length - 1;
+    //this.locations2 = this.way.points;
+    var length = arr.length - 1;
     var directs = [];
-    for(var i = 1; i < this.locations2.length - 1; i++){
-      var d = {location: {lat: this.locations2[i].lat, lng: this.locations2[i].lng}};
+    for(var i = 1; i < arr.length - 1; i++){
+      var d = {location: {lat: arr[i].lat, lng: arr[i].lng}};
       directs.push(d);
     }
-    console.log(this.locations2);
+    console.log(arr);
     console.log(directs);
     this.dir = {
-      origin: {lat: this.locations2[0].lat, lng:this.locations2[0].lng},
-      destination: {lat: this.locations2[length].lat, lng: this.locations2[length].lng},
+      origin: {lat: arr[0].lat, lng:arr[0].lng},
+      destination: {lat: arr[length].lat, lng: arr[length].lng},
       waypoints: directs,
       travelMode: google.maps.TravelMode.DRIVING
-      
     }
+
+    
 
     /*this.mapsAPILoader.load().then(() => {
      var directionsService = new google.maps.DirectionsService();
@@ -121,6 +147,38 @@ export class MapFormComponent implements OnInit{
     });
   });*/
    }
+
+   public getDetailsForWay(placeId: string){
+    this.httpService.getData(placeId).subscribe( value =>{
+      //var loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], zoom: 15, placeId: value['result']['place_id'],  choose: false};
+      var phot = value['result']['photos'];
+      var name = value['result']['name'];
+      var address = value['result']['formatted_address'];
+      var rating = value['result']['rating'];
+      var types = value['result']['types'];
+      var number = value['result']['international_phone_number'];
+
+      this.indexw += 1;
+      var ref = []
+      phot.forEach(ph => {
+        ref.push(ph['photo_reference']);
+      });
+
+      var photoRes = [];
+        ref.forEach(ph => {
+          photoRes.push('https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+ph+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ')
+        });
+      //console.log(value['result']['place_id']);
+      this.dataw.push({photo: photoRes[0],name: name,address: address,index: this.indexw, isAddedToWay: true, isAddedToFav: true});
+      console.log("data w" + this.dataw);
+      this.photosw.push(photoRes);
+      this.numberw.push(number);
+      this.ratingw.push(rating);
+      this.typesw.push(types);
+    });
+  }
+
+  
 
    ngOnInit() {
      //load Places Autocomplete
@@ -251,14 +309,14 @@ export class MapFormComponent implements OnInit{
     this._wayOpen();
   }
 
-  public newLocation(){
-   this.data.changeLandMark(this.loc);
-   this.data.changePhotos(this.photos);
-   this.data.changeRating(this.rating);
-   this.data.changeAddress(this.address);
-   this.data.changeName(this.name);
-   this.data.changeNumber(this.number);
-   this.data.changeTypes(this.types);
+  public newLocation(loc: Location, photos: Array<string>, rating: number, address: string, name: string, number: string, types: Array<string>){
+   this.data.changeLandMark(loc);
+   this.data.changePhotos(photos);
+   this.data.changeRating(rating);
+   this.data.changeAddress(address);
+   this.data.changeName(name);
+   this.data.changeNumber(number);
+   this.data.changeTypes(types);
   }
 
   setLabel(index){
