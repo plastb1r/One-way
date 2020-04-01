@@ -3,7 +3,7 @@
     <div class="col-md-4 offset-md-4">
       <div class="form-login js-login-form">
         <div class="form-login__block js-form-block is-selected" id="signin">
-          <form #myform="ngForm" (ngSubmit)="logIn(myform)" >
+          <form #myform="ngForm" (ngSubmit)="digestLogIn(myform)" >
             <div class="form-container">
               <h3 class="form-title t-center">Вход в систему</h3>
               <div class="form-social">
@@ -42,7 +42,7 @@
                   name="password"
                   id="password"
                   class="form-input form-input--pill form-input--border-c-gallery"
-                  required  [(ngModel)]="password" 
+                  required  [(ngModel)]="password"
                   placeholder="******"
                 >
               </div><!-- .form-group -->
@@ -60,8 +60,8 @@
               <div class="form-group--submit">
                 <button
                   class="button button--primary button--pill button--large button--block button--submit"
-                  type="submit" 
-                  (click) ="getRequestTest()"
+                  type="submit"
+                  (click) ="digestLogIn()"
                 >
                   Войти
                 </button>
