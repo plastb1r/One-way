@@ -129,7 +129,7 @@ export class LogInPageComponent implements OnInit {
   formulateResponse() {
     const CryptoJS = require('crypto-js');
 
-    const HA1 = CryptoJS.MD5(this.username + ':' + this.realm + ':' + this.password).toString();
+    const HA1 = CryptoJS.MD5(this.username + ':' + this.realm + ':' + CryptoJS.MD5(this.password)).toString();
     const HA2 = CryptoJS.MD5(this.method + ':' + this.uri).toString();
     this.cnonce = this.generateCnonce();
 
