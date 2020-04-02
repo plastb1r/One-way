@@ -82,12 +82,12 @@ class RouteGeneratorController {
         distances.setNodes(test);
         distances.simplifyGraph();
         ArrayList<Node> test1 = new ArrayList<Node>(test);
-        test1.remove(test1.size());
+        test1.remove(test1.size()-1);
         test1.remove(0);
         Node start;
         start=distances.getNodes().get(0);
         Node end;
-        end=distances.getNodes().get(test1.size());
+        end=distances.getNodes().get(test1.size()-1);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
         int counter = 0;
 
