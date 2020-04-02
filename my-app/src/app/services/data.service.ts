@@ -18,7 +18,7 @@ export class DataService {
   way: Way = new Way(0, new Array<Location>(), "", "");
   cityName: string;
   favP: Array<Location> = new Array<Location>();
-  authHeader: string = '';
+  authHeader: string = "";
   visibilityOfMap: boolean;
 
 
@@ -37,7 +37,7 @@ export class DataService {
   private authHeaderSource = new BehaviorSubject<string>(this.authHeader);
   private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
 
-  private password = '';
+  private password =  "";
 
   currentRat = this.ratingSourse.asObservable();
   currentAds = this.addressSourse.asObservable();

@@ -101,6 +101,8 @@ export class LogInPageComponent implements OnInit {
       console.log('okey, you in');
       this.data.changeAuthHeader(authHeader, this.password);
 
+      console.log("changed " + authHeader);
+
       let header;
       this.data.currentAuthHeader.subscribe(h => header = h);
       console.log("local subscribe header -- " + header);

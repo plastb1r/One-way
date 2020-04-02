@@ -80,7 +80,6 @@ export class MapFormComponent implements OnInit{
     this.visibility[index] = !this.visibility[index];
   }
 
-
    createWay(arr: Array<Location>){
     this.visibilityOfPopularplaces = false;
     this.data.changeVisibilityOfMap(false);
@@ -101,7 +100,7 @@ export class MapFormComponent implements OnInit{
     var length = arr.length - 1;
     var directs = [];
     for(var i = 1; i < arr.length - 1; i++){
-      var d = {location: {lat: arr[i].lat, lng: arr[i].lng}, stopover: true,};
+      var d = {location: {lat: arr[i].lat, lng: arr[i].lng}, stopover: false,};
       directs.push(d);
     }
     console.log(arr);
@@ -112,8 +111,6 @@ export class MapFormComponent implements OnInit{
       waypoints: directs,
       travelMode: google.maps.TravelMode.DRIVING
     }
-
-    this.markerClicked2(1);
 
     
 
@@ -134,6 +131,8 @@ export class MapFormComponent implements OnInit{
     });
   });*/
    }
+
+  
 
    public getDetailsForWay(placeId: string){
     this.httpService.getData(placeId).subscribe( value =>{
@@ -293,53 +292,36 @@ public renderOptions = {
   suppressMarkers: true,
 };
 
-markerClicked2(iy: number) {
-  this.placeId = this.way.points[iy].placeId;
-  console.log(this.placeId);
-  this.getDetails(this.placeId);
+markerClicked2() {
+  //this.placeId = this.way.points[iy].placeId;
+  console.log("clicked" + this.placeId);
+  //this.getDetails(this.placeId);
 }
 
+public optimizeWaypoints: boolean = false;
 
 public markerOptions = {
   origin: {
-    infoWindow:       
-    `<div class="container">
-    <div class="col100 mt-4">
-    <h5>{{name}} | {{rating}}</h5>
-    </div>
-    <div class="col100 mt-1" >
-    {{address}}
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <img height="200" width="300" src={{photo}}>
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <button class="btn btn-outline-dark" type="submit" (click)="newLocation(loc, photos, rating, address, name, number, types)" routerLink="/landmarkPage">Подробнее</button>
-    </div>
-  </div>`,
-    icon: 'http://i.imgur.com/7teZKif.png',
-  },
-  destination: {
-    infoWindow: `<div class="container">
-    <div class="col100 mt-4">
-    <h5>{{name}} | {{rating}}</h5>
-    </div>
-    <div class="col100 mt-1" >
-    {{address}}
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <img height="200" width="300" src={{photo}}>
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <button class="btn btn-outline-dark" type="submit" (click)="newLocation(loc, photos, rating, address, name, number, types)" routerLink="/landmarkPage">Подробнее</button>
-    </div>
-  </div>`,
+    infoWindow: 'origin',
     icon: 'http://i.imgur.com/7teZKif.png',
   },
   waypoints: [
     {
+      infoWindow: 'destination',
       icon: 'http://i.imgur.com/7teZKif.png',
-    }
-  ]
+    },
+    {
+      infoWindow: 'destination',
+      icon: 'http://i.imgur.com/7teZKif.png',
+    },
+    {
+      infoWindow: 'destination',
+      icon: 'http://i.imgur.com/7teZKif.png',
+    },
+  ],
+  destination: {
+    infoWindow: 'промежуточная',
+    icon: 'http://i.imgur.com/7teZKif.png',
+  },
 };
 }
