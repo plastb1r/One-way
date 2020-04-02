@@ -25,8 +25,7 @@ export class ProfilePageComponent implements OnInit {
 
     let header;
     this.data.currentAuthHeader.subscribe(h => header = h);
-
-    console.log(header);
+    console.log("from cur" + header);
     this.data.updateAuthHeader('GET');
     console.log(header);
 
