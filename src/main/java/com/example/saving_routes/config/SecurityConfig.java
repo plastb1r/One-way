@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors()
+        /*http.csrf().disable().cors()
             .and()
             .addFilter(digestAuthenticationFilter()) 
             .exceptionHandling().authenticationEntryPoint(digestEntryPoint())
@@ -30,11 +30,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers("/api/routes/**").permitAll()
             .anyRequest().authenticated()
             .and()
-            .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
-        // http.csrf().disable().cors()
-        // .and()
-        // .authorizeRequests().antMatchers("/**").permitAll()
-        // .anyRequest().authenticated();
+            .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();*/
+        http.csrf().disable().cors()
+        .and()
+        .authorizeRequests().antMatchers("/**").permitAll()
+        .anyRequest().authenticated();
     }
 
     DigestAuthenticationFilter digestAuthenticationFilter() throws Exception {

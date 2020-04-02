@@ -9,6 +9,8 @@ import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Way } from 'src/app/domens/way';
 import { Data } from '../domens/data';
+import { PlaceOnRoute } from 'src/app/domens/placesOnRoute';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'map-form',
@@ -33,6 +35,8 @@ export class MapFormComponent implements OnInit{
   typesw:  Array<any> = new Array<any>();
   numberw: Array<string> = new Array<string>();
   ratingw: Array<number> = new Array<number>();
+  timeToNext: Array<number> = new Array<number>();
+  travelModes: Array<string> = new  Array<string>();
   photosw: Array<Array<string>> = new Array<Array<string>>();
   previous;
   number: string;
@@ -47,6 +51,9 @@ export class MapFormComponent implements OnInit{
   visibility: Array<boolean> = new Array<boolean>();
   visibilityOfPopularplaces : boolean;
   markersLabels = ['A','B','C','D','E','F','Z','H','I','K','L','M','N','O','P','Q','R','S','T','V','X'];
+  icons = ["fa fa-car listing-contact__icon", "fa fa-bus listing-contact__icon", "fa fa-bicycle listing-contact__icon", "fa fa-male listing-contact__icon"];
+  travelModesStr: Array<string> = new  Array<string>();
+  travelModesIcons: Array<string> = new  Array<string>();
 
   @ViewChild('searchplace', {static: true})
   public searchElementRef: ElementRef;
@@ -61,13 +68,40 @@ export class MapFormComponent implements OnInit{
 
    // sends places to alg 
    placesFromAlg(){
-    this.way.points.forEach(w =>{
-      console.log("before alg " + w.lat);
-    });
+    console.log("1     " + this.way.points[0].lat);
+    console.log("2     " + this.way.points[1].lat);
+    console.log("3     " + this.way.points[2].lat);
+    console.log("4     " + this.way.points[3].lat);
+    var d = [];
     this.httpService.sendPlacesToAlgorythm(this.way.points).subscribe(
-      (data: Array<Location>) => {
-        this.way.points=data;
+      (data: Array<any>) => {
+        d = data;
+        this.way.points = new Array<Location>();
+        this.timeToNext = new Array<number>();
+        this.travelModes =  new  Array<string>();
+        this.travelModesStr = new Array<string>();
+        d.forEach(p => {
+          this.way.points.push(p['place']);
+          this.timeToNext.push((Math.round(p['timeToNext']/60)));
+          this.travelModes.push(p['transportToNext']);
+        });
+        console.log("1     " + this.way.points[0].lat);
+        console.log("2     " + this.way.points[1].lat);
+        console.log("3     " + this.way.points[2].lat);
+        console.log("4     " + this.way.points[3].lat);
+
+        console.log("1     " + this.timeToNext[0]);
+        console.log("2     " + this.timeToNext[1]);
+        console.log("3     " + this.timeToNext[2]);
+        console.log("4     " + this.timeToNext[3]);
+
+        console.log("1     " + this.travelModes[0]);
+        console.log("2     " + this.travelModes[1]);
+        console.log("3     " + this.travelModes[2]);
+        console.log("4     " + this.travelModes[3]);
+        this.setTravelModes();
       }
+
     );
     this.way.points.forEach(w =>{
       console.log("after alg " + w.lat);
@@ -75,6 +109,32 @@ export class MapFormComponent implements OnInit{
     this.data.changeWay1(this.way);
     this.createWay(this.way.points);
 
+   }
+
+   setTravelModes(){
+    this.travelModes.forEach(tm => {
+      console.log("fffbbbbbbbbbb" + tm);
+      if(tm = "WALKING")
+      {
+        this.travelModesIcons.push(this.icons[3]);
+        this.travelModesStr.push("Пешком")
+      }
+      if(tm = "TRANSIT")
+      {
+        this.travelModesIcons.push(this.icons[1]);
+        this.travelModesStr.push("Транзит")
+      }
+      if(tm = "DRIVING")
+      {
+        this.travelModesIcons.push(this.icons[0]);
+        this.travelModesStr.push("На машине")
+      }
+      if(tm = "BICYCLING")
+      {
+        this.travelModesIcons.push(this.icons[2]);
+        this.travelModesStr.push("На велосипеде")
+      }
+    })
    }
 
    toggle(index: number){
@@ -293,5 +353,11 @@ export class MapFormComponent implements OnInit{
     markerOptions: { // effect all markers
     },
 }
+
+  setIconsForTransportModes(index){
+    var label: string = '';
+      label =this.icons[1];
+    return label;
+  }
 
 }
