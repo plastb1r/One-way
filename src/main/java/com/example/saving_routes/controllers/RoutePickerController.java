@@ -82,18 +82,17 @@ class RouteGeneratorController {
         distances.setNodes(test);
         distances.simplifyGraph();
         ArrayList<Node> test1 = new ArrayList<Node>(test);
-        test1.remove(test1.size()-1);
-        test1.remove(0);
         Node start;
         start=distances.getNodes().get(0);
         Node end;
         end=distances.getNodes().get(test1.size()-1);
+        test1.remove(test1.size()-1);
+        test1.remove(0);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
         int counter = 0;
-
         Long sum = Long.valueOf(0);
         Long sums[] = new Long[distances.factorial(test1.size())];
-        sums = distances.shortWayPermute(start, end, test1, sum, test1.size()-2);
+        sums = distances.shortWayPermute(start, end, test1, sum, test1.size());
         ArrayList<Node> minWay =  new ArrayList<Node>();
         minWay = distances.getMinWay();
 

@@ -127,6 +127,7 @@ export class PopularLandmarksPageComponent implements OnInit{
   changePopularLocations(){
     console.log(this.locations);
     this.data.changeLocations(this.locations);
+    this.data.changeVisibilityOfMap(true);
   }
 
   /*getDetails(placeId: string){

@@ -19,6 +19,8 @@ export class DataService {
   cityName: string;
   favP: Array<Location> = new Array<Location>();
   authHeader: string = '';
+  visibilityOfMap: boolean;
+
 
   private locationSourse = new BehaviorSubject<Location>(this.location);
   private ratingSourse = new BehaviorSubject<number>(this.rating);
@@ -33,6 +35,7 @@ export class DataService {
   private cityNameSourse = new BehaviorSubject<string>(this.cityName);
   private favPSourse = new BehaviorSubject<Array<Location>>(this.favP);
   private authHeaderSource = new BehaviorSubject<string>(this.authHeader);
+  private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
 
   private password = '';
 
@@ -49,6 +52,7 @@ export class DataService {
   currentCityName = this.cityNameSourse.asObservable();
   currentFavP = this.favPSourse.asObservable();
   currentAuthHeader = this.authHeaderSource.asObservable();
+  currentVisibilityOfMap = this.visibilityOfMapSourse.asObservable();
 
   constructor() { }
 
@@ -132,7 +136,13 @@ export class DataService {
     this.favPSourse.next(this.favP);
   }
 
-  changeFavPRemove(loc: Location, f: Array<Location>) {
+  changeVisibilityOfMap(v: boolean){
+    this.visibilityOfMap = v;
+    this.visibilityOfMapSourse.next(this.visibilityOfMap);
+  }
+
+
+  changeFavPRemove(loc: Location, f: Array<Location>){
     this.favP = f;
     const index: number = this.favP.indexOf(loc);
     this.favP.splice(index, 1);

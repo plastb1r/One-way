@@ -134,16 +134,8 @@ export class LogInPageComponent implements OnInit {
     return digestAuthHeader;
   }
 
+    //this.getRequest().subscribe(data => {console.log("data" + data)});
   public isLoggedIn(): boolean {
     return this.userService.isUserSignedIn();
   }
-
-  public signIn() {
-    this.userService.signIn();
-  }
-
-  public signOut() {
-    this.userService.signOut();
-  }
-
 }

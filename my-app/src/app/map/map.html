@@ -8,7 +8,7 @@
   <div class="siderbar-container">
     <!-- Page content -->
     <div ng-sidebar-content>
-      <button class="btn teal darken-3 text-white" (click)="_toggleOpened()">Посмотреть маршруты</button>
+      <button class="btn-way teal darken-3 text-white" (click)="_toggleOpened()">Посмотреть маршруты</button>
     </div>
 
     <ng-sidebar-container>
@@ -18,15 +18,16 @@
           <div  *ngFor="let d of dataw, let i = index " class="accordion">
               <div class="accordion-container">
                   <div class="accordion__header" (click)="toggle(d.index)">
-                    <li class="d-flex align-items-center c-silver-charlice listing-contact">
-                      <i class="fa fa-compass listing-contact__icon"></i>
-                      {{d.address}}
-                    </li>
+                    {{d.name}}
                   </div><!-- .accordion__header -->
    
                   <div class=" toggle" *ngIf="visibility[d.index]">
                     <div class="d-sm-flex accordion__inner ">
                       <div class="c-dove-gray accordion__desc" >
+                        <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                          <i class="fa fa-compass listing-contact__icon"></i>
+                          {{d.address}}
+                        </li>
                         <ul class="min-list listing-contact-list">
                             <a href="#">
                               <i class="fa fa-heart c-silver-charlice"></i>
@@ -50,6 +51,7 @@
 
   </div>
   <agm-map
+  *ngIf = "visibilityOfPopularplaces"
     [latitude]="locations2[0].lat"
     [longitude]="locations2[0].lng"
     [zoom]="locations2[0].zoom"
@@ -59,13 +61,13 @@
     [showDefaultInfoWindow]="true">
 
     <agm-marker
+    
     [markerDraggable]="true"
     *ngFor="let location of locations2, let iy = index"
     [latitude]="location.lat"
     [longitude]="location.lng"
     (dragEnd)="markerDragEnd($event)"
     (markerClick)="markerClicked(window,iy)"
-    [label] = "setLabel(iy)"
     >
     <agm-info-window #window>
       <div class="container">
@@ -83,9 +85,27 @@
         </div>
       </div>
   </agm-info-window >
-  <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"  [waypoints]="dir.waypoints"></agm-direction>
     </agm-marker>
 
+  </agm-map>
+
+  <agm-map
+  *ngIf = "!visibilityOfPopularplaces"
+    [latitude]="way.points[0].lat"
+    [longitude]="way.points[0].lng"
+    [zoom]="locations2[0].zoom"
+    [disableDoubleClickZoom]="true"
+>
+<agm-marker>
+  <agm-direction
+   *ngIf="dir" 
+   [origin]="dir.origin" 
+   [destination]="dir.destination"  
+   [waypoints]="waypoints"
+   [renderOptions]="renderOptions" 
+  [markerOptions]="markerOptions"
+   > </agm-direction>
+</agm-marker>
   </agm-map>
 
 </div>
