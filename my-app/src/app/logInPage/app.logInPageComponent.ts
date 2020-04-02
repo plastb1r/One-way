@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { User } from 'src/app/domens/user';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Data } from '../domens/data';
+import { DataService } from '../services/data.service';
 // import { url } from 'inspector';
 
 @Component({
@@ -43,7 +45,8 @@ export class LogInPageComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: GoogleAuthService,
     private gapiService: GoogleApiService,
-    private http: HttpClient
+    private http: HttpClient,
+    private data: DataService
   ) {
     this.gapiService.onLoad().subscribe();
   }
@@ -60,15 +63,15 @@ export class LogInPageComponent implements OnInit {
     request.send();
 
     if (request.status === 401) {
-      var digestHeadersArr = request.getResponseHeader('WWW-Authenticate').split(',');
+      var digestHeaderArgs = request.getResponseHeader('WWW-Authenticate').split(',');
 
-      this.scheme = digestHeadersArr[0].split(/\s/)[0];
+      this.scheme = digestHeaderArgs[0].split(/\s/)[0];
 
-      for (let i = 0; i < digestHeadersArr.length; i++) {
-        const equalIndex = digestHeadersArr[i].indexOf('=');
+      for (let i = 0; i < digestHeaderArgs.length; i++) {
+        const equalIndex = digestHeaderArgs[i].indexOf('=');
 
-        const key = digestHeadersArr[i].substring(0, equalIndex);
-        let val = digestHeadersArr[i].substring(equalIndex + 1);
+        const key = digestHeaderArgs[i].substring(0, equalIndex);
+        let val = digestHeaderArgs[i].substring(equalIndex + 1);
         val = val.replace(/['"]+/g, '');
 
         if (key.match(/realm/i) != null) {
@@ -81,9 +84,6 @@ export class LogInPageComponent implements OnInit {
           this.qop = val;
         }
       }
-
-      console.log('realm = ' + this.realm);
-      console.log('nonce = ' + this.nonce);
     }
   }
 
@@ -95,19 +95,25 @@ export class LogInPageComponent implements OnInit {
     console.log('password ' + this.password);
 
     const authenticatedRequest = new XMLHttpRequest();
-    this.makeAuthenticatedRequest(authenticatedRequest);
-
+    let authHeader = this.makeAuthenticatedRequest(authenticatedRequest);
 
     if (authenticatedRequest.status === 200) {
       console.log('okey, you in');
-      console.log(authenticatedRequest.responseText);
+      this.data.changeAuthHeader(authHeader, this.password);
+
+      let header;
+      this.data.currentAuthHeader.subscribe(h => header = h);
+      console.log("local subscribe header -- " + header);
     } else {
       console.log('smth wrong - ' + authenticatedRequest.status);
     }
   }
 
   makeAuthenticatedRequest(authenticatedRequest: XMLHttpRequest) {
-    this.response = this.formulateResponse();
+    this.cnonce = this.data.generateCnonce();
+    this.response = this.data.formulateResponse(this.username, this.password,
+      this.method, this.realm, this.nonce, this.uri, this.cnonce, this.qop, this.nc);
+
     authenticatedRequest.open(this.method, this.url, false);
 
     const digestAuthHeader = this.scheme + ' ' +
@@ -124,33 +130,8 @@ export class LogInPageComponent implements OnInit {
 
     authenticatedRequest.setRequestHeader('Authorization', digestAuthHeader);
     authenticatedRequest.send();
-  }
 
-  formulateResponse() {
-    const CryptoJS = require('crypto-js');
-
-    const HA1 = CryptoJS.MD5(this.username + ':' + this.realm + ':' + CryptoJS.MD5(this.password)).toString();
-    const HA2 = CryptoJS.MD5(this.method + ':' + this.uri).toString();
-    this.cnonce = this.generateCnonce();
-
-    const response = CryptoJS.MD5(HA1 + ':' +
-      this.nonce + ':' +
-      ('00000000' + this.nc).slice(-8) + ':' +
-      this.cnonce + ':' +
-      this.qop + ':' +
-      HA2).toString();
-
-    return response;
-  }
-
-  generateCnonce() {
-    const characters = 'abcdef0123456789';
-    let token = '';
-    for (let i = 0; i < 16; i++) {
-      const randNum = Math.round(Math.random() * characters.length);
-      token += characters.substr(randNum, 1);
-    }
-    return token;
+    return digestAuthHeader;
   }
 
   public isLoggedIn(): boolean {
