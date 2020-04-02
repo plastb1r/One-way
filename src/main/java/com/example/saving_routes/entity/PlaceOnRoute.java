@@ -45,7 +45,7 @@ public class PlaceOnRoute {
     private int index;
 
     @Column(name = "time_to_next_place") // hours
-    private float timeToNext;
+    private long timeToNext;
 
     @Column(name = "transport_to_next_place")
     private Transports transportToNext;

@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilter(digestAuthenticationFilter()) 
             .exceptionHandling().authenticationEntryPoint(digestEntryPoint())
             .and()
-            .authorizeRequests().antMatchers("/api/opentest").permitAll()
+            .authorizeRequests().antMatchers("/api/routes/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();

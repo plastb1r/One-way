@@ -12,7 +12,9 @@ import com.example.saving_routes.algorithm.Graph;
 import com.example.saving_routes.algorithm.JsonReader;
 import com.example.saving_routes.algorithm.Node;
 import com.example.saving_routes.entity.Place;
+import com.example.saving_routes.entity.PlaceOnRoute;
 import com.example.saving_routes.entity.Route;
+import com.example.saving_routes.entity.Transports;
 import com.example.saving_routes.repositories.RouteRepository;
 
 import org.json.simple.parser.ParseException;
@@ -80,28 +82,34 @@ class RouteGeneratorController {
         distances.setNodes(test);
         distances.simplifyGraph();
         ArrayList<Node> test1 = new ArrayList<Node>(test);
-        test1.remove(test1.size());
-        test1.remove(0);
         Node start;
         start=distances.getNodes().get(0);
         Node end;
-        end=distances.getNodes().get(test1.size());
+        end=distances.getNodes().get(test1.size()-1);
+        test1.remove(test1.size()-1);
+        test1.remove(0);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
         int counter = 0;
-
         Long sum = Long.valueOf(0);
         Long sums[] = new Long[distances.factorial(test1.size())];
-        sums = distances.shortWayPermute(start, end, test1, sum, test1.size()-2);
+        sums = distances.shortWayPermute(start, end, test1, sum, test1.size());
         ArrayList<Node> minWay =  new ArrayList<Node>();
         minWay = distances.getMinWay();
 
         distances.filterMinWay();
 
-        List<Place> res = new ArrayList<Place>();
+        LinkedList<Place> res = new LinkedList<Place>();
+        LinkedList<PlaceOnRoute> routes = new LinkedList<PlaceOnRoute>();
+        int count = 0;
         for (Node p : minWay) {
             for (Place pl : places) {
                 if (p.getId() == pl.getId()) {
+                    count++;
                     res.add(new Place(p.getId(), pl.getLat(), pl.getLng(), null));
+                    if(!p.getEdges().isEmpty())
+                    {
+                        routes.add(new PlaceOnRoute(0,res.getLast(),null,count,p.getEdges().get(0).getDuration(),Transports.valueOf(p.getEdges().get(0).getTravelMode())));
+                    }
                 }
             }
         }
