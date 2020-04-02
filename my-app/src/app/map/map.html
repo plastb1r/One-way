@@ -18,7 +18,7 @@
           <div  *ngFor="let d of dataw, let i = index " class="accordion">
               <div class="accordion-container">
                   <div class="accordion__header" (click)="toggle(d.index)">
-                    {{d.name}}
+                    {{setLabel(d.index)}}: {{d.name}}
                   </div><!-- .accordion__header -->
    
                   <div class=" toggle" *ngIf="visibility[d.index]">
@@ -58,11 +58,11 @@
     (mapClick)="mapClick($event)"
     (mapDblClick)="mapDoubleClick($event)"
     [disableDoubleClickZoom]="true"
-    [showDefaultInfoWindow]="true">
+    [showDefaultInfoWindow]="false">
 
     <agm-marker
     
-    [markerDraggable]="true"
+    [markerDraggable]="false"
     *ngFor="let location of locations2, let iy = index"
     [latitude]="location.lat"
     [longitude]="location.lng"
@@ -89,26 +89,47 @@
 
   </agm-map>
 
-  <agm-map
+  <agm-map  #window2
   *ngIf = "!visibilityOfPopularplaces"
     [latitude]="way.points[0].lat"
     [longitude]="way.points[0].lng"
     [zoom]="locations2[0].zoom"
     [disableDoubleClickZoom]="true"
 >
-
-  <agm-direction
-   *ngIf="dir" 
-   [origin]="dir.origin" 
-   [waypoints]="dir.waypoints"
-   [destination]="dir.destination"  
-   [renderOptions]="renderOptions" 
-   [markerOptions]="markerOptions"
-   [optimizeWaypoints]="optimizeWaypoints"
-   
-   (click)="markerClicked2()"
-   > 
-   </agm-direction>
+<agm-marker
+    *ngFor="let location of way.points, let iy = index"
+    [latitude]="location.lat"
+    [longitude]="location.lng"
+    (dragEnd)="markerDragEnd($event)"
+    (markerClick)="markerClicked(window2,iy)"
+    [label]="setLabel(iy)"
+    >
+    
+    <agm-info-window #window2>
+      <div class="container">
+        <div class="col100 mt-4">
+        <h5>{{name}} | {{rating}}</h5>
+        </div>
+        <div class="col100 mt-1" >
+        {{address}}
+        </div>
+        <div class="col100 mt-4 d-flex justify-content-center">
+          <img height="200" width="300" src={{photo}}>
+        </div>
+        <div class="col100 mt-4 d-flex justify-content-center">
+          <button class="btn btn-outline-dark" type="submit" (click)="newLocation(loc, photos, rating, address, name, number, types)" routerLink="/landmarkPage">Подробнее</button>
+        </div>
+      </div>
+  </agm-info-window >
+    </agm-marker>
+    <agm-direction
+    *ngIf="dir" 
+    [origin]="dir.origin" 
+    [waypoints]="dir.waypoints"
+    [destination]="dir.destination"  
+    [renderOptions]="renderOptions" 
+    > 
+    </agm-direction>
   </agm-map>
 
 </div>

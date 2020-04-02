@@ -46,6 +46,7 @@ export class MapFormComponent implements OnInit{
   notallow = false;
   visibility: Array<boolean> = new Array<boolean>();
   visibilityOfPopularplaces : boolean;
+  markersLabels = ['A','B','C','D','E','F','Z','H','I','K','L','M','N','O','P','Q','R','S','T','V','X'];
 
   @ViewChild('searchplace', {static: true})
   public searchElementRef: ElementRef;
@@ -282,46 +283,15 @@ export class MapFormComponent implements OnInit{
 
   setLabel(index){
     var label: string = '';
-    if(this.locations2.length > 1 && this.showIndexes == true){
-        label = String(index + 1);
-    }
+        label =this.markersLabels[index];
     return label;
   }
-
-public renderOptions = {
-  suppressMarkers: true,
-};
-
-markerClicked2() {
-  //this.placeId = this.way.points[iy].placeId;
-  console.log("clicked" + this.placeId);
-  //this.getDetails(this.placeId);
+  public renderOptions: any = {
+    draggable: false,
+    suppressMarkers: true,
+    suppressInfoWindows: false,
+    markerOptions: { // effect all markers
+    },
 }
 
-public optimizeWaypoints: boolean = false;
-
-public markerOptions = {
-  origin: {
-    infoWindow: 'origin',
-    icon: 'http://i.imgur.com/7teZKif.png',
-  },
-  waypoints: [
-    {
-      infoWindow: 'destination',
-      icon: 'http://i.imgur.com/7teZKif.png',
-    },
-    {
-      infoWindow: 'destination',
-      icon: 'http://i.imgur.com/7teZKif.png',
-    },
-    {
-      infoWindow: 'destination',
-      icon: 'http://i.imgur.com/7teZKif.png',
-    },
-  ],
-  destination: {
-    infoWindow: 'промежуточная',
-    icon: 'http://i.imgur.com/7teZKif.png',
-  },
-};
 }
