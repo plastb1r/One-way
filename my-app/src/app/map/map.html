@@ -131,13 +131,13 @@
   </agm-info-window >
     </agm-marker>
     <agm-direction
-    *ngIf="dir" 
-    [origin]="dir.origin" 
-    [waypoints]="dir.waypoints"
-    [destination]="dir.destination"  
+    *ngFor="let dir of dirWalk, let iy = index"
+    [origin]="dirWalk[iy].origin" 
+    [destination]="dirWalk[iy].destination"  
     [renderOptions]="renderOptions" 
-    > 
-    </agm-direction>
+    [travelMode]="dirWalk[0].travelMode"
+    > </agm-direction>
+   
   </agm-map>
 
 </div>
