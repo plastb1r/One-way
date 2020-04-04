@@ -53,11 +53,11 @@ export class DataService {
 
   constructor() { }
 
-  updateAndGetAuthHeader(method: string) {
+  updateAndGetAuthHeader(method: string, uri: string) {
     const digestHeaderArgs = sessionStorage.getItem('authHeader').split(',');
     const userPassword = sessionStorage.getItem('userPassword');
 
-    let username, realm, nonce, uri, response, qop, nc, cnonce;
+    let username, realm, nonce, response, qop, nc, cnonce;
     let scheme = digestHeaderArgs[0].split(/\s/)[0];
 
     for (let i = 0; i < digestHeaderArgs.length; i++) {

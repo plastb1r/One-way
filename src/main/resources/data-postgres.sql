@@ -40,9 +40,9 @@ INSERT INTO places_on_route(place_on_route_id, place_id, route_id,
 VALUES 
   (1,'aaaa',1,1,1,1),
   (2,'bbbb',1,2,0,0),
-  (3,'cccc',2,1,2,5),
+  (3,'cccc',2,1,2,4),
   (4,'dddd',2,2,0,0),
   (5,'eeee',3,1,0.5,2),
   (8,'ffff',3,2,0.5,4),
-  (6,'zzzz',3,3,1,5),
+  (6,'zzzz',3,3,1,2),
   (7,'ssss',3,4,0,0); 
