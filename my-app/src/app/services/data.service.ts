@@ -35,7 +35,7 @@ export class DataService {
   private favPSourse = new BehaviorSubject<Array<Location>>(this.favP);
   private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
 
-  private password = '';
+  private password =  "";
 
   currentRat = this.ratingSourse.asObservable();
   currentAds = this.addressSourse.asObservable();
