@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { GoogleAuthService } from 'ng-gapi';
 import { GoogleApiService } from 'ng-gapi';
 import { UserService } from 'src/app/services/user.service';
@@ -16,6 +16,7 @@ import { DataService } from '../services/data.service';
   styleUrls: ['./app.logInPageComponent.scss']
 
 })
+@Injectable()
 export class LogInPageComponent implements OnInit {
   public sheetId: string;
   public sheet: any;
@@ -53,13 +54,17 @@ export class LogInPageComponent implements OnInit {
 
   //первый запрос на получения nonce и realm
   ngOnInit() {
+    this.firstDigestRequest();
+  }
+
+  firstDigestRequest() {
     this.uri = 'api/user/1';
     this.url = 'http://localhost:8181/api/user/1';
     this.method = 'GET';
     this.nc = 1;
 
     const request = new XMLHttpRequest();
-    request.open('get', this.url, false);
+    request.open('GET', this.url, false);
     request.send();
 
     if (request.status === 401) {
@@ -91,25 +96,22 @@ export class LogInPageComponent implements OnInit {
   digestLogIn(form: NgForm) {
     this.username = form.controls.username.value;
     this.password = form.controls.password.value;
-    console.log('username ' + this.username);
-    console.log('password ' + this.password);
 
     const authenticatedRequest = new XMLHttpRequest();
-    let authHeader = this.makeAuthenticatedRequest(authenticatedRequest);
+    const authHeader = this.secondDigestRequest(authenticatedRequest);
 
     if (authenticatedRequest.status === 200) {
       console.log('okey, you in');
-      this.data.changeAuthHeader(authHeader, this.password);
-
-      let header;
-      this.data.currentAuthHeader.subscribe(h => header = h);
-      console.log("local subscribe header -- " + header);
+      console.log('response - ' + authenticatedRequest.responseText);
+      sessionStorage.setItem('authHeader', authHeader);
+      sessionStorage.setItem('userPassword', this.password);
+      console.log(authHeader);
     } else {
       console.log('smth wrong - ' + authenticatedRequest.status);
     }
   }
 
-  makeAuthenticatedRequest(authenticatedRequest: XMLHttpRequest) {
+  secondDigestRequest(authenticatedRequest: XMLHttpRequest) {
     this.cnonce = this.data.generateCnonce();
     this.response = this.data.formulateResponse(this.username, this.password,
       this.method, this.realm, this.nonce, this.uri, this.cnonce, this.qop, this.nc);
@@ -126,15 +128,13 @@ export class LogInPageComponent implements OnInit {
       'nc=' + ('00000000' + this.nc).slice(-8) + ', ' +
       'cnonce="' + this.cnonce + '"';
 
-    console.log(digestAuthHeader);
-
     authenticatedRequest.setRequestHeader('Authorization', digestAuthHeader);
     authenticatedRequest.send();
 
     return digestAuthHeader;
   }
 
-    //this.getRequest().subscribe(data => {console.log("data" + data)});
+  //this.getRequest().subscribe(data => {console.log("data" + data)});
   public isLoggedIn(): boolean {
     return this.userService.isUserSignedIn();
   }
