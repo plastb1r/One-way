@@ -18,7 +18,6 @@ export class DataService {
   way: Way = new Way(0, new Array<Location>(), "", "");
   cityName: string;
   favP: Array<Location> = new Array<Location>();
-  authHeader: string = '';
   visibilityOfMap: boolean;
 
 
@@ -34,10 +33,9 @@ export class DataService {
   private waySourse = new BehaviorSubject<Way>(this.way);
   private cityNameSourse = new BehaviorSubject<string>(this.cityName);
   private favPSourse = new BehaviorSubject<Array<Location>>(this.favP);
-  private authHeaderSource = new BehaviorSubject<string>(this.authHeader);
   private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
 
-  private password = '';
+  private password =  "";
 
   currentRat = this.ratingSourse.asObservable();
   currentAds = this.addressSourse.asObservable();
@@ -51,45 +49,40 @@ export class DataService {
   currentWay = this.waySourse.asObservable();
   currentCityName = this.cityNameSourse.asObservable();
   currentFavP = this.favPSourse.asObservable();
-  currentAuthHeader = this.authHeaderSource.asObservable();
   currentVisibilityOfMap = this.visibilityOfMapSourse.asObservable();
 
   constructor() { }
 
-  changeAuthHeader(header: string, password: string) {
-    this.authHeader = header;
-    this.password = password;
-    this.authHeaderSource.next(this.authHeader);
-  }
+  updateAndGetAuthHeader(method: string, uri: string) {
+    const digestHeaderArgs = sessionStorage.getItem('authHeader').split(',');
+    const userPassword = sessionStorage.getItem('userPassword');
 
-  updateAuthHeader(method: string) {
-    let digestHeaderArgs = this.authHeader.split(',');
-
+    let username, realm, nonce, response, qop, nc, cnonce;
     let scheme = digestHeaderArgs[0].split(/\s/)[0];
-    let username, realm, nonce, uri, response, qop, nc, cnonce;
 
     for (let i = 0; i < digestHeaderArgs.length; i++) {
       const equalIndex = digestHeaderArgs[i].indexOf('=');
 
-      const key = digestHeaderArgs[i].substring(0, equalIndex);
+      let key = digestHeaderArgs[i].substring(0, equalIndex);
       let val = digestHeaderArgs[i].substring(equalIndex + 1);
       val = val.replace(/['"]+/g, '');
+      key = key.trim();
 
       switch (key) {
-        case 'username': username = val; break;
+        case 'Digest username': username = val; break;
         case 'realm': realm = val; break;
         case 'nonce': nonce = val; break;
         case 'uri': uri = val; break;
         case 'qop': qop = val; break;
         case 'nc': nc = val; break;
+        case 'cnonce': cnonce = val; break;
       }
     }
 
     nc++;
-    cnonce = this.generateCnonce();
-    response = this.formulateResponse(username, this.password, method, realm, nonce, uri, cnonce, qop, nc);
+    response = this.formulateResponse(username, userPassword, method, realm, nonce, uri, cnonce, qop, nc);
 
-    const updateAuthHeader = scheme + ' ' +
+    const updatedAuthHeader = scheme + ' ' +
       'username="' + username + '", ' +
       'realm="' + realm + '", ' +
       'nonce="' + nonce + '", ' +
@@ -99,8 +92,8 @@ export class DataService {
       'nc=' + ('00000000' + nc).slice(-8) + ', ' +
       'cnonce="' + cnonce + '"';
 
-    this.authHeader = updateAuthHeader;
-    this.authHeaderSource.next(this.authHeader);
+    sessionStorage.setItem('authHeader', updatedAuthHeader);
+    return updatedAuthHeader;
   }
 
   formulateResponse(username: string, password: string, method: string, realm: string,
@@ -136,13 +129,13 @@ export class DataService {
     this.favPSourse.next(this.favP);
   }
 
-  changeVisibilityOfMap(v: boolean){
+  changeVisibilityOfMap(v: boolean) {
     this.visibilityOfMap = v;
     this.visibilityOfMapSourse.next(this.visibilityOfMap);
   }
 
 
-  changeFavPRemove(loc: Location, f: Array<Location>){
+  changeFavPRemove(loc: Location, f: Array<Location>) {
     this.favP = f;
     const index: number = this.favP.indexOf(loc);
     this.favP.splice(index, 1);

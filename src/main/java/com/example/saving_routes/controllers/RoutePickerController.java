@@ -36,7 +36,7 @@ class RouteGeneratorController {
     RouteRepository routeRepository;
 
     @PostMapping(path = "/generate")
-    public List<Place> genereateRoutes(@RequestBody(required = false) List<Place> places)
+    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places)
             throws IOException, ParseException {
         String[] travelModes = { "DRIVING", "WALKING", "TRANSIT", "BICYCLING" };
         String[] transitModes = { "BUS", "SUBWAY", "TRAIN", "TRAM", "RAIL" };
@@ -98,23 +98,26 @@ class RouteGeneratorController {
 
         distances.filterMinWay();
 
-        LinkedList<Place> res = new LinkedList<Place>();
+
         LinkedList<PlaceOnRoute> routes = new LinkedList<PlaceOnRoute>();
         int count = 0;
         for (Node p : minWay) {
             for (Place pl : places) {
                 if (p.getId() == pl.getId()) {
                     count++;
-                    res.add(new Place(p.getId(), pl.getLat(), pl.getLng(), null));
                     if(!p.getEdges().isEmpty())
                     {
-                        routes.add(new PlaceOnRoute(0,res.getLast(),null,count,p.getEdges().get(0).getDuration(),Transports.valueOf(p.getEdges().get(0).getTravelMode())));
+                        routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,count,p.getEdges().get(0).getDuration(),Transports.valueOf(p.getEdges().get(0).getTravelMode())));
+                    }
+                    else
+                    {
+                        routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,0,0L,null));
                     }
                 }
             }
         }
 
-        return res;
+        return routes;
     }
 
     @GetMapping(path = "/find")

@@ -9,6 +9,8 @@ import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Way } from 'src/app/domens/way';
 import { Data } from '../domens/data';
+import { Direction } from 'src/app/domens/placesOnRoute';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'map-form',
@@ -33,6 +35,8 @@ export class MapFormComponent implements OnInit{
   typesw:  Array<any> = new Array<any>();
   numberw: Array<string> = new Array<string>();
   ratingw: Array<number> = new Array<number>();
+  timeToNext: Array<number> = new Array<number>();
+  travelModes: Array<string> = new  Array<string>();
   photosw: Array<Array<string>> = new Array<Array<string>>();
   previous;
   number: string;
@@ -40,12 +44,20 @@ export class MapFormComponent implements OnInit{
   loc: Location;
   showIndexes: boolean = false;
   placeId: string;
-  dir = undefined;
+  dir: Direction;
   allow = true;
   way: Way;
   notallow = false;
   visibility: Array<boolean> = new Array<boolean>();
   visibilityOfPopularplaces : boolean;
+  markersLabels = ['A','B','C','D','E','F','Z','H','I','K','L','M','N','O','P','Q','R','S','T','V','X'];
+  icons = ["fa fa-car listing-contact__icon", "fa fa-bus listing-contact__icon", "fa fa-bicycle listing-contact__icon", "fa fa-male listing-contact__icon"];
+  travelModesStr: Array<string> = new  Array<string>();
+  travelModesIcons: Array<string> = new  Array<string>();
+  dirWalk: Array<Direction> = new Array<Direction>();
+  dirTrans: Array<Direction> = new Array<Direction>();
+  dirBic: Array<Direction> = new Array<Direction>();
+  dirCar: Array<Direction> = new Array<Direction>();
 
   @ViewChild('searchplace', {static: true})
   public searchElementRef: ElementRef;
@@ -60,26 +72,78 @@ export class MapFormComponent implements OnInit{
 
    // sends places to alg 
    placesFromAlg(){
-    this.way.points.forEach(w =>{
-      console.log("before alg " + w.lat);
-    });
+    this.timeToNext = new Array<number>();
+    this.travelModes =  new  Array<string>();
+    this.travelModesStr = new Array<string>();
+    console.log("1  s   " + this.way.points[0].lat);
+    console.log("2  s   " + this.way.points[1].lat);
+    console.log("3  s  " + this.way.points[2].lat);
+    var d = [];
+    var tm =  new Array<string>();
     this.httpService.sendPlacesToAlgorythm(this.way.points).subscribe(
-      (data: Array<Location>) => {
-        this.way.points=data;
-      }
-    );
-    this.way.points.forEach(w =>{
-      console.log("after alg " + w.lat);
-    });
-    this.data.changeWay1(this.way);
-    this.createWay(this.way.points);
+      (data: Array<any>) => {
+        d = data;
+        this.way.points = new Array<Location>();
+        d.forEach(p => {
+          this.way.points.push(p['place']);
+          this.timeToNext.push((Math.round(p['timeToNext']/60)));
+          this.travelModes.push(p['transportToNext']);
+        });
+        console.log("1     " + this.way.points[0].lat);
+        console.log("2     " + this.way.points[1].lat);
+        console.log("3     " + this.way.points[2].lat);
 
+
+        console.log("1     " + this.timeToNext[0]);
+        console.log("2     " + this.timeToNext[1]);
+        console.log("3     " + this.timeToNext[2]);
+
+        console.log("1     " + this.travelModes[0]);
+        console.log("2     " + this.travelModes[1]);
+        console.log("3     " + this.travelModes[2]);
+
+        this.setTravelModes();
+        //this.createWay(this.way.points);
+        console.log("1     " + this.travelModesStr[0]);
+        console.log("2     " + this.travelModesStr[1]);
+        console.log("3     " + this.travelModesStr[2]);
+
+      }
+
+    );
+    this.createWay(this.way.points);
+    this.data.changeWay1(this.way);
+   
+   }
+
+   setTravelModes(){
+    this.travelModes.forEach(tm => {
+      if(tm == "WALKING")
+      {
+        this.travelModesIcons.push(this.icons[3]);
+        this.travelModesStr.push("Пешком")
+      }
+      if(tm == "TRANSIT")
+      {
+        this.travelModesIcons.push(this.icons[1]);
+        this.travelModesStr.push("Транзит")
+      }
+      if(tm == "DRIVING")
+      {
+        this.travelModesIcons.push(this.icons[0]);
+        this.travelModesStr.push("На машине")
+      }
+      if(tm == "BICYCLING")
+      {
+        this.travelModesIcons.push(this.icons[2]);
+        this.travelModesStr.push("На велосипеде")
+      }
+    })
    }
 
    toggle(index: number){
     this.visibility[index] = !this.visibility[index];
   }
-
 
    createWay(arr: Array<Location>){
     this.visibilityOfPopularplaces = false;
@@ -99,22 +163,65 @@ export class MapFormComponent implements OnInit{
     this.allow = false;
     this.notallow = true;
     var length = arr.length - 1;
-    var directs = [];
-    for(var i = 1; i < arr.length - 1; i++){
-      var d = {location: {lat: arr[i].lat, lng: arr[i].lng}, stopover: true,};
-      directs.push(d);
+
+    for(var i = 0; i < arr.length - 1; i++){
+      if(this.travelModes[i] == "WALKING")
+      {
+          this.dir = {
+          origin: {lat: arr[i].lat, lng: arr[i].lng},
+          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+          travelMode: google.maps.TravelMode.WALKING
+          }
+          this.dirWalk.push(this.dir);
+          console.log("dir walk     " +  this.dir);
+          console.log("dir walk     " +  this.dirWalk[0].origin.lat);
+          console.log("dir walk     " +  this.dirWalk[0].destination.lat);
+      }
+
+      
+      this.dir = {
+        origin: {lat: arr[i].lat, lng: arr[i].lng},
+        destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+        travelMode: google.maps.TravelMode.WALKING
+        }
+        this.dirWalk.push(this.dir);
+      
+        
+      if(this.travelModesStr[i] == "TRANSIT")
+      {
+        var dir: Direction = {
+          origin: {lat: arr[i].lat, lng: arr[i].lng},
+          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+          travelMode: google.maps.TravelMode.WALKING
+          }
+          this.dirTrans.push(dir);
+      }
+      if(this.travelModesStr[i] == "DRIVING")
+      {
+        var dir: Direction = {
+          origin: {lat: arr[i].lat, lng: arr[i].lng},
+          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+          travelMode: google.maps.TravelMode.DRIVING
+          }
+          this.dirCar.push(dir);
+      }
+      if(this.travelModesStr[i] == "BICYCLING")
+      {
+        var dir: Direction = {
+          origin: {lat: arr[i].lat, lng: arr[i].lng},
+          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+          travelMode: google.maps.TravelMode.BICYCLING
+          }
+          this.dirBic.push(dir);
+      }
     }
-    console.log(arr);
-    console.log(directs);
-    this.dir = {
+
+    /*this.dir = {
       origin: {lat: arr[0].lat, lng:arr[0].lng},
       destination: {lat: arr[length].lat, lng: arr[length].lng},
-      waypoints: directs,
+      //waypoints: directs,
       travelMode: google.maps.TravelMode.DRIVING
     }
-
-    this.markerClicked2(1);
-
     
 
     /*this.mapsAPILoader.load().then(() => {
@@ -134,6 +241,8 @@ export class MapFormComponent implements OnInit{
     });
   });*/
    }
+
+  
 
    public getDetailsForWay(placeId: string){
     this.httpService.getData(placeId).subscribe( value =>{
@@ -178,9 +287,11 @@ export class MapFormComponent implements OnInit{
       this.data.currentVisibilityOfMap.subscribe(vis => this.visibilityOfPopularplaces = vis);
       this.data.currentWay.subscribe(w => this.way = w);
       this.data.currentLocations.subscribe(locat => this.locations2 = locat);
-      if(!this.visibilityOfPopularplaces){
+
+      /*if(!this.visibilityOfPopularplaces){
         this.createWay(this.way.points);  
-      }
+      }*/
+
       //this.data.currentBound.subscribe(bd => this.bound);
        this.geoCoder = new google.maps.Geocoder;
        //let autocomplete = new google.maps.places.Autocomplete("New York, NY, USA", {
@@ -200,8 +311,8 @@ export class MapFormComponent implements OnInit{
            this.locations2 = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: this.zoom, placeId: place.place_id,choose: false}];
            this.placeId = place.place_id;
            this.data.changeLocations(this.locations2);
-           this.visibilityOfPopularplaces = true; //make true visibility when return to a point after way
-           this.data.changeVisibilityOfMap(true);
+           //this.visibilityOfPopularplaces = true; //make true visibility when return to a point after way
+           //his.data.changeVisibilityOfMap(true);
          });
        });
       });
@@ -283,63 +394,21 @@ export class MapFormComponent implements OnInit{
 
   setLabel(index){
     var label: string = '';
-    if(this.locations2.length > 1 && this.showIndexes == true){
-        label = String(index + 1);
-    }
+        label =this.markersLabels[index];
+    return label;
+  }
+  public renderOptions: any = {
+    draggable: false,
+    suppressMarkers: true,
+    suppressInfoWindows: false,
+    markerOptions: { // effect all markers
+    },
+}
+
+  setIconsForTransportModes(index){
+    var label: string = '';
+      label =this.icons[1];
     return label;
   }
 
-public renderOptions = {
-  suppressMarkers: true,
-};
-
-markerClicked2(iy: number) {
-  this.placeId = this.way.points[iy].placeId;
-  console.log(this.placeId);
-  this.getDetails(this.placeId);
-}
-
-
-public markerOptions = {
-  origin: {
-    infoWindow:       
-    `<div class="container">
-    <div class="col100 mt-4">
-    <h5>{{name}} | {{rating}}</h5>
-    </div>
-    <div class="col100 mt-1" >
-    {{address}}
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <img height="200" width="300" src={{photo}}>
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <button class="btn btn-outline-dark" type="submit" (click)="newLocation(loc, photos, rating, address, name, number, types)" routerLink="/landmarkPage">Подробнее</button>
-    </div>
-  </div>`,
-    icon: 'http://i.imgur.com/7teZKif.png',
-  },
-  destination: {
-    infoWindow: `<div class="container">
-    <div class="col100 mt-4">
-    <h5>{{name}} | {{rating}}</h5>
-    </div>
-    <div class="col100 mt-1" >
-    {{address}}
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <img height="200" width="300" src={{photo}}>
-    </div>
-    <div class="col100 mt-4 d-flex justify-content-center">
-      <button class="btn btn-outline-dark" type="submit" (click)="newLocation(loc, photos, rating, address, name, number, types)" routerLink="/landmarkPage">Подробнее</button>
-    </div>
-  </div>`,
-    icon: 'http://i.imgur.com/7teZKif.png',
-  },
-  waypoints: [
-    {
-      icon: 'http://i.imgur.com/7teZKif.png',
-    }
-  ]
-};
 }

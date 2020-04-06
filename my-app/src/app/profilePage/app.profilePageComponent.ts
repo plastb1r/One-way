@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { Location } from 'src/app/domens/location';
 import { DataService } from 'src/app/services/data.service';
@@ -10,8 +10,8 @@ import { User } from 'src/app/domens/user';
 
 @Component({
   templateUrl: './profilePage.html',
-  styleUrls: ['./app.profilePageComponent.scss']
-
+  styleUrls: ['./app.profilePageComponent.scss'],
+  providers: [DataService]
 })
 export class ProfilePageComponent implements OnInit {
 
@@ -21,13 +21,9 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit() {
     const con = new XMLHttpRequest();
-    con.open('GET', 'http://localhost:8181/api/user/1', false);
+    con.open('GET', 'http://localhost:8181/api/user/1/routes', false);
 
-    let header;
-    this.data.currentAuthHeader.subscribe(h => header = h);
-
-    console.log(header);
-    this.data.updateAuthHeader('GET');
+    const header = this.data.updateAndGetAuthHeader('GET', 'api/user/1/routes');
     console.log(header);
 
     con.setRequestHeader('Authorization', header);
@@ -35,7 +31,7 @@ export class ProfilePageComponent implements OnInit {
 
     if (con.status === 200) {
       this.userFromBack = con.responseText;
-      console.log(this.userFromBack);
+      console.log('OK \n' + this.userFromBack);
     }
     else {
       console.log("smth wrong");
