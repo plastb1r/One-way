@@ -13,7 +13,7 @@ public class Edge {
         startNode = new Node();
         endNode = new Node();
         duration = Long.valueOf(0);
-        travelMode = "DRIVING";
+        travelMode = "driving";
         cost = BigDecimal.valueOf(0.0);
     }
 

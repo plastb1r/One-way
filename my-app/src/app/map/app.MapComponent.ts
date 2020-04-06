@@ -70,7 +70,7 @@ export class MapFormComponent implements OnInit{
      private httpService: HttpService
    ) { }
 
-   // sends places to alg 
+   // sends places to alg
    placesFromAlg(){
     this.timeToNext = new Array<number>();
     this.travelModes =  new  Array<string>();
@@ -113,27 +113,27 @@ export class MapFormComponent implements OnInit{
     );
     this.createWay(this.way.points);
     this.data.changeWay1(this.way);
-   
+
    }
 
    setTravelModes(){
     this.travelModes.forEach(tm => {
-      if(tm == "WALKING")
+      if(tm == "walking")
       {
         this.travelModesIcons.push(this.icons[3]);
         this.travelModesStr.push("Пешком")
       }
-      if(tm == "TRANSIT")
+      if(tm == "transit")
       {
         this.travelModesIcons.push(this.icons[1]);
         this.travelModesStr.push("Транзит")
       }
-      if(tm == "DRIVING")
+      if(tm == "driving")
       {
         this.travelModesIcons.push(this.icons[0]);
         this.travelModesStr.push("На машине")
       }
-      if(tm == "BICYCLING")
+      if(tm == "bicycling")
       {
         this.travelModesIcons.push(this.icons[2]);
         this.travelModesStr.push("На велосипеде")
@@ -156,7 +156,7 @@ export class MapFormComponent implements OnInit{
     arr.forEach(w =>{
       console.log("func  " + w.lat);
     });
-    
+
     arr.forEach(p => {
       this.getDetailsForWay(p.placeId);
     });
@@ -165,7 +165,7 @@ export class MapFormComponent implements OnInit{
     var length = arr.length - 1;
 
     for(var i = 0; i < arr.length - 1; i++){
-      if(this.travelModes[i] == "WALKING")
+      if(this.travelModes[i] == "walking")
       {
           this.dir = {
           origin: {lat: arr[i].lat, lng: arr[i].lng},
@@ -178,16 +178,16 @@ export class MapFormComponent implements OnInit{
           console.log("dir walk     " +  this.dirWalk[0].destination.lat);
       }
 
-      
+
       this.dir = {
         origin: {lat: arr[i].lat, lng: arr[i].lng},
         destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
         travelMode: google.maps.TravelMode.WALKING
         }
         this.dirWalk.push(this.dir);
-      
-        
-      if(this.travelModesStr[i] == "TRANSIT")
+
+
+      if(this.travelModesStr[i] == "transit")
       {
         var dir: Direction = {
           origin: {lat: arr[i].lat, lng: arr[i].lng},
@@ -196,7 +196,7 @@ export class MapFormComponent implements OnInit{
           }
           this.dirTrans.push(dir);
       }
-      if(this.travelModesStr[i] == "DRIVING")
+      if(this.travelModesStr[i] == "driving")
       {
         var dir: Direction = {
           origin: {lat: arr[i].lat, lng: arr[i].lng},
@@ -205,7 +205,7 @@ export class MapFormComponent implements OnInit{
           }
           this.dirCar.push(dir);
       }
-      if(this.travelModesStr[i] == "BICYCLING")
+      if(this.travelModesStr[i] == "bicycling")
       {
         var dir: Direction = {
           origin: {lat: arr[i].lat, lng: arr[i].lng},
@@ -222,7 +222,7 @@ export class MapFormComponent implements OnInit{
       //waypoints: directs,
       travelMode: google.maps.TravelMode.DRIVING
     }
-    
+
 
     /*this.mapsAPILoader.load().then(() => {
      var directionsService = new google.maps.DirectionsService();
@@ -242,7 +242,7 @@ export class MapFormComponent implements OnInit{
   });*/
    }
 
-  
+
 
    public getDetailsForWay(placeId: string){
     this.httpService.getData(placeId).subscribe( value =>{
@@ -274,7 +274,7 @@ export class MapFormComponent implements OnInit{
     });
   }
 
-  
+
 
    ngOnInit() {
      //load Places Autocomplete
@@ -289,14 +289,14 @@ export class MapFormComponent implements OnInit{
       this.data.currentLocations.subscribe(locat => this.locations2 = locat);
 
       /*if(!this.visibilityOfPopularplaces){
-        this.createWay(this.way.points);  
+        this.createWay(this.way.points);
       }*/
 
       //this.data.currentBound.subscribe(bd => this.bound);
        this.geoCoder = new google.maps.Geocoder;
        //let autocomplete = new google.maps.places.Autocomplete("New York, NY, USA", {
        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-        
+
        });
        autocomplete.addListener("place_changed", () => {
          this.ngZone.run(() => {

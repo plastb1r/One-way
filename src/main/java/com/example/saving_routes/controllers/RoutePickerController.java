@@ -38,7 +38,7 @@ class RouteGeneratorController {
     @PostMapping(path = "/generate")
     public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places)
             throws IOException, ParseException {
-        String[] travelModes = { "DRIVING", "WALKING", "TRANSIT", "BICYCLING" };
+        String[] travelModes = { "driving", "walking", "transit", "bicycling" };
         String[] transitModes = { "BUS", "SUBWAY", "TRAIN", "TRAM", "RAIL" };
         ArrayList<String> placeId = new ArrayList<String>();
         String str = "";
