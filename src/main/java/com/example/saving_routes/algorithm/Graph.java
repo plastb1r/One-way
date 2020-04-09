@@ -55,6 +55,7 @@ public class Graph {
             minWay.get(i).getEdges().clear();
             minWay.get(i).getEdges().add(rEdge);
         }
+        minWay.get(minWay.size()-1).getEdges().clear();
     }
 
     public ArrayList<Node> getMinWay() {
@@ -255,7 +256,7 @@ public class Graph {
         for (Node node : nodes) {
             ArrayList<Edge> minEdges = new ArrayList<Edge>();
             for (Edge edge : node.getEdges()) {
-                if (edge.getTravelMode().equals("WALKING")) {
+                if (edge.getTravelMode().equals("walking")) {
                     minEdges.add(edge);
                 }
             }
