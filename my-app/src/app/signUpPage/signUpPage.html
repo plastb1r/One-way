@@ -3,7 +3,7 @@
     <div class="col-md-4 offset-md-4">
       <div class="form-login js-login-form">
         <div class="form-login__block js-form-block is-selected" id="signin">
-          <form #myform="ngForm" (ngSubmit)="register(myform)">
+          <form #regForm="ngForm" (ngSubmit)="registrater(regForm)">
             <div class="form-container">
             <h3 class="form-title t-center">Регистрация</h3>
             <div class="form-social">
@@ -61,6 +61,7 @@
               <button
                 class="button button--primary button--pill button--large button--block button--submit"
                 type="submit"
+                routerLink="/logInPage"  (click) ="registrater(regForm)"
               >
                 Зарегистрироваться
               </button>

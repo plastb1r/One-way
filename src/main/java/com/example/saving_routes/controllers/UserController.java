@@ -1,5 +1,7 @@
 package com.example.saving_routes.controllers;
 
+import java.security.Principal;
+
 import com.example.saving_routes.entity.City;
 import com.example.saving_routes.entity.Place;
 import com.example.saving_routes.entity.Route;
@@ -36,7 +38,22 @@ public class UserController {
     @Autowired
     private CityRepository cityRepository;
 
-    @GetMapping(path = "/{user_id}")
+
+    @GetMapping(path = "/")
+    public User getUser(Principal principal) {
+        System.out.println("Name: \"" + principal.getName() + "\"");
+        userRepository.findByName(principal.getName()).get();
+
+        return userRepository.findByName(principal.getName()).get();
+    }
+
+    @PutMapping(path = "/")
+    public User updateUser(Principal principal, @RequestBody User user) {
+        User savedUser = userRepository.saveAndFlush(user);
+        return savedUser;
+    }
+
+    /*@GetMapping(path = "/{user_id}")
     public User getUser(@PathVariable(name = "user_id") String user_id) {
         return userRepository.findById(Integer.parseInt(user_id)).get();
     }
@@ -45,7 +62,7 @@ public class UserController {
     public User updateUser(@PathVariable(name = "user_id") String user_id, @RequestBody User user) {
         User savedUser = userRepository.saveAndFlush(user);
         return savedUser;
-    }
+    }*/
 
     @GetMapping(path = "/{user_id}/routes")
     public Iterable<Route> getRoutesByUserId(@PathVariable(name = "user_id") String userId) {

@@ -37,8 +37,6 @@ export class DataService {
   private favPSourse = new BehaviorSubject<Array<Location>>(this.favP);
   private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
 
-  private password =  "";
-
   currentRat = this.ratingSourse.asObservable();
   currentAds = this.addressSourse.asObservable();
   currentPh = this.photoSourse.asObservable();
@@ -53,6 +51,8 @@ export class DataService {
   currentCityName = this.cityNameSourse.asObservable();
   currentFavP = this.favPSourse.asObservable();
   currentVisibilityOfMap = this.visibilityOfMapSourse.asObservable();
+
+  private password =  "";
 
   constructor() { }
 
@@ -125,7 +125,6 @@ export class DataService {
     }
     return token;
   }
-
   changeFavP(loc: Location, f: Array<Location>) {
     this.favP = f;
     this.favP.push(loc);

@@ -7,6 +7,7 @@ import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
 import {NgForm} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   templateUrl: './signUpPage.html',
@@ -14,18 +15,26 @@ import {NgForm} from '@angular/forms';
 
 })
 export class SignUpPageComponent implements OnInit{
-  username: string = "";
-  password: string = "";
-  email: string = "";
+  urlReg: string;
+  username = '';
+  password = '';
 
-  register(form: NgForm) { 
-    this.username = form.controls['username'].value;
-    this.password = form.controls['password'].value;
-    this.email = form.controls['email'].value;
-    console.log("username" + this.username);
-    console.log("password" + this.password);
-    console.log("email" + this.email);
+  constructor(private http: HttpClient){ }
+ 
+  registrater(form: NgForm){
+      this.username = form.controls.username.value;
+      this.password = form.controls.password.value;
+
+      this.urlReg = 'http://localhost:8181/api/auth/registration';
+      const requestReg = new XMLHttpRequest();
+
+      requestReg.open('POST', this.urlReg, false );
+      const CryptoJS = require('crypto-js');
+      requestReg.setRequestHeader('Content-Type','application/json');
+      requestReg.send(JSON.stringify({name: this.username, password: CryptoJS.MD5(this.password).toString() ,email:" ",
+      phoneNumber: "89999999999", accountNonExpired: true ,accountNonLocked: true, credentialsNonExpired: true, enabled: true}));
+      console.log("response" + requestReg.response);
   }
-
-  ngOnInit() { }
+  ngOnInit(){
+  }
 }

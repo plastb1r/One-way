@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
-    @Override
+    /*@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors()
             .and()
@@ -31,6 +31,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
             .and()
             .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
+        // http.csrf().disable().cors()
+        // .and()
+        // .authorizeRequests().antMatchers("/**").permitAll()
+        // .anyRequest().authenticated();
+    }*/
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().cors()
+            .and()
+            .addFilter(digestAuthenticationFilter()) 
+            .exceptionHandling().authenticationEntryPoint(digestEntryPoint())
+            .and()
+            .authorizeRequests().antMatchers("/api/auth/registration").permitAll()
+            .anyRequest().authenticated();
+            //.and()
+            //.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
         // http.csrf().disable().cors()
         // .and()
         // .authorizeRequests().antMatchers("/**").permitAll()

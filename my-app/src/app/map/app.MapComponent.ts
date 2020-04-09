@@ -68,19 +68,7 @@ export class MapFormComponent implements OnInit{
      private httpService: HttpService
    ) { }
 
-<<<<<<< HEAD
-  ngOnInit() {
-    this.mapsAPILoader.load().then(() => {
-      this.data.currentVisibilityOfMap.subscribe(v => this.visibilityOfPopularplaces = v);
-      this.data.currentWay.subscribe(w => this.way = w);
-      this.data.currentLocations.subscribe(locat => this.locations2 = locat);
-      this.geoCoder = new google.maps.Geocoder;
-        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {});
-        autocomplete.addListener("place_changed", () => {
-          this.ngZone.run(() => {
-=======
-   // sends places to alg
-   placesFromAlg(){
+   public placesFromAlg(){
     this.timeToNext = new Array<number>();
     this.travelModes =  new  Array<string>();
     this.travelModesStr = new Array<string>();
@@ -112,6 +100,7 @@ export class MapFormComponent implements OnInit{
         console.log("3     " + this.travelModes[2]);
 
         this.setTravelModes();
+        //this.show = true;
         //this.createWay(this.way.points);
         console.log("1     " + this.travelModesStr[0]);
         console.log("2     " + this.travelModesStr[1]);
@@ -119,11 +108,61 @@ export class MapFormComponent implements OnInit{
 
       }
 
-    );
-    this.createWay(this.way.points);
-    this.data.changeWay1(this.way);
-
-   }
+    )
+    if(this.show){
+      this.createWay(this.way.points);
+      this.data.changeWay1(this.way);
+      this.visibilityOfPopularplaces = false;
+    }
+  }
+    
+    public createWay(arr: Array<Location>){
+      arr.forEach(p => {
+        this.getDetailsForWay(p.placeId);
+      });
+      this.travelModes = ["walking", "transit", "driving", "walking", "transit", "driving"];
+      for(var i = 0; i < arr.length - 1; i++){
+        if(this.travelModes[i] == "walking")
+        {
+            var dir = {
+            origin: {lat: arr[i].lat, lng: arr[i].lng},
+            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+            travelMode: google.maps.TravelMode.WALKING
+            }
+            this.dirWalk.push(dir);
+        }
+  
+  
+        if(this.travelModesStr[i] == "transit")
+        {
+          var dir = {
+            origin: {lat: arr[i].lat, lng: arr[i].lng},
+            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+            travelMode: google.maps.TravelMode.WALKING
+            }
+            this.dirTrans.push(dir);
+        }
+        if(this.travelModesStr[i] == "driving")
+        {
+          var dir =  {
+            origin: {lat: arr[i].lat, lng: arr[i].lng},
+            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+            travelMode: google.maps.TravelMode.DRIVING
+            }
+            this.dirCar.push(dir);
+        }
+        if(this.travelModesStr[i] == "bicycling")
+        {
+          var dir = {
+            origin: {lat: arr[i].lat, lng: arr[i].lng},
+            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
+            travelMode: google.maps.TravelMode.BICYCLING
+            }
+            this.dirBic.push(dir);
+        }
+      }
+      this.visibilityOfPopularplaces = false;
+     }  
 
    setTravelModes(){
     this.travelModes.forEach(tm => {
@@ -153,105 +192,6 @@ export class MapFormComponent implements OnInit{
    toggle(index: number){
     this.visibility[index] = !this.visibility[index];
   }
-
-   createWay(arr: Array<Location>){
-    this.visibilityOfPopularplaces = false;
-    this.data.changeVisibilityOfMap(false);
-    this.dataw =  new Array<Data>();
-    this.typesw = new Array<any>();
-    this.numberw = new Array<string>();
-    this.ratingw = new Array<number>();
-    this.photosw = new Array<Array<string>>();
-    arr.forEach(w =>{
-      console.log("func  " + w.lat);
-    });
-
-    arr.forEach(p => {
-      this.getDetailsForWay(p.placeId);
-    });
-    this.allow = false;
-    this.notallow = true;
-    var length = arr.length - 1;
-
-    for(var i = 0; i < arr.length - 1; i++){
-      if(this.travelModes[i] == "walking")
-      {
-          this.dir = {
-          origin: {lat: arr[i].lat, lng: arr[i].lng},
-          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-          travelMode: google.maps.TravelMode.WALKING
-          }
-          this.dirWalk.push(this.dir);
-          console.log("dir walk     " +  this.dir);
-          console.log("dir walk     " +  this.dirWalk[0].origin.lat);
-          console.log("dir walk     " +  this.dirWalk[0].destination.lat);
-      }
-
-
-      this.dir = {
-        origin: {lat: arr[i].lat, lng: arr[i].lng},
-        destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-        travelMode: google.maps.TravelMode.WALKING
-        }
-        this.dirWalk.push(this.dir);
-
-
-      if(this.travelModesStr[i] == "transit")
-      {
-        var dir: Direction = {
-          origin: {lat: arr[i].lat, lng: arr[i].lng},
-          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-          travelMode: google.maps.TravelMode.WALKING
-          }
-          this.dirTrans.push(dir);
-      }
-      if(this.travelModesStr[i] == "driving")
-      {
-        var dir: Direction = {
-          origin: {lat: arr[i].lat, lng: arr[i].lng},
-          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-          travelMode: google.maps.TravelMode.DRIVING
-          }
-          this.dirCar.push(dir);
-      }
-      if(this.travelModesStr[i] == "bicycling")
-      {
-        var dir: Direction = {
-          origin: {lat: arr[i].lat, lng: arr[i].lng},
-          destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-          travelMode: google.maps.TravelMode.BICYCLING
-          }
-          this.dirBic.push(dir);
-      }
-    }
-
-    /*this.dir = {
-      origin: {lat: arr[0].lat, lng:arr[0].lng},
-      destination: {lat: arr[length].lat, lng: arr[length].lng},
-      //waypoints: directs,
-      travelMode: google.maps.TravelMode.DRIVING
-    }
-
-
-    /*this.mapsAPILoader.load().then(() => {
-     var directionsService = new google.maps.DirectionsService();
-     var directionsRenderer = new google.maps.DirectionsRenderer();
-     directionsService.route({
-        origin: {lat: this.locations2[0].lat, lng:this.locations2[0].lng},
-        destination: {lat: this.locations2[1].lat, lng: this.locations2[1].lng},
-        travelMode: google.maps.TravelMode.WALKING
-    }, function (response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-            directionsRenderer.setDirections(response);
-            console.log('good');
-        } else {
-            console.log('Directions request failed due to ' + status);
-        }
-    });
-  });*/
-   }
-
-
 
    public getDetailsForWay(placeId: string){
     this.httpService.getData(placeId).subscribe( value =>{
@@ -288,29 +228,15 @@ export class MapFormComponent implements OnInit{
    ngOnInit() {
      //load Places Autocomplete
      this.mapsAPILoader.load().then(() => {
-       //this.setCurrentLocation();
-       //this.data.currentLoc.subscribe(locat => this.loc=locat);
-       //this.locations2 = [
-         //{lat: this.loc.lat, lng: this.loc.lng, zoom: 12}
-      //];
       this.data.currentVisibilityOfMap.subscribe(vis => this.visibilityOfPopularplaces = vis);
       this.data.currentWay.subscribe(w => this.way = w);
       this.data.currentLocations.subscribe(locat => this.locations2 = locat);
-
-      /*if(!this.visibilityOfPopularplaces){
-        this.createWay(this.way.points);
-      }*/
-
-      //this.data.currentBound.subscribe(bd => this.bound);
        this.geoCoder = new google.maps.Geocoder;
-       //let autocomplete = new google.maps.places.Autocomplete("New York, NY, USA", {
        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
 
        });
        autocomplete.addListener("place_changed", () => {
          this.ngZone.run(() => {
-           //get the place result
->>>>>>> 091fe00bf60b1ef1e11519d87457b791115eedf7
           let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
             if (place.geometry === undefined || place.geometry === null) {
               return;
@@ -370,176 +296,12 @@ export class MapFormComponent implements OnInit{
      this.data.changeNumber(number);
      this.data.changeTypes(types);
     }
-
-    public setTravelModes(){
-      this.travelModes.forEach(tm => {
-        if(tm == "WALKING")
-        {
-          this.travelModesIcons.push(this.icons[3]);
-          this.travelModesStr.push("Пешком")
-        }
-        if(tm == "TRANSIT")
-        {
-          this.travelModesIcons.push(this.icons[1]);
-          this.travelModesStr.push("Транзит")
-        }
-        if(tm == "DRIVING")
-        {
-          this.travelModesIcons.push(this.icons[0]);
-          this.travelModesStr.push("На машине")
-        }
-        if(tm == "BICYCLING")
-        {
-          this.travelModesIcons.push(this.icons[2]);
-          this.travelModesStr.push("На велосипеде")
-        }
-      })
-     }
-  
-    public toggle(index: number){
-      this.visibility[index] = !this.visibility[index];
-    }
-
-    public placesFromAlg(){
-      this.timeToNext = new Array<number>();
-      this.travelModes =  new  Array<string>();
-      this.travelModesStr = new Array<string>();
-      console.log("1  s   " + this.way.points[0].lat);
-      console.log("2  s   " + this.way.points[1].lat);
-      console.log("3  s  " + this.way.points[2].lat);
-      var d = [];
-      var tm =  new Array<string>();
-      this.httpService.sendPlacesToAlgorythm(this.way.points).subscribe(
-        (data: Array<any>) => {
-          d = data;
-          this.way.points = new Array<Location>();
-          d.forEach(p => {
-            this.way.points.push(p['place']);
-            this.timeToNext.push((Math.round(p['timeToNext']/60)));
-            this.travelModes.push(p['transportToNext']);
-          });
-          this.travelModes = ["WALKING", "TRANSIT", "DRIVING", "WALKING", "TRANSIT", "DRIVING"];
-          console.log("1     " + this.way.points[0].lat);
-          console.log("2     " + this.way.points[1].lat);
-          console.log("3     " + this.way.points[2].lat);
-  
-  
-          console.log("1     " + this.timeToNext[0]);
-          console.log("2     " + this.timeToNext[1]);
-          console.log("3     " + this.timeToNext[2]);
-  
-          console.log("1     " + this.travelModes[0]);
-          console.log("2     " + this.travelModes[1]);
-          console.log("3     " + this.travelModes[2]);
-  
-          this.setTravelModes();
-          this.createWay(this.way.points);
-          this.data.changeWay1(this.way);
-          this.visibilityOfPopularplaces = false;
-          //this.show = true;
-          //this.createWay(this.way.points);
-          console.log("1     " + this.travelModesStr[0]);
-          console.log("2     " + this.travelModesStr[1]);
-          console.log("3     " + this.travelModesStr[2]);
-  
-        }
-  
-      );
-      /*if(this.show){
-        this.createWay(this.way.points);
-        this.data.changeWay1(this.way);
-        this.visibilityOfPopularplaces = false;
-      }*/
-
-      this.createWay(this.way.points);
-      this.data.changeWay1(this.way);
-      this.visibilityOfPopularplaces = false;
-      
-      
-     }
+    
 
      public makeVis(){
       this.visibilityOfPopularplaces = false;
       this.data.changeVisibilityOfMap(false);
      }
-
-     public getDetailsForWay(placeId: string){
-      console.log(placeId);
-     this.httpService.getData(placeId).subscribe( value =>{
-       //var loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], zoom: 15, placeId: value['result']['place_id'],  choose: false};
-       var phot = value['result']['photos'];
-       var name = value['result']['name'];
-       var address = value['result']['formatted_address'];
-       var rating = value['result']['rating'];
-       var types = value['result']['types'];
-       var number = value['result']['international_phone_number'];
- 
-       this.indexw += 1;
-       var ref = []
-       phot.forEach(ph => {
-         ref.push(ph['photo_reference']);
-       });
- 
-       var photoRes = [];
-         ref.forEach(ph => {
-           photoRes.push('https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+ph+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ')
-         });
-       //console.log(value['result']['place_id']);
-       this.dataw.push({photo: photoRes[0],name: name,address: address,index: this.indexw, isAddedToWay: true, isAddedToFav: true});
-       console.log("data w" + this.dataw);
-       this.photosw.push(photoRes);
-       this.numberw.push(number);
-       this.ratingw.push(rating);
-       this.typesw.push(types);
-     });
-   }
-
-     public createWay(arr: Array<Location>){
-      arr.forEach(p => {
-        this.getDetailsForWay(p.placeId);
-      });
-      this.travelModes = ["WALKING", "TRANSIT", "DRIVING", "WALKING", "TRANSIT", "DRIVING"];
-      for(var i = 0; i < arr.length - 1; i++){
-        if(this.travelModes[i] == "WALKING")
-        {
-            var dir = {
-            origin: {lat: arr[i].lat, lng: arr[i].lng},
-            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-            travelMode: google.maps.TravelMode.WALKING
-            }
-            this.dirWalk.push(dir);
-        }
-
-        if(this.travelModes[i] == "TRANSIT")
-        {
-          var dir = {
-            origin: {lat: arr[i].lat, lng: arr[i].lng},
-            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-            travelMode: google.maps.TravelMode.WALKING
-            }
-            this.dirTrans.push(dir);
-        }
-        if(this.travelModes[i] == "DRIVING")
-        {
-          var dir = {
-            origin: {lat: arr[i].lat, lng: arr[i].lng},
-            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-            travelMode: google.maps.TravelMode.DRIVING
-            }
-            this.dirCar.push(dir);
-        }
-        if(this.travelModes[i] == "BICYCLING")
-        {
-          var dir= {
-            origin: {lat: arr[i].lat, lng: arr[i].lng},
-            destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
-            travelMode: google.maps.TravelMode.BICYCLING
-            }
-            this.dirBic.push(dir);
-        }
-      }
-      this.visibilityOfPopularplaces = false;
-     }  
 
      public renderOptionsWalk: any = {
       draggable: false,
