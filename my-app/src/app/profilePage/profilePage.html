@@ -8,14 +8,14 @@
   <div class="row">
     <div class="col-lg-7">
       <div class="form-group">
-        <label for="name">Имя * {{userFromBack}}</label>
+        <label for="name">Имя * </label>
         <input
           type="text"
           name="name"
           id="name"
           class="form-input form-input--square form-input--border-c-alto bg-wild-sand form-input--large"
           required
-          value="Felix"
+          value="{{responseText.name}}"
         >
       </div><!-- .form-group -->
 
@@ -27,7 +27,7 @@
           id="email"
           class="form-input form-input--square form-input--border-c-alto bg-wild-sand form-input--large"
           required
-          value="Felix@example.com"
+          value="{{responseText.email}}"
         >
       </div><!-- .form-group -->
 
@@ -38,6 +38,8 @@
           name="phone"
           id="phone"
           class="form-input form-input--square form-input--border-c-alto bg-wild-sand form-input--large"
+          required
+          value="{{responseText.phoneNumber}}"
         >
       </div><!-- .form-group -->
 

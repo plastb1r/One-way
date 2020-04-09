@@ -7,7 +7,6 @@ import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
 
-
 @Component({
   templateUrl: './profilePage.html',
   styleUrls: ['./app.profilePageComponent.scss'],
@@ -15,15 +14,17 @@ import { User } from 'src/app/domens/user';
 })
 export class ProfilePageComponent implements OnInit {
 
-  userFromBack: string;
+  userFromBack;
+  responseText;
 
   constructor(private data: DataService) { }
 
   ngOnInit() {
     const con = new XMLHttpRequest();
-    con.open('GET', 'http://localhost:8181/api/user/1/routes', false);
+    con.open('GET', 'http://localhost:8181/api/user/1', false);
 
-    const header = this.data.updateAndGetAuthHeader('GET', 'api/user/1/routes');
+    const header = this.data.updateAndGetAuthHeader('GET', 'api/user/1');
+
     console.log(header);
 
     con.setRequestHeader('Authorization', header);
@@ -31,6 +32,7 @@ export class ProfilePageComponent implements OnInit {
 
     if (con.status === 200) {
       this.userFromBack = con.responseText;
+      this.responseText =  JSON.parse(this.userFromBack);
       console.log('OK \n' + this.userFromBack);
     }
     else {

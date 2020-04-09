@@ -49,7 +49,8 @@ export class PopularLandmarksPageComponent implements OnInit{
   ngOnInit() {
     this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
     this.setPopPlaces();
-    this.data.currentCityName.subscribe(ads => this.cityName = ads);
+    //this.data.currentCityName.subscribe(ads => this.cityName = ads);
+    this.cityName = sessionStorage.getItem('cityAddress');
   }
 
   loadMorePopPlaces(){

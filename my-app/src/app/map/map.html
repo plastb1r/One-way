@@ -97,11 +97,11 @@
 
   </agm-map>
 
-  <agm-map  #window2
+  <agm-map
   *ngIf = "!visibilityOfPopularplaces"
     [latitude]="way.points[0].lat"
     [longitude]="way.points[0].lng"
-    [zoom]="locations2[0].zoom"
+    [zoom]="15"
     [disableDoubleClickZoom]="true"
 >
 <agm-marker
@@ -116,16 +116,16 @@
     <agm-info-window #window2>
       <div class="container">
         <div class="col100 mt-4">
-        <h5>{{name}} | {{rating}}</h5>
+        <h5>{{dataw[iy].name}} | {{ratingw[iy]}}</h5>
         </div>
         <div class="col100 mt-1" >
-        {{address}}
+        {{ dataw[iy].address}}
         </div>
         <div class="col100 mt-4 d-flex justify-content-center">
-          <img height="200" width="300" src={{photo}}>
+          <img height="200" width="300" src={{photosw[iy][0]}}>
         </div>
         <div class="col100 mt-4 d-flex justify-content-center">
-          <button class="btn btn-outline-dark" type="submit" (click)="newLocation(loc, photos, rating, address, name, number, types)" routerLink="/landmarkPage">Подробнее</button>
+          <button class="btn btn-outline-dark" type="submit" (click)="newLocation(way.points[d.index], photosw[d.index], ratingw[d.index], dataw[d.index].address, dataw[d.index].name,typesw[d.index], numberw[i])" routerLink="/landmarkPage">Подробнее</button>
         </div>
       </div>
   </agm-info-window >
@@ -134,8 +134,29 @@
     *ngFor="let dir of dirWalk, let iy = index"
     [origin]="dirWalk[iy].origin" 
     [destination]="dirWalk[iy].destination"  
-    [renderOptions]="renderOptions" 
+    [renderOptions]="renderOptionsWalk" 
     [travelMode]="dirWalk[0].travelMode"
+    > </agm-direction>
+    <agm-direction
+    *ngFor="let dir of dirTrans, let iy = index"
+    [origin]="dirTrans[iy].origin" 
+    [destination]="dirTrans[iy].destination"  
+    [renderOptions]="renderOptionsTrans" 
+    [travelMode]="dirTrans[0].travelMode"
+    > </agm-direction>
+    <agm-direction
+    *ngFor="let dir of dirCar, let iy = index"
+    [origin]="dirCar[iy].origin" 
+    [destination]="dirCar[iy].destination"  
+    [renderOptions]="renderOptionsCar" 
+    [travelMode]="dirCar[0].travelMode"
+    > </agm-direction>
+    <agm-direction
+    *ngFor="let dir of dirBic, let iy = index"
+    [origin]="dirBic[iy].origin" 
+    [destination]="dirBic[iy].destination"  
+    [renderOptions]="renderOptionsBic" 
+    [travelMode]="dirBic[0].travelMode"
     > </agm-direction>
    
   </agm-map>

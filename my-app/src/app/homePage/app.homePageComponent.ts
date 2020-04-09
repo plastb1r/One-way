@@ -85,7 +85,8 @@ export class HomePageComponent implements OnInit{
         break;
     }
     //this.data.changeLocation(this.location[0]);
-    this.data.changeCityName(this.address);
+    sessionStorage.setItem('cityAddress', this.address);
+    //this.data.changeCityName(this.address);
     this.data.changeLocations(this.location);
   }
 }

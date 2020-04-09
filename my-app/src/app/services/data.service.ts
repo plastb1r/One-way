@@ -16,6 +16,7 @@ export class DataService {
   locations: Array<Location>;
   wayLocations: Array<Location> = new Array<Location>();
   way: Way = new Way(0, new Array<Location>(), "", "");
+  way1: Way = new Way(0, new Array<Location>(), "", "");
   cityName: string;
   favP: Array<Location> = new Array<Location>();
   visibilityOfMap: boolean;
@@ -31,6 +32,7 @@ export class DataService {
   private locationsSourse = new BehaviorSubject<Array<Location>>(this.locations);
   private wayLocationsSourse = new BehaviorSubject<Array<Location>>(this.wayLocations);
   private waySourse = new BehaviorSubject<Way>(this.way);
+  private waySourse1 = new BehaviorSubject<Way>(this.way1);
   private cityNameSourse = new BehaviorSubject<string>(this.cityName);
   private favPSourse = new BehaviorSubject<Array<Location>>(this.favP);
   private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
@@ -47,6 +49,7 @@ export class DataService {
   currentLocations = this.locationsSourse.asObservable();
   currentWayLocations = this.wayLocationsSourse.asObservable();
   currentWay = this.waySourse.asObservable();
+  currentWay1 = this.waySourse1.asObservable();
   currentCityName = this.cityNameSourse.asObservable();
   currentFavP = this.favPSourse.asObservable();
   currentVisibilityOfMap = this.visibilityOfMapSourse.asObservable();
@@ -169,8 +172,8 @@ export class DataService {
   }
 
   changeWay1(way: Way) {
-    this.way = way;
-    this.waySourse.next(this.way);
+    this.way1 = way;
+    this.waySourse1.next(this.way1);
   }
 
   /*changeWayLocations(locs: Array<Location>){

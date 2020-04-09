@@ -18,23 +18,23 @@ import { DataService } from '../services/data.service';
 })
 @Injectable()
 export class LogInPageComponent implements OnInit {
-  public sheetId: string;
+  public sheetId: string = '';
   public sheet: any;
   public foundSheet: any;
   submitted = false;
   user: User;
 
-  url: string;
-  uri: string;
-  scheme: string; // we just echo the scheme, to allow for 'Digest', 'X-Digest', 'JDigest' etc
-  realm: string;
-  nonce: string;
-  qop: string; // "quality of protection" - '' or 'auth' or 'auth-int'
-  response: string; // hashed response to server challenge
+  url: string = '';
+  uri: string = '';
+  scheme: string = ''; // we just echo the scheme, to allow for 'Digest', 'X-Digest', 'JDigest' etc
+  realm: string = '';
+  nonce: string = '';
+  qop: string = ''; // "quality of protection" - '' or 'auth' or 'auth-int'
+  response: string = ''; // hashed response to server challenge
   nc: number; // nonce count - increments with each request used with the same nonce
-  cnonce: string;
+  cnonce: string = '';
 
-  method: string;
+  method: string = '';
   timeout: number;
   loggingOn: boolean;
 
@@ -117,6 +117,7 @@ export class LogInPageComponent implements OnInit {
       this.method, this.realm, this.nonce, this.uri, this.cnonce, this.qop, this.nc);
 
     authenticatedRequest.open(this.method, this.url, false);
+    //authenticatedRequest.open(this.method, this.uri, false);
 
     const digestAuthHeader = this.scheme + ' ' +
       'username="' + this.username + '", ' +
