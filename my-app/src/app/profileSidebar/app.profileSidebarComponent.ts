@@ -12,4 +12,16 @@ import { Way } from 'src/app/domens/way';
   styleUrls: ['./app.profileSidebarComponent.scss']
 
 })
-export class ProfileSidebarComponent{}
+export class ProfileSidebarComponent implements OnInit{
+  userName='';
+
+  constructor(private data: DataService ){}
+  ngOnInit(){
+    this.userName = sessionStorage.getItem("UserName");
+  }
+  public logOut(){
+    sessionStorage.removeItem("authHeader");
+    sessionStorage.removeItem("UserName");
+    console.log("You have been successfully log out");
+  }
+}

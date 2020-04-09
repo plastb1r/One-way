@@ -44,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilter(digestAuthenticationFilter()) 
             .exceptionHandling().authenticationEntryPoint(digestEntryPoint())
             .and()
+            .authorizeRequests().antMatchers("/api/routes/**").permitAll()
+            .and()
             .authorizeRequests().antMatchers("/api/auth/registration").permitAll()
             .anyRequest().authenticated();
             //.and()

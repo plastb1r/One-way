@@ -100,7 +100,7 @@ export class MapFormComponent implements OnInit{
         console.log("3     " + this.travelModes[2]);
 
         this.setTravelModes();
-        //this.show = true;
+        this.show = true;
         //this.createWay(this.way.points);
         console.log("1     " + this.travelModesStr[0]);
         console.log("2     " + this.travelModesStr[1]);

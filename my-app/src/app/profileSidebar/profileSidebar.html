@@ -1,5 +1,5 @@
 <div class="settings marg-top ">
-    <h2 class="settings__header">Привет, <strong>Felix!</strong></h2>
+    <h2 class="settings__header">Привет, <strong>{{userName}}!</strong></h2>
     <div class="setting-group">
       <h3 class="setting-group__title c-gray">Аккаунт</h3>
       <ul class="setting-container min-list">
@@ -32,11 +32,11 @@
       <ul class="setting-container min-list">
         <li class="setting">
           <i class="fa fa-lock setting__icon"></i>
-          <a href="change-password.html" class="setting__link">Изменить пароль</a>
+          <a  class="setting__link">Изменить пароль</a>
         </li>
         <li class="setting">
           <i class="fa fa-power-off setting__icon"></i>
-          <a href="index.html" class="setting__link">Выйти</a>
+          <a routerLink="/logInPage" (click)="logOut()"  class="setting__link">Выйти</a>
         </li>
       </ul><!-- .setting-container -->
     </div><!-- setting-group -->

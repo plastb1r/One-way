@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Location } from 'src/app/domens/location';
 import { Way } from 'src/app/domens/way';
+import { Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -21,6 +22,13 @@ export class DataService {
   favP: Array<Location> = new Array<Location>();
   visibilityOfMap: boolean;
 
+  public linkName$ = new BehaviorSubject<string>("Войти");
+  public link$ = new BehaviorSubject<string>("/logInPage");
+
+  public isUserLoggedIn = new Subject();
+  setUserLoggedIn(loggedIn: boolean) {
+    this.isUserLoggedIn.next(loggedIn);
+  }
 
   private locationSourse = new BehaviorSubject<Location>(this.location);
   private ratingSourse = new BehaviorSubject<number>(this.rating);
@@ -36,6 +44,7 @@ export class DataService {
   private cityNameSourse = new BehaviorSubject<string>(this.cityName);
   private favPSourse = new BehaviorSubject<Array<Location>>(this.favP);
   private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
+ 
 
   currentRat = this.ratingSourse.asObservable();
   currentAds = this.addressSourse.asObservable();
@@ -125,6 +134,7 @@ export class DataService {
     }
     return token;
   }
+
   changeFavP(loc: Location, f: Array<Location>) {
     this.favP = f;
     this.favP.push(loc);

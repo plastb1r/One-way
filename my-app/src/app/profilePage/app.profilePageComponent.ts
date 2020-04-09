@@ -6,17 +6,17 @@ import { HttpService } from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   templateUrl: './profilePage.html',
   styleUrls: ['./app.profilePageComponent.scss'],
   providers: [DataService]
 })
-export class ProfilePageComponent implements OnInit {
 
+export class ProfilePageComponent implements OnInit {
   userFromBack;
   responseText;
-
   constructor(private data: DataService) { }
 
   ngOnInit() {
@@ -33,10 +33,12 @@ export class ProfilePageComponent implements OnInit {
     if (con.status === 200) {
       this.userFromBack = con.responseText;
       this.responseText =  JSON.parse(this.userFromBack);
+      sessionStorage.setItem("UserName", this.responseText.name);
       console.log('OK \n' + this.userFromBack);
     }
     else {
       console.log("smth wrong");
+      this.data.setUserLoggedIn(false);
     }
   }
 

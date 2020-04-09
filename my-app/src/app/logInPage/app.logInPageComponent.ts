@@ -51,9 +51,12 @@ export class LogInPageComponent implements OnInit {
 
   //первый запрос на получения nonce и realm
   ngOnInit() {
-      sessionStorage.removeItem("authHeader");
-      console.log(sessionStorage.getItem("authHeader"));
-  this.firstDigestRequest();
+    this.data.linkName$.next("Войти");
+    this.data.link$.next("/logInPage");
+    sessionStorage.removeItem("UserName");
+    sessionStorage.removeItem("authHeader");
+    console.log(sessionStorage.getItem("authHeader"));
+    this.firstDigestRequest();
   }
 
   firstDigestRequest() {
@@ -134,8 +137,10 @@ export class LogInPageComponent implements OnInit {
 
   authenticatedRequest.setRequestHeader('Authorization', digestAuthHeader);
   authenticatedRequest.send();
-
+  this.data.linkName$.next(this.username);
+  this.data.link$.next("/profilePage");
   return digestAuthHeader;
+
   }
 
   //this.getRequest().subscribe(data => {console.log("data" + data)});

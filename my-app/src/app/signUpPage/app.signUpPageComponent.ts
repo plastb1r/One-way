@@ -18,12 +18,14 @@ export class SignUpPageComponent implements OnInit{
   urlReg: string;
   username = '';
   password = '';
+  email = '';
 
   constructor(private http: HttpClient){ }
  
   registrater(form: NgForm){
       this.username = form.controls.username.value;
       this.password = form.controls.password.value;
+      this.email = form.controls.email.value;
 
       this.urlReg = 'http://localhost:8181/api/auth/registration';
       const requestReg = new XMLHttpRequest();
@@ -31,7 +33,7 @@ export class SignUpPageComponent implements OnInit{
       requestReg.open('POST', this.urlReg, false );
       const CryptoJS = require('crypto-js');
       requestReg.setRequestHeader('Content-Type','application/json');
-      requestReg.send(JSON.stringify({name: this.username, password: CryptoJS.MD5(this.password).toString() ,email:" ",
+      requestReg.send(JSON.stringify({name: this.username, password: CryptoJS.MD5(this.password).toString() ,email: this.email,
       phoneNumber: "89999999999", accountNonExpired: true ,accountNonLocked: true, credentialsNonExpired: true, enabled: true}));
       console.log("response" + requestReg.response);
   }
