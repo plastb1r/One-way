@@ -24,6 +24,7 @@ export class DataService {
 
   public linkName$ = new BehaviorSubject<string>("Войти");
   public link$ = new BehaviorSubject<string>("/logInPage");
+  public linkNameInFooter$ = new BehaviorSubject<string>("Войти");
 
   public isUserLoggedIn = new Subject();
   setUserLoggedIn(loggedIn: boolean) {

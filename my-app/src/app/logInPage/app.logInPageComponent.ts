@@ -53,6 +53,7 @@ export class LogInPageComponent implements OnInit {
   ngOnInit() {
     this.data.linkName$.next("Войти");
     this.data.link$.next("/logInPage");
+    this.data.linkNameInFooter$.next("Войти");
     sessionStorage.removeItem("UserName");
     sessionStorage.removeItem("authHeader");
     console.log(sessionStorage.getItem("authHeader"));
@@ -139,6 +140,7 @@ export class LogInPageComponent implements OnInit {
   authenticatedRequest.send();
   this.data.linkName$.next(this.username);
   this.data.link$.next("/profilePage");
+  this.data.linkNameInFooter$.next("Личный кабинет");
   return digestAuthHeader;
 
   }

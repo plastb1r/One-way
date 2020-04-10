@@ -30,7 +30,7 @@
             <ul class="setting-container min-list">
               <li class="setting">
                 <i class="fa fa-group setting__icon c-white"></i>
-                <a routerLink = "/" class="setting__link c-white">наша команда</a>
+                <a routerLink = "/" class="setting__link c-white">Наша команда</a>
               </li>
             </ul><!-- .setting-container -->
           </div><!-- setting-group -->
@@ -47,7 +47,7 @@
             <ul class="setting-container min-list">
               <li class="setting">
                 <i class="fa fa-user setting__icon c-white"></i>
-                <a routerLink = "/wayParamsPage" class="setting__link c-white">Личный кабинет</a>
+                <a routerLink="{{data.link$ | async}}" class="setting__link c-white">{{data.linkNameInFooter$ | async}}</a>
               </li>
               
               <li class="setting">

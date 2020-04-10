@@ -12,6 +12,7 @@ export class HomePageComponent implements OnInit{
     private geoCoder;
     location: Array<Location>;
     address: string = "Moscow, Russia";
+    routerLink = '/signUpPage';
 
     @ViewChild('search', {static: false})
     public searchElementRef: ElementRef;
@@ -47,6 +48,11 @@ export class HomePageComponent implements OnInit{
           });
         });
       });
+
+      if(sessionStorage.getItem("UserName"))
+      {
+        this.routerLink = '/profilePage';
+      }
     }
 
   _newLocation(index: number){

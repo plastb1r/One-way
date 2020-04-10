@@ -14,17 +14,6 @@ export class HeaderComponent implements OnInit{
   constructor(private data: DataService ){
   
   }
-  /*public setLink(){
-    if(sessionStorage.getItem("UserName")){
-      this.nameOfLink = sessionStorage.getItem("UserName");
-      this.routerLink = "/profilePage";
-    }
-    else {
-      this.nameOfLink = "Войти";
-      this.routerLink = "/logInPage";
-    }
-  }*/
-  
   ngOnInit(){
     if(sessionStorage.getItem("UserName")){
       this.data.linkName$.next(sessionStorage.getItem("UserName"));

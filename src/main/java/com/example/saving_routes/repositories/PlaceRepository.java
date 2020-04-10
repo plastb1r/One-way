@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaceRepository extends JpaRepository<Place, String> {
     Iterable<Place> findAllByOwner(User user);
-
 }
