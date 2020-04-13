@@ -42,7 +42,7 @@
                 />
                 <i class="mdi mdi-account"></i>
                 <div
-                  class="alert alert-danger"
+                  class="alert alert"
                   role="alert"
                   *ngIf="f.submitted && username.invalid"
                 >
@@ -64,7 +64,7 @@
                 />
                 <i class="mdi mdi-eye"></i>
                 <div
-                  class="alert alert-danger"
+                  class="alert alert"
                   role="alert"
                   *ngIf="f.submitted && password.invalid"
                 >
@@ -90,23 +90,28 @@
                   Войти
                 </button>
               </div>
+
+              <div class="form-group">
+                <div
+                  class="alert"
+                  role="alert"
+                  *ngIf="f.submitted && isLoginFailed"
+                >
+                  Что-то пошло не так! Введите пароль и/или имя пользователя ещё раз. 
+                </div>
+              </div>
+
               <div class="form-group--footer">
                 <span class="c-gray">
                   Впервые на нашем сайте?
                   <a (click)="reloadPageToReg()" href="signUpPage"  class="c-primary t-underline js-block-trigger">Регистрация!</a>
                 </span>
               </div>
-
-              <div class="form-group">
-                <div
-                  class="alert alert-danger"
-                  role="alert"
-                  *ngIf="f.submitted && isLoginFailed"
-                >
-                  Что-то пошло не так: {{ errorMessage }}
-                </div>
-              </div>
             </div><!-- .form-container -->
+            <div class="alert alert-success" *ngIf="isSuccessful">
+              Регистрация прошла успешно!
+            </div>
+
             </form><!-- .reset -->
           </div><!-- .form-login__block -->
         </div><!-- .form-login -->

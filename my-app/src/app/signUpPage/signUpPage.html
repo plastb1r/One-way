@@ -42,7 +42,7 @@
                 placeholder="jhon12"
               />
               <i class="mdi mdi-account"></i>
-              <div class="alert-danger" *ngIf="f.submitted && username.invalid">
+              <div class="alert" *ngIf="f.submitted && username.invalid">
                 <div *ngIf="username.errors.required">Имя пользователя обязательно для заполнения</div>
                 <div *ngIf="username.errors.minlength">
                   Имя пользователя должно содержать минимум 3 символа
@@ -65,7 +65,7 @@
                 #email="ngModel"
                 placeholder="jhon12@gmail.com"
               />
-                <div class="alert-danger" *ngIf="f.submitted && email.invalid">
+                <div class="alert" *ngIf="f.submitted && email.invalid">
                   <div *ngIf="email.errors.required">E-mail обязательен для заполнения</div>
                   <div *ngIf="email.errors.email">
                     E-mail должен быть действительным адресом электронной почты
@@ -88,7 +88,7 @@
                     placeholder="******"
                   />
                 <i class="mdi mdi-eye"></i>
-                <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+                <div class="alert" *ngIf="f.submitted && password.invalid">
                   <div *ngIf="password.errors.required">Пароль обязателен для заполнения</div>
                   <div *ngIf="password.errors.minlength">
                     Пароль должен содержать минимум 6 символов
@@ -103,19 +103,9 @@
                 Зарегистрироваться
               </button>
             </div>
-            <div class="mt-2 w-75 mx-auto">
-              <div class="form-check form-check-flat">
-                <label class="form-check-label">
-                  <input type="checkbox" class="form-check-input">
-                  Я принимаю условия пользовательского соглашения
-                </label>
-              </div>
-            </div>
-            <div class="mt-2 text-center">
-              <a  class="auth-link text-black">Уже зарегистрированы? <span class="font-weight-medium">Sign in</span></a>
-            </div>
-            <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-              Что-то пошло не так!<br />{{ errorMessage }}
+
+            <div class="alert" *ngIf="f.submitted && isSignUpFailed">
+              Что-то пошло не так!<br />
             </div>  
       
             <div class="form-group--footer">

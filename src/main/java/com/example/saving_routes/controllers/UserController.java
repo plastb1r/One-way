@@ -156,17 +156,21 @@ public class UserController {
         return savedUser;
     }*/
 
+    @GetMapping(path = "/routes/{routeId}")
+    public Route getRouteById(@PathVariable String routeId) {
+        return routeRepository.findAllById(Integer.parseInt(routeId));
+    }
 
-    @GetMapping(path = "/{user_id}/routes")
-    public Iterable<Route> getRoutesByUserId(@PathVariable(name = "user_id") String userId) {
+    @GetMapping(path = "/routes")
+    public Iterable<Route> getRoutesByUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
 		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
 		User user = userRepository.findById(us.getId()).get();	
         return routeRepository.findByOwner(user);
     }
 
-    @PutMapping(path = "/{user_id}/routes")
-    public Iterable<Route> saveRoute(@PathVariable(name = "user_id") String userId, @RequestBody Route route) {
+    @PutMapping(path = "/routes")
+    public Route saveRoute(@RequestBody Route route) {
         Route newRoute = new Route();
         newRoute.setTimeToGo(route.getTimeToGo());
         newRoute.setName(route.getName());
@@ -179,7 +183,7 @@ public class UserController {
 		User user = userRepository.findById(us.getId()).get();	
         newRoute.setOwner(user);
 
-        routeRepository.saveAndFlush(newRoute);
+        Route savedRoute = routeRepository.saveAndFlush(newRoute);
 
         route.getPlaces().forEach(placeOnRoute -> {
             Place place = placeRepository.saveAndFlush(placeOnRoute.getPlace());
@@ -187,25 +191,30 @@ public class UserController {
             placeOnRoute.setPlace(place);
             placeOnRouteRepository.saveAndFlush(placeOnRoute);
         });
-        return routeRepository.findByOwner(user);
+        return savedRoute;
     }
 
-    @DeleteMapping(path = "/{user_id}/routes/{route_id}")
-    public String deleteRoute(@PathVariable(name = "route_id") Integer routeId) {
+    @DeleteMapping(path = "/routes/{routeId}")
+    public String deleteRoute(@PathVariable Integer routeId) {
         routeRepository.deleteById(routeId);
         return routeRepository.existsById(routeId) ? "error" : "deleted";
     }
 
-    @GetMapping(path = "/{user_id}/places")
-    public Iterable<Place> getPlacesByUserId(@PathVariable(name = "user_id") String userId) {
+    @GetMapping(path = "/places/{placeId}")
+    public Place getPlaceById(@PathVariable String placeId) {
+        return placeRepository.findAllById(Integer.parseInt(placeId));
+    }
+
+    @GetMapping(path = "/places")
+    public Iterable<Place> getPlacesByUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
 		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
 		User user = userRepository.findById(us.getId()).get();	
         return placeRepository.findAllByOwner(user);
     }
 
-    @PutMapping(path = "/{user_id}/places")
-    public Place savePlace(@PathVariable(name = "user_id") String userId, @RequestBody Place place) {
+    @PutMapping(path = "/places")
+    public Place savePlace(@RequestBody Place place) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
 		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
 		User user = userRepository.findById(us.getId()).get();	
@@ -214,102 +223,15 @@ public class UserController {
         return savedPlace;
     }
 
-    @DeleteMapping(path = "/{user_id}/places/{place_id}")
-    public String deletePlace(@PathVariable(name = "user_id") String placeId) {
+    @DeleteMapping(path = "/places/{placeId}")
+    public String deletePlace(@PathVariable String placeId) {
         placeRepository.deleteById(placeId);
         return placeRepository.existsById(placeId) ? "error" : "deleted";
     }
-		
-	/*@GetMapping(path = "/lists")
-    public Iterable<ListToDo> getListsByUserId() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
-		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
-		User user = userRepository.findById(us.getId()).get();	
-        return listRepository.findAllByOwner(user);
+
+    @GetMapping(path = "/routes/{routeId}/placesOnRoute")
+    public Iterable<PlaceOnRoute> getPlacesOnRouteByRouteId( @PathVariable String routeId) {
+		Route route = routeRepository.findById(Integer.parseInt(routeId)).get();	
+        return placeOnRouteRepository.findAllByRoute(route);
 	}
-	
-	@GetMapping(path = "/lists/{listId}")
-    public ListToDo getListById(@PathVariable String listId) {
-        return listRepository.findAllById(Integer.parseInt(listId));
-    }
-
-    @PutMapping(path = "/lists")
-    public ListToDo saveList(@RequestBody ListToDo list) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
-		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
-		User user = userRepository.findById(us.getId()).get();	
-        list.setOwner(user);
-        ListToDo savedList = listRepository.saveAndFlush(list);
-        return savedList;
-    }
-
-    @DeleteMapping(path = "/lists/{listId}")
-    public String deleteList(@PathVariable String listId) {
-        listRepository.deleteById(Integer.parseInt(listId));
-        return listRepository.existsById(Integer.parseInt(listId)) ? "error" : "deleted";
-    }
-
-    @PutMapping(path = "/events")
-    public Event saveEvent(@RequestBody Event event) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
-		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
-		User user = userRepository.findById(us.getId()).get();	
-        event.setOwner(user);
-        Event savedEvent = eventRepository.saveAndFlush(event);
-        return savedEvent;
-    }
-
-    @DeleteMapping(path = "/events/{eventId}")
-    public String deleteEvent(@PathVariable String eventId) {
-        eventRepository.deleteById(Integer.parseInt(eventId));
-        return eventRepository.existsById(Integer.parseInt(eventId)) ? "error" : "deleted";
-	}
-	
-	@GetMapping(path = "/events/{eventId}")
-    public Event getEventById(@PathVariable String eventId) {
-		return eventRepository.findAllById(Integer.parseInt(eventId));
-    }
-
-    @GetMapping(path = "/events")
-    public Iterable<Event> getEventsByUserId() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
-		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
-		User user = userRepository.findById(us.getId()).get();	
-        return eventRepository.findAllByOwner(user);
-	}
-
-
-	@PutMapping(path = "/lists/{listId}/things/")
-    public Thing saveThing(@PathVariable String listId, @RequestBody Thing thing) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
-		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
-		User user = userRepository.findById(us.getId()).get();	
-        thing.setOwner(user);
-        Thing savedThing = thingRepository.saveAndFlush(thing);
-        return savedThing;
-	}
-	
-
-    @DeleteMapping(path = "/lists/{listId}/things/{thingId}")
-    public String deleteThing(@PathVariable String thingId, @PathVariable String listId) {
-        thingRepository.deleteById(Integer.parseInt(listId));
-        return thingRepository.existsById(Integer.parseInt(thingId)) ? "error" : "deleted";
-	}
-	
-	@GetMapping(path = "/lists/{listId}/things/{thingId}")
-    public Thing getThingById(@PathVariable String thingId, @PathVariable String listId) {
-		return thingRepository.findAllById(Integer.parseInt(thingId));
-    }
-
-    @GetMapping(path = "/lists/{listId}/things")
-    public Iterable<Thing> getThingssByListId( @PathVariable String listId) {
-		ListToDo list = listRepository.findById(Integer.parseInt(listId)).get();	
-        return thingRepository.findAllByListId(list);
-	}
-    
-    @DeleteMapping(path = "/{user_id}/lists/{list_id}/things/{thing_id}")
-    public String deleteThing(@PathVariable(name = "user_id") String thingId) {
-        thingRepository.deleteById(Integer.parseInt(thingId));
-        return thingRepository.existsById(Integer.parseInt(thingId)) ? "error" : "deleted";
-    }*/
 }
