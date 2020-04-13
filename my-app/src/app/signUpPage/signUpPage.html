@@ -3,7 +3,13 @@
     <div class="col-md-4 offset-md-4">
       <div class="form-login js-login-form">
         <div class="form-login__block js-form-block is-selected" id="signin">
-          <form #regForm="ngForm" (ngSubmit)="registrater(regForm)">
+          <form
+            *ngIf="!isSuccessful"
+            name="form"
+            (ngSubmit)="f.form.valid && onSubmit()"
+            #f="ngForm"
+            novalidate
+          >
             <div class="form-container">
             <h3 class="form-title t-center">Регистрация</h3>
             <div class="form-social">
@@ -21,61 +27,113 @@
                 </div><!-- .form-group__wrapper -->
               </div><!-- .form-group -->
             </div><!-- .form-social -->
-            <div class="form-group">
-              <label for="signup-email">E-mail *</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="form-input form-input--pill form-input--border-c-gallery"
-                required [(ngModel)]="email" name="email"
-                placeholder="johndoe@gmail.com"
-              >
-            </div><!-- .form-group -->
 
             <div class="form-group">
-              <label for="signup-name">Имя *</label>
+              <label for="username">Имя*</label>
               <input
                 type="text"
-                name="username"
-                id="username"
                 class="form-input form-input--pill form-input--border-c-gallery"
-               required [(ngModel)]="username" name="username"
-                placeholder="John Doe"
-              >
-            </div><!-- .form-group -->
+                name="username"
+                [(ngModel)]="form.username"
+                required
+                minlength="3"
+                maxlength="20"
+                #username="ngModel"
+                placeholder="jhon12"
+              />
+              <i class="mdi mdi-account"></i>
+              <div class="alert-danger" *ngIf="f.submitted && username.invalid">
+                <div *ngIf="username.errors.required">Имя пользователя обязательно для заполнения</div>
+                <div *ngIf="username.errors.minlength">
+                  Имя пользователя должно содержать минимум 3 символа
+                </div>
+                <div *ngIf="username.errors.maxlength">
+                  Имя пользователя должно содержать не более 20 символов
+                </div>
+              </div>
+            </div>
 
             <div class="form-group">
-              <label for="signup-password">Введите пароль *</label>
+              <label for="email">E-mail</label>
               <input
-                type="password"
-                name="password"
-                id="password"
+                type="email"
                 class="form-input form-input--pill form-input--border-c-gallery"
-                required  [(ngModel)]="password" name="password"
-                placeholder="******"
-              >
-            </div><!-- .form-group -->
+                name="email"
+                [(ngModel)]="form.email"
+                required
+                email
+                #email="ngModel"
+                placeholder="jhon12@gmail.com"
+              />
+                <div class="alert-danger" *ngIf="f.submitted && email.invalid">
+                  <div *ngIf="email.errors.required">E-mail обязательен для заполнения</div>
+                  <div *ngIf="email.errors.email">
+                    E-mail должен быть действительным адресом электронной почты
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+
+                <div class="form-group">
+                  <label for="password">Пароль</label>
+                  <input
+                    type="password"
+                    class="form-input form-input--pill form-input--border-c-gallery"
+                    name="password"
+                    [(ngModel)]="form.password"
+                    required
+                    minlength="6"
+                    #password="ngModel"
+                    placeholder="******"
+                  />
+                <i class="mdi mdi-eye"></i>
+                <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+                  <div *ngIf="password.errors.required">Пароль обязателен для заполнения</div>
+                  <div *ngIf="password.errors.minlength">
+                    Пароль должен содержать минимум 6 символов
+                  </div>
+                </div>
+              </div>
 
             <div class="form-group--submit">
               <button
                 class="button button--primary button--pill button--large button--block button--submit"
-                type="submit"
-                routerLink="/logInPage"  (click) ="registrater(regForm)"
               >
                 Зарегистрироваться
               </button>
             </div>
-
+            <div class="mt-2 w-75 mx-auto">
+              <div class="form-check form-check-flat">
+                <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input">
+                  Я принимаю условия пользовательского соглашения
+                </label>
+              </div>
+            </div>
+            <div class="mt-2 text-center">
+              <a  class="auth-link text-black">Уже зарегистрированы? <span class="font-weight-medium">Sign in</span></a>
+            </div>
+            <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+              Что-то пошло не так!<br />{{ errorMessage }}
+            </div>  
+      
             <div class="form-group--footer">
             <span class="c-gray">
               Уже зарегистрированы?
-              <a routerLink="/logInPage" class="c-primary t-underline js-block-trigger">Войти</a>
+              <a  (click)="reloadPageToLogIn()" href="logInPage"  class="c-primary t-underline js-block-trigger">Войти</a>
             </span>
             </div>
           </div><!-- .form-container -->
+        </div>
         </form><!-- .signup -->
+        <div class="alert alert-success" *ngIf="isSuccessful">
+          Регистрация прошла успешно!
+        </div>
+      </div>   
       </div><!-- .form-login__block -->
   </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- .container -->
+
+

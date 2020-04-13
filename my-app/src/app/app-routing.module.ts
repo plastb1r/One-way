@@ -11,13 +11,15 @@ import {MyFavoritePlacesPageComponent} from './myFavoritePlacesPage/app.myFavori
 import {WayParamsPageComponent} from './wayParamsPage/app.wayParamsPageComponent';
 import {LogInPageComponent} from './logInPage/app.logInPageComponent';
 import {SignUpPageComponent} from 'src/app/signUpPage/app.signUpPageComponent';
+import { BoardUserComponent } from './board-user/board-user.component';
 
 const routes: Routes = [
   {
     path: 'mapPage',
     component: MapPageComponent
   },
-
+  { path: 'user', component: BoardUserComponent },
+  { path: '', redirectTo: 'homePage', pathMatch: 'full' },
   {
     path: 'homePage',
     component: HomePageComponent

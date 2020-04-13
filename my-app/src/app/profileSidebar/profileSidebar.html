@@ -1,5 +1,5 @@
 <div class="settings marg-top ">
-    <h2 class="settings__header">Привет, <strong>{{userName}}!</strong></h2>
+    <h2 class="settings__header">Привет, <strong>{{username}}!</strong></h2>
     <div class="setting-group">
       <h3 class="setting-group__title c-gray">Аккаунт</h3>
       <ul class="setting-container min-list">
@@ -36,7 +36,7 @@
         </li>
         <li class="setting">
           <i class="fa fa-power-off setting__icon"></i>
-          <a routerLink="/logInPage" (click)="logOut()"  class="setting__link">Выйти</a>
+          <a (click)="logout()"  class="setting__link">Выйти</a>
         </li>
       </ul><!-- .setting-container -->
     </div><!-- setting-group -->

@@ -7,6 +7,7 @@ import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
 import { ReplaySubject } from 'rxjs';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   templateUrl: './profilePage.html',
@@ -15,32 +16,19 @@ import { ReplaySubject } from 'rxjs';
 })
 
 export class ProfilePageComponent implements OnInit {
-  userFromBack;
-  responseText;
-  constructor(private data: DataService) { }
+  currentUser: any;
+  //lists:ListToDo[];
+
+  constructor(private token: TokenStorageService,
+    ) { }
 
   ngOnInit() {
-    const con = new XMLHttpRequest();
-    con.open('GET', 'http://localhost:8181/api/user/', false);
+    this.currentUser = this.token.getUser();
+    //this.listService.getAll().subscribe(data =>{this.lists = data;});
+  } 
 
-    const header = this.data.updateAndGetAuthHeader('GET', 'api/user/');
-
-    console.log(header);
-
-    con.setRequestHeader('Authorization', header);
-    con.send();
-
-    if (con.status === 200) {
-      this.userFromBack = con.responseText;
-      this.responseText =  JSON.parse(this.userFromBack);
-      sessionStorage.setItem("UserName", this.responseText.name);
-      console.log('OK \n' + this.userFromBack);
-    }
-    else {
-      console.log("smth wrong");
-      this.data.setUserLoggedIn(false);
-    }
-  }
+ 
+}
 
   // user: User = new User("", "Иван", "Москва", "ivan@gmail.com", 89515555555, "", "", "ivan01", "hhhh");
 
@@ -91,4 +79,3 @@ export class ProfilePageComponent implements OnInit {
   //     this.types.push(types);
   //   });
   // }
-}

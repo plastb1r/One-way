@@ -45,9 +45,15 @@
 
           <div class="setting-group">
             <ul class="setting-container min-list">
-              <li class="setting">
+
+              <li class="setting" *ngIf="!isLoggedIn">
                 <i class="fa fa-user setting__icon c-white"></i>
-                <a routerLink="{{data.link$ | async}}" class="setting__link c-white">{{data.linkNameInFooter$ | async}}</a>
+                <a href="/logInPage" class="setting__link c-white" routerLink="logInPage">Войти</a>
+              </li>
+        
+              <li class="setting" *ngIf="isLoggedIn">
+                <i class="fa fa-user setting__icon c-white"></i>
+                <a href="/profilePage" class="setting__link c-white" routerLink="profilePage">{{ username }}</a>
               </li>
               
               <li class="setting">

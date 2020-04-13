@@ -49,6 +49,11 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <scope>compile</scope>
@@ -78,6 +83,12 @@
       <artifactId>json-simple</artifactId>
       <version>1.1.1</version>
   </dependency>
+  
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>8.0.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

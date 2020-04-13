@@ -1,53 +1,39 @@
 package com.example.saving_routes.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.springframework.security.core.GrantedAuthority;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role implements GrantedAuthority {
+public class Role {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private static final long serialVersionUID = 1L;
+	@Enumerated(EnumType.STRING)
+	@Column(length = 20)
+	private ERole name;
 
-    @JsonIgnore
-    @Id
-    @SequenceGenerator(name = "role_seq", sequenceName = "roles_role_id_seq", allocationSize = 1, initialValue = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @Column(name = "role_id")
-    private Integer id;
+	public Role() {
 
-    @JsonIgnore
-    @Column(name = "role_name")
-    private String name;
+	}
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User owner;
+	public Role(ERole name) {
+		this.name = name;
+	}
 
-    @Override
-    public String getAuthority() {
-        return this.name;
-    }
+	public Integer getId() {
+		return id;
+	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public ERole getName() {
+		return name;
+	}
+
+	public void setName(ERole name) {
+		this.name = name;
+	}
 }

@@ -14,6 +14,7 @@ import { AgmDirectionModule } from 'agm-direction';
 import { UserService } from 'src/app/services/user.service';
 import { FooService } from 'src/app/services/foo.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import {
     GoogleApiModule,
     GoogleApiService,
@@ -35,6 +36,7 @@ import {LandmarkPageComponent } from './landmarkPage/app.landmarkPageComponent';
 import {PopularLandmarksPageComponent } from './popularLandmarksPage/app.popularLandmarksPageComponent';
 import {WayPageComponent } from './wayPage/app.wayPageComponent';
 import {DataService} from 'src/app/services/data.service';
+import { BoardUserComponent } from './board-user/board-user.component';
 
 import {HttpService} from 'src/app/services/http.service';
 import {ProfilePageComponent} from './profilePage/app.profilePageComponent';
@@ -79,7 +81,8 @@ let gapiClientConfig: NgGapiClientConfig = {
     ProfileSidebarComponent,
     WayParamsPageComponent,
     LogInPageComponent,
-    SignUpPageComponent
+    SignUpPageComponent,
+    BoardUserComponent
   ],
   imports: [
     BrowserModule,
@@ -105,7 +108,7 @@ let gapiClientConfig: NgGapiClientConfig = {
       libraries: ['places']
     })
   ],
-  providers: [DataService, HttpService, UserService, FooService],
+  providers: [DataService, HttpService, UserService, FooService, authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

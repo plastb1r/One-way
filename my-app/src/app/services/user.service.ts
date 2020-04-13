@@ -4,8 +4,6 @@ import {GoogleAuthService} from "ng-gapi/lib/GoogleAuthService";
 import GoogleUser = gapi.auth2.GoogleUser;
 import GoogleAuth = gapi.auth2.GoogleAuth;
 
-
-
 @Injectable()
 export class UserService {
   //private readonly profile: gapi.auth2.BasicProfile;
@@ -16,7 +14,6 @@ export class UserService {
                 private ngZone: NgZone) {
 
     }
-
 
     public setUser(user: GoogleUser): void {
         this.user = user;

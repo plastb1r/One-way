@@ -8,6 +8,7 @@ import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
 import {NgForm} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   templateUrl: './signUpPage.html',
@@ -15,28 +16,33 @@ import { HttpClient } from '@angular/common/http';
 
 })
 export class SignUpPageComponent implements OnInit{
-  urlReg: string;
-  username = '';
-  password = '';
-  email = '';
+  form: any = {};
+    isSuccessful = false;
+    isSignUpFailed = false;
+    errorMessage = '';
+  
+    constructor(private authService: AuthService) { }
+  
+    ngOnInit() {
+    }
+  
+    onSubmit() {
+      this.authService.register(this.form).subscribe(
+        data => {
+          console.log(data);
+          this.isSuccessful = true;
+          this.isSignUpFailed = false;
+          this.reloadPageToLogIn();
+        },
+        err => {
+          this.errorMessage = err.error.message;
+          this.isSignUpFailed = true;
+        }
+      );
+    }
 
-  constructor(private http: HttpClient){ }
- 
-  registrater(form: NgForm){
-      this.username = form.controls.username.value;
-      this.password = form.controls.password.value;
-      this.email = form.controls.email.value;
-
-      this.urlReg = 'http://localhost:8181/api/auth/registration';
-      const requestReg = new XMLHttpRequest();
-
-      requestReg.open('POST', this.urlReg, false );
-      const CryptoJS = require('crypto-js');
-      requestReg.setRequestHeader('Content-Type','application/json');
-      requestReg.send(JSON.stringify({name: this.username, password: CryptoJS.MD5(this.password).toString() ,email: this.email,
-      phoneNumber: "89999999999", accountNonExpired: true ,accountNonLocked: true, credentialsNonExpired: true, enabled: true}));
-      console.log("response" + requestReg.response);
+    reloadPageToLogIn() {
+      //window.location.reload();
+      window.location.replace("http://localhost:4200/logInPage");
   }
-  ngOnInit(){
   }
-}

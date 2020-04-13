@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'my-footer',
@@ -8,20 +9,19 @@ import { DataService } from '../services/data.service';
 
 })
 export class FooterComponent implements OnInit{
-  routerLink = '';
-  nameOfLink = '';
+  isLoggedIn = false;
+  username: string;
+  constructor(private data: DataService ,
+    private tokenStorageService: TokenStorageService
+  )
+  {}
 
-  constructor(private data: DataService ){
-  
-  }
   ngOnInit(){
-    if(sessionStorage.getItem("UserName")){
-      this.data.linkNameInFooter$.next("Личный кабинет");
-      this.data.link$.next("/profilePage");
-    }
-    else {
-      this.data.linkName$.next("Войти");
-      this.data.link$.next("/logInPage");
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.username = user.username;
     }
   }
 }

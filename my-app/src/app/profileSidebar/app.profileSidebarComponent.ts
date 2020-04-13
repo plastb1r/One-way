@@ -5,6 +5,7 @@ import {DataService} from 'src/app/services/data.service';
 import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'profile-sidebar',
@@ -13,15 +14,25 @@ import { Way } from 'src/app/domens/way';
 
 })
 export class ProfileSidebarComponent implements OnInit{
-  userName='';
+  isLoggedIn = false;
+  username: string;
+  constructor(private data: DataService ,
+    private tokenStorageService: TokenStorageService
+  )
+  {}
 
-  constructor(private data: DataService ){}
   ngOnInit(){
-    this.userName = sessionStorage.getItem("UserName");
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.username = user.username;
+    }
   }
-  public logOut(){
-    sessionStorage.removeItem("authHeader");
-    sessionStorage.removeItem("UserName");
-    console.log("You have been successfully log out");
+  
+  logout() {
+    this.tokenStorageService.signOut();
+    window.location.replace("http://localhost:4200/logInPage");
   }
+  
 }

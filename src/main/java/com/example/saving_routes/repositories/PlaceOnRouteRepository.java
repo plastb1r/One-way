@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaceOnRouteRepository extends JpaRepository<PlaceOnRoute, Integer> {
   Iterable<PlaceOnRoute> findAllByRoute(Route route);
-
 }
