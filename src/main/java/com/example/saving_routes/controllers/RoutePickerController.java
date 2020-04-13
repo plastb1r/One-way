@@ -17,7 +17,9 @@ import com.example.saving_routes.entity.Route;
 import com.example.saving_routes.entity.Transports;
 import com.example.saving_routes.repositories.RouteRepository;
 
+import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/routes")
 class RouteGeneratorController {
 
+    public static Logger logger = Logger.getLogger(RouteGeneratorController.class);
     @Autowired
     RouteRepository routeRepository;
 
@@ -65,9 +68,11 @@ class RouteGeneratorController {
                     content.append(inputLine);
                 }
                 queryContent.put(travelMode, content.toString());
+                logger.info("Data from GoogleAPI was received");
 
             } catch (final Exception ex) {
                 ex.printStackTrace();
+                logger.error("Connection to GoogleAPI error",ex);
             }
         }
 
@@ -76,9 +81,11 @@ class RouteGeneratorController {
         ArrayList<Node> test = new ArrayList<Node>();
 
         test = reader.readNodesToArray(placeId);
+        logger.info("Successfully read nodes from json file to array");
         for (Map.Entry<String, String> mode : queryContent.entrySet()) {
             reader.readEdgesArray(test, mode.getValue(), mode.getKey());
         }
+        logger.info("Successfully read edges from json file to array");
         distances.setNodes(test);
         distances.simplifyGraph();
         ArrayList<Node> test1 = new ArrayList<Node>(test);

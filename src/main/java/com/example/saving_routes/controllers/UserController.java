@@ -1,5 +1,6 @@
 package com.example.saving_routes.controllers;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,6 +44,7 @@ import com.example.saving_routes.security.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
+	public static Logger logger = Logger.getLogger(UserController.class);
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -81,7 +83,7 @@ public class UserController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-
+		logger.debug("User id:"+ userDetails.getId()+",name: "+userDetails.getUsername()+",e-mai: "+userDetails.getEmail()+"was sign in");
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
@@ -92,12 +94,14 @@ public class UserController {
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			logger.error("Error: Username "+ signUpRequest.getUsername()+" is already taken! ");
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			logger.error("Error: Email " + signUpRequest.getEmail() + " is already in use!");
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
@@ -141,6 +145,7 @@ public class UserController {
 		user.setRoles(roles);
 		userRepository.save(user);
 
+		logger.debug("User registered successfully!");
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }	
     
