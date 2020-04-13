@@ -87,12 +87,22 @@ class RouteGeneratorController {
         }
         logger.info("Successfully read edges from json file to array");
         distances.setNodes(test);
-        distances.simplifyGraph();
+        try{
+            distances.simplifyGraph();
+            logger.info("Graph was simplified");
+        }
+        catch (final Exception e)
+        {
+            logger.error("Simplify error", e);
+        }
+
         ArrayList<Node> test1 = new ArrayList<Node>(test);
         Node start;
         start=distances.getNodes().get(0);
+        logger.debug("Start node "+start.getId());
         Node end;
         end=distances.getNodes().get(test1.size()-1);
+        logger.debug("End node "+end.getId());
         test1.remove(test1.size()-1);
         test1.remove(0);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
@@ -100,12 +110,18 @@ class RouteGeneratorController {
         Long sum = Long.valueOf(0);
         Long sums[] = new Long[distances.factorial(test1.size())];
         sums = distances.shortWayPermute(start, end, test1, sum, test1.size());
+        logger.debug("Graph was permuted");
         ArrayList<Node> minWay =  new ArrayList<Node>();
         minWay = distances.getMinWay();
 
-        distances.filterMinWay();
-
-
+        try{
+            distances.filterMinWay();
+            logger.info("Graph was filtered");
+        }
+        catch (final Exception e)
+        {
+            logger.error("Graph filter error", e);
+        }
         LinkedList<PlaceOnRoute> routes = new LinkedList<PlaceOnRoute>();
         int count = 0;
         for (Node p : minWay) {
