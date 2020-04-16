@@ -24,8 +24,17 @@ export class HttpService{
 
     sendPlacesToAlgorythm(pl: Array<Location>){
       const places = pl;
-      return this.http.post('http://localhost:8181/api/routes/generate', places); 
+      return this.http.post('http://localhost:8181/api/routes/generate', places);
     }
+
+    sendParamsToAlgorythm(pl: Array<Location>, st: Location, ed: Location)
+    {
+      const start = st;
+      const end = ed;
+      const places = pl;
+      return this.http.post('http://localhost:8181/api/routes/generate', [places, start, end]);
+    }
+
 
     getPopPlaces(loc: Location, index: number, pt: string){
       var latit = String(loc.lat);
