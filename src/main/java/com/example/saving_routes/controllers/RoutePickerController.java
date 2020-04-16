@@ -16,10 +16,9 @@ import com.example.saving_routes.entity.PlaceOnRoute;
 import com.example.saving_routes.entity.Route;
 import com.example.saving_routes.entity.Transports;
 import com.example.saving_routes.repositories.RouteRepository;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,12 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/routes")
 class RouteGeneratorController {
 
-    public static Logger logger = Logger.getLogger(RouteGeneratorController.class);
+    public static Logger logger = LogManager.getLogger();
     @Autowired
     RouteRepository routeRepository;
 
     @PostMapping(path = "/generate")
-    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places)
+    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places, @RequestBody(required = false) Place startP, Place endP)
             throws IOException, ParseException {
         String[] travelModes = { "driving", "walking", "transit", "bicycling" };
         String[] transitModes = { "BUS", "SUBWAY", "TRAIN", "TRAM", "RAIL" };
@@ -99,10 +98,10 @@ class RouteGeneratorController {
         ArrayList<Node> test1 = new ArrayList<Node>(test);
         Node start;
         start=distances.getNodes().get(0);
-        logger.debug("Start node "+start.getId());
+        logger.debug("Start node {}",start.getId());
         Node end;
         end=distances.getNodes().get(test1.size()-1);
-        logger.debug("End node "+end.getId());
+        logger.debug("End node {}",end.getId());
         test1.remove(test1.size()-1);
         test1.remove(0);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
