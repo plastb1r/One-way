@@ -1,6 +1,7 @@
 package com.example.saving_routes.algorithm;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Edge {
     private Node startNode;
@@ -63,5 +64,22 @@ public class Edge {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+        return Objects.equals(startNode, edge.startNode) &&
+                Objects.equals(endNode, edge.endNode) &&
+                Objects.equals(duration, edge.duration) &&
+                Objects.equals(travelMode, edge.travelMode) &&
+                Objects.equals(cost, edge.cost);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startNode, endNode, duration, travelMode, cost);
     }
 }
