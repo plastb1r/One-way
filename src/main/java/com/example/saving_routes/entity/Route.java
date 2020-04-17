@@ -27,7 +27,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "routes")
 public class Route {
-
     @Id
     @SequenceGenerator(name = "route_seq", sequenceName = "routes_route_id_seq", allocationSize = 1, initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "route_seq")

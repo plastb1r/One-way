@@ -171,9 +171,10 @@ public class UserController {
 
     @PutMapping(path = "/routes")
     public Route saveRoute(@RequestBody Route route) {
-        Route newRoute = new Route();
-        newRoute.setTimeToGo(route.getTimeToGo());
-        newRoute.setName(route.getName());
+		Route newRoute = new Route();
+		newRoute.setId(route.getId());
+		newRoute.setName(route.getName());
+		newRoute.setTimeToGo(route.getTimeToGo());
 
         City city = cityRepository.saveAndFlush(route.getCity());
         newRoute.setCity(city);

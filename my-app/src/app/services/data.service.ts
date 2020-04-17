@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Location } from 'src/app/domens/location';
 import { Way } from 'src/app/domens/way';
 import { Subject } from 'rxjs';
+import { PlaceDetails } from '../domens/PlaceDetails';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -16,20 +17,22 @@ export class DataService {
   types: Array<string>;
   locations: Array<Location>;
   wayLocations: Array<Location> = new Array<Location>();
-  way: Way = new Way(0, new Array<Location>(), "", "");
-  way1: Way = new Way(0, new Array<Location>(), "", "");
+  //way: Way = new Way(0, new Array<Location>(), "", "");
+  //way1: Way = new Way(0, new Array<Location>(), "", "");
   cityName: string;
   favP: Array<Location> = new Array<Location>();
   visibilityOfMap: boolean;
 
-  public linkName$ = new BehaviorSubject<string>("Войти");
+  placeDetails: PlaceDetails;
+
+  /*public linkName$ = new BehaviorSubject<string>("Войти");
   public link$ = new BehaviorSubject<string>("/logInPage");
   public linkNameInFooter$ = new BehaviorSubject<string>("Войти");
 
   public isUserLoggedIn = new Subject();
   setUserLoggedIn(loggedIn: boolean) {
     this.isUserLoggedIn.next(loggedIn);
-  }
+  }*/
 
   private locationSourse = new BehaviorSubject<Location>(this.location);
   private ratingSourse = new BehaviorSubject<number>(this.rating);
@@ -40,12 +43,19 @@ export class DataService {
   private numberSourse = new BehaviorSubject<string>(this.number);
   private locationsSourse = new BehaviorSubject<Array<Location>>(this.locations);
   private wayLocationsSourse = new BehaviorSubject<Array<Location>>(this.wayLocations);
-  private waySourse = new BehaviorSubject<Way>(this.way);
-  private waySourse1 = new BehaviorSubject<Way>(this.way1);
+ // private waySourse = new BehaviorSubject<Way>(this.way);
+  //private waySourse1 = new BehaviorSubject<Way>(this.way1);
   private cityNameSourse = new BehaviorSubject<string>(this.cityName);
   private favPSourse = new BehaviorSubject<Array<Location>>(this.favP);
   private visibilityOfMapSourse = new BehaviorSubject<boolean>(this.visibilityOfMap);
- 
+
+  private placeDetailsSourse = new BehaviorSubject<PlaceDetails>(this.placeDetails);
+  currentPlDet = this.placeDetailsSourse.asObservable();
+
+  changePlaceDetails(pd: PlaceDetails) {
+    this.placeDetails = pd;
+    this.placeDetailsSourse.next(this.placeDetails);
+  }
 
   currentRat = this.ratingSourse.asObservable();
   currentAds = this.addressSourse.asObservable();
@@ -56,8 +66,8 @@ export class DataService {
   currentLoc = this.locationSourse.asObservable();
   currentLocations = this.locationsSourse.asObservable();
   currentWayLocations = this.wayLocationsSourse.asObservable();
-  currentWay = this.waySourse.asObservable();
-  currentWay1 = this.waySourse1.asObservable();
+  //currentWay = this.waySourse.asObservable();
+  //currentWay1 = this.waySourse1.asObservable();
   currentCityName = this.cityNameSourse.asObservable();
   currentFavP = this.favPSourse.asObservable();
   currentVisibilityOfMap = this.visibilityOfMapSourse.asObservable();
@@ -65,76 +75,6 @@ export class DataService {
   private password =  "";
 
   constructor() { }
-
-  updateAndGetAuthHeader(method: string, uri: string) {
-    const digestHeaderArgs = sessionStorage.getItem('authHeader').split(',');
-    const userPassword = sessionStorage.getItem('userPassword');
-
-    let username, realm, nonce, response, qop, nc, cnonce;
-    let scheme = digestHeaderArgs[0].split(/\s/)[0];
-
-    for (let i = 0; i < digestHeaderArgs.length; i++) {
-      const equalIndex = digestHeaderArgs[i].indexOf('=');
-
-      let key = digestHeaderArgs[i].substring(0, equalIndex);
-      let val = digestHeaderArgs[i].substring(equalIndex + 1);
-      val = val.replace(/['"]+/g, '');
-      key = key.trim();
-
-      switch (key) {
-        case 'Digest username': username = val; break;
-        case 'realm': realm = val; break;
-        case 'nonce': nonce = val; break;
-        case 'uri': uri = val; break;
-        case 'qop': qop = val; break;
-        case 'nc': nc = val; break;
-        case 'cnonce': cnonce = val; break;
-      }
-    }
-
-    nc++;
-    response = this.formulateResponse(username, userPassword, method, realm, nonce, uri, cnonce, qop, nc);
-
-    const updatedAuthHeader = scheme + ' ' +
-      'username="' + username + '", ' +
-      'realm="' + realm + '", ' +
-      'nonce="' + nonce + '", ' +
-      'uri="' + uri + '", ' +
-      'response="' + response + '", ' +
-      'qop=' + qop + ', ' +
-      'nc=' + ('00000000' + nc).slice(-8) + ', ' +
-      'cnonce="' + cnonce + '"';
-
-    sessionStorage.setItem('authHeader', updatedAuthHeader);
-    return updatedAuthHeader;
-  }
-
-  formulateResponse(username: string, password: string, method: string, realm: string,
-    nonce: string, uri: string, cnonce: string, qop: string, nc: number) {
-    const CryptoJS = require('crypto-js');
-
-    const HA1 = CryptoJS.MD5(username + ':' + realm + ':' + CryptoJS.MD5(password)).toString();
-    const HA2 = CryptoJS.MD5(method + ':' + uri).toString();
-
-    const response = CryptoJS.MD5(HA1 + ':' +
-      nonce + ':' +
-      ('00000000' + nc).slice(-8) + ':' +
-      cnonce + ':' +
-      qop + ':' +
-      HA2).toString();
-
-    return response;
-  }
-
-  generateCnonce() {
-    const characters = 'abcdef0123456789';
-    let token = '';
-    for (let i = 0; i < 16; i++) {
-      const randNum = Math.round(Math.random() * characters.length);
-      token += characters.substr(randNum, 1);
-    }
-    return token;
-  }
 
   changeFavP(loc: Location, f: Array<Location>) {
     this.favP = f;
@@ -160,7 +100,7 @@ export class DataService {
     this.cityNameSourse.next(cityName)
   }
 
-  changeWay(loc: Location, way: Way, RemOrDel: number) {
+  /*changeWay(loc: Location, way: Way, RemOrDel: number) {
     this.way = way;
     if (RemOrDel == 1) {
       this.way.points.push(loc);
@@ -174,17 +114,17 @@ export class DataService {
       })
     }
     this.waySourse.next(this.way);
-  }
+  }*/
 
   changeWayLocations(loc: Location) {
     this.wayLocations.push(loc);
     this.wayLocationsSourse.next(this.wayLocations)
   }
 
-  changeWay1(way: Way) {
+  /*changeWay1(way: Way) {
     this.way1 = way;
     this.waySourse1.next(this.way1);
-  }
+  }*/
 
   /*changeWayLocations(locs: Array<Location>){
 

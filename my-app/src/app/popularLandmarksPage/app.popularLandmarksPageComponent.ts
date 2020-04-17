@@ -1,18 +1,155 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { Location } from 'src/app/domens/location';
-import {DataService} from 'src/app/services/data.service';
-import {HttpService} from 'src/app/services/http.service';
-import { Data } from 'src/app/domens/data';
-import { Way } from 'src/app/domens/way';
+import { PlaceDetails } from '../domens/PlaceDetails';
+import { PlacesService } from '../services/places.service';
 
 @Component({
+  selector: 'popular_landmarks',
   templateUrl: './popularLandmarksPage.html',
   styleUrls: ['./app.popularLandmarksPageComponent.scss']
-
 })
+
+@Injectable()
 export class PopularLandmarksPageComponent implements OnInit{
-  locations: Array<Location>;
+  @ViewChild('map', {static: false})
+  mapElement: ElementRef;
+
+  map: any;
+  cityLocation: Array<Location> ;
+  cityName: string;
+  placeDetails: Array<PlaceDetails> = new Array<PlaceDetails>();
+  locations: Array<Location> = new Array<Location>();
+  types = [];
+  favorites: Array<boolean> = new Array<boolean>();
+  places = [];
+  visibility: boolean = true;
+
+  constructor(
+    private mapsAPILoader: MapsAPILoader,
+    private placeService: PlacesService
+  )
+  {}
+
+  
+  ngOnInit() {
+    //this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
+    this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
+    this.cityName = sessionStorage.getItem('cityAddress');
+    this.placeService.getAll().subscribe(data =>  this.places=data);
+    this.loadPlaces();
+  }
+
+  loadPlaces(){
+    this.placeDetails = [];
+    this.locations = [];
+    this.mapsAPILoader.load().then(() => {
+      let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
+      let mapOptions = {
+        center: city,
+        zoom: 15
+      }
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      let service = new google.maps.places.PlacesService(this.map);
+      service.nearbySearch({
+        location: city,
+        radius: 10000,
+        types: this.types
+       
+      }, (results, status) => {
+          this.getPlaces(results, status)
+      });
+
+    }, (err) => {
+      console.log(err);
+    });
+
+  }
+
+  getPlaces(results, status){
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+        results.sort(function (a, b) {
+          if (a['rating'] < b['rating']) {
+            return 1;
+          }
+          if (a['rating'] > b['rating']) {
+            return -1;
+          }
+          // a должно быть равным b
+          return 0;
+        });
+
+        for (var i = 1; i < results.length ; i++) {
+          if(results[i].photos){
+            this.places.forEach(pl => {
+              if(pl.placeId == results[i].place_id)
+              {
+                this.favorites.push(true);
+              }
+              else{ this.favorites.push(false)}
+            });
+
+            
+            this.placeDetails.push({name: results[i].name, address: results[i].vicinity,photos: [results[i].photos[0].getUrl()],
+              types: results[i].types, rating: results[i].rating});
+            this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id });
+          }
+        }
+      console.log("details" + this.placeDetails);
+      console.log("locations" + this.locations);
+      console.log("favs" + this.favorites);
+    }
+  }
+
+  sendPlaceId(index){
+    sessionStorage.removeItem('landmark');
+    sessionStorage.setItem("landmark", this.locations[index].placeId);
+  }
+
+  sendPopularLocations(){
+    //this.data.changeLocations(this.locations);
+    sessionStorage.removeItem('locatsToShowOnMap');
+    sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+    sessionStorage.removeItem('detailsToShowOnMap');
+    sessionStorage.setItem('detailsToShowOnMap', JSON.stringify(this.placeDetails));
+  }
+
+  setIndex(index: number){
+    if(index == 0){
+      this.types = ['restaurant','cafe', 'bakery', 'food'];
+
+    }
+    if(index == 1){
+      this.types = ['lodging'];
+    }
+    if(index == 2){
+      this.types= ['bar','liquor_store'];
+    }
+    if(index == 3){
+      this.types = ['amusement_park','bowling_alley','casino','night_club','movie_theater','establishment'];
+    }
+    if(index == 4){
+      this.types = ['museum','art_gallery','painter','library'];
+    }
+    if(index == 5){
+      this.types = ['clothing_store','shoe_store','shopping_mall'];
+    }
+    if(index == 6){
+      this.types = ['park','tourist_attraction','aquarium'];
+    }
+  }
+
+  addToFavP(index){
+    var loc = {lat: this.locations[index].lat, lng: this.locations[index].lng, placeId: this.locations[index].placeId};
+    this.placeService.addPlace(loc).subscribe(data =>console.log(data));
+  }
+
+  toggle(){
+    this.visibility=!this.visibility;
+  }
+
+  /*locations: Array<Location>;
   test;
   photo: Array<string>;
   name:Array<string>;
@@ -35,101 +172,10 @@ export class PopularLandmarksPageComponent implements OnInit{
   way: Way;
   favP: Array<Location>;
 
-  toggle(){
-    this.visibility=!this.visibility;
-  }
+  placeDetails: PlaceDetails[];
+  locats: Location[];
+  map;
 
-  constructor(
-    private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone,
-    private data: DataService,
-    private httpService: HttpService
-  ) { }
-
-  ngOnInit() {
-    this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
-    this.setPopPlaces();
-    //this.data.currentCityName.subscribe(ads => this.cityName = ads);
-    this.cityName = sessionStorage.getItem('cityAddress');
-  }
-
-  loadMorePopPlaces(){
-    this.prev = this.locations;
-    this.setPopPlaces();
-    this.locations = this.prev.concat(this.locations);
-  }
-
-  setPopPlaces(){
-    this.city = this.cityLocation[0];
-    console.log(this.city);
-    this.httpService.getPopPlaces(this.city, this.index, this.pt).subscribe(city => {this.test = city['results'];
-    this.pt = city['next_page_token'];
-    this.test.sort(function (a, b) {
-        if (a['rating'] < b['rating']) {
-          return 1;
-        }
-        if (a['rating'] > b['rating']) {
-          return -1;
-        }
-        // a должно быть равным b
-        return 0;
-      });
-      console.log(this.test);
-      var ratings = [];
-      var names = [];
-      var addresses = [];
-      var locats = [];
-      var ref = [];
-      var types = [];
-      this.test.forEach((loc) => {
-        if(loc['photos']){
-          names.push(loc['name']);
-          addresses.push(loc['vicinity']);
-          locats.push({lat: loc['geometry']['location']['lat'],lng: loc['geometry']['location']['lng'], zoom: 15, placeId: loc['place_id'],  choose: false});
-          ref.push(loc['photos'][0]['photo_reference']);
-          ratings.push(loc['rating']);
-          types.push(loc['types']);
-        }
-      });
-      var photoRes = [];
-      ref.forEach(ph => {
-        photoRes.push('https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+ph+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ')
-      });
-      this.photo = photoRes;
-      console.log(ref);
-      //console.log(locats[0].placeId);
-      this.rating = ratings;
-      this.name = names;
-      this.address = addresses;
-      this.locations = locats;
-      this.types = types;
-
-      var data = [];
-      for(var i= 0;i < photoRes.length; i++ )
-      {
-        data.push({photo: this.photo[i],
-          address:  this.address[i],
-          name: this.name[i],
-          index: i,
-          isAdded: false
-        });
-      }
-      this.dataLM=data;
-
-      //var t = 'https://maps.googleapis.com/maps/api/place/details/json?placeid='+locats[0].placeId+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ';
-      //console.log('fffff' + t);
-      //this.number = t['result']['international_phone_number'];
-    });
-  }
-  setIndex(index: number){
-    this.index = index;
-  }
-
-  changePopularLocations(){
-    console.log(this.locations);
-    this.data.changeLocations(this.locations);
-    this.data.changeVisibilityOfMap(true);
-  }
 
   /*getDetails(placeId: string){
   this.httpService.getData(placeId).subscribe( value =>{
@@ -148,21 +194,6 @@ export class PopularLandmarksPageComponent implements OnInit{
       console.log(this.photos);
       //this.photo = this.photos[0];
     });
-  }*/
-
-
-
-  newLocation(i: number){
-    console.log(this.locations[i].placeId);
-    //this.getDetails(this.locations[0].placeId);
-    this.data.changeLandMark(this.locations[i]);
-    this.data.changePhotos(this.photo);
-    this.data.changeRating(this.rating[i]);
-    this.data.changeAddress(this.address[i]);
-    this.data.changeName(this.name[i]);
-    this.data.changeTypes(this.types[i]);
-    this.data.changeNumber(this.number);
-
   }
 
   changeIndInArray(i: number){
@@ -222,5 +253,5 @@ export class PopularLandmarksPageComponent implements OnInit{
       this.data.changeFavPRemove(this.locations[i], this.favP);
     }
   console.log(this.favP);
-  }
+  }*/
 }

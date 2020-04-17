@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { Location } from 'src/app/domens/location';
 import {DataService} from 'src/app/services/data.service';
@@ -8,14 +8,28 @@ import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
 import {Parameters} from 'src/app/domens/params';
 import {NgForm} from '@angular/forms';
+import { PopularLandmarksPageComponent } from '../popularLandmarksPage/app.popularLandmarksPageComponent';
+import { PlaceDetails } from '../domens/PlaceDetails';
+import { PlacesService } from '../services/places.service';
 
 @Component({
   templateUrl: './wayParamsPage.html',
   styleUrls: ['./app.wayParamsPageComponent.scss']
 
 })
+
+@Injectable()
 export class WayParamsPageComponent implements OnInit{
-    locations: Array<Location> = new Array<Location>();
+
+    @ViewChild('searchpl', {static: true})
+    public searchElementRef: ElementRef;
+
+    @ViewChild('startPoint', {static: true})
+    public searchElementRefStart: ElementRef;
+
+    @ViewChild('endPoint', {static: true})
+    public searchElementRefEnd: ElementRef;
+    /*locations: Array<Location> = new Array<Location>();
     locations1: Array<Location> = new Array<Location>();
     test;
     label = "Добавлено";
@@ -35,36 +49,212 @@ export class WayParamsPageComponent implements OnInit{
     pt: string = "";
     wayArray: Array<Location> = new Array<Location>();
     ind: number = 0;
-    prev = this.locations;
+    //prev = this.locations;
     way: Way;
     favP: Array<Location>;
     submitted = false;
     parameters: Parameters;
+    */
+
+    @ViewChild('map', {static: false})
+    mapElement: ElementRef;
+  
+    map: any;
+    cityLocation: Array<Location> ;
+    cityName: string;
+    placeDetails: Array<PlaceDetails> = new Array<PlaceDetails>();
+    locations: Array<Location> = new Array<Location>();
+    types = [];
+    favorites: Array<boolean> = new Array<boolean>();
+    places = [];
+    visibility: boolean = false;
     startPoint: Location;
     endPoint: Location;
-
-    @ViewChild('searchpl', {static: true})
-    public searchElementRef: ElementRef;
-
-    @ViewChild('startPoint', {static: true})
-    public searchElementRefStart: ElementRef;
-
-    @ViewChild('endPoint', {static: true})
-    public searchElementRefEnd: ElementRef;
-
+  
+    constructor(
+      private mapsAPILoader: MapsAPILoader,
+      private mapsAPILoader2: MapsAPILoader,
+      private placeService: PlacesService,
+      private ngZone: NgZone,
+    )
+    {}
+  
+    ngOnInit() {
+      //this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
+      this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
+      this.cityName = sessionStorage.getItem('cityAddress');
+      this.placeService.getAll().subscribe(data =>  this.places=data);
+      this.loadPlaces();
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+      });
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+            this.locations = [];
+            this.locations= [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),placeId: place.place_id}];
+            sessionStorage.removeItem('locatsToShowOnMap');
+            sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+            sessionStorage.removeItem('detailsToShowOnMap');
+            this.placeDetails = [];
+            var photo = [];
+            photo.push(place.photos[0].getUrl({maxWidth: 400}));
+            this.placeDetails.push({name: place.name, address: place.formatted_address, photos: photo,
+            types: place.types});
+            sessionStorage.setItem('detailsToShowOnMap', JSON.stringify(this.placeDetails));
+          });
+      });
+    }
+  
+    loadPlaces(){
+      this.placeDetails = [];
+      this.locations = [];
+      this.mapsAPILoader.load().then(() => {
+        let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
+        let mapOptions = {
+          center: city,
+          zoom: 15
+        }
+  
+        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+        let service = new google.maps.places.PlacesService(this.map);
+        service.nearbySearch({
+          location: city,
+          radius: 10000,
+          types: this.types
+         
+        }, (results, status) => {
+            this.getPlaces(results, status)
+        });
+  
+      }, (err) => {
+        console.log(err);
+      });
+  
+    }
+  
+    getPlaces(results, status){
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+          results.sort(function (a, b) {
+            if (a['rating'] < b['rating']) {
+              return 1;
+            }
+            if (a['rating'] > b['rating']) {
+              return -1;
+            }
+            // a должно быть равным b
+            return 0;
+          });
+  
+          for (var i = 1; i < results.length ; i++) {
+            if(results[i].photos){
+              this.places.forEach(pl => {
+                if(pl.placeId == results[i].place_id)
+                {
+                  this.favorites.push(true);
+                }
+                else{ this.favorites.push(false)}
+              });
+  
+              
+              this.placeDetails.push({name: results[i].name, address: results[i].vicinity,photos: [results[i].photos[0].getUrl()],
+                types: results[i].types, rating: results[i].rating});
+              this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id });
+            }
+          }
+        console.log("details" + this.placeDetails);
+        console.log("locations" + this.locations);
+        console.log("favs" + this.favorites);
+      }
+    }
+  
+    sendPlaceId(index){
+      sessionStorage.removeItem('landmark');
+      sessionStorage.setItem("landmark", this.locations[index].placeId);
+    }
+  
+    sendPopularLocations(){
+      //this.data.changeLocations(this.locations);
+      sessionStorage.removeItem('locatsToShowOnMap');
+      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+      sessionStorage.removeItem('detailsToShowOnMap');
+      sessionStorage.setItem('detailsToShowOnMap', JSON.stringify(this.placeDetails));
+    }
+  
+    setIndex(index: number){
+      if(index == 0){
+        this.types = ['restaurant','cafe', 'bakery', 'food'];
+  
+      }
+      if(index == 1){
+        this.types = ['lodging'];
+      }
+      if(index == 2){
+        this.types= ['bar','liquor_store'];
+      }
+      if(index == 3){
+        this.types = ['amusement_park','bowling_alley','casino','night_club','movie_theater','establishment'];
+      }
+      if(index == 4){
+        this.types = ['museum','art_gallery','painter','library'];
+      }
+      if(index == 5){
+        this.types = ['clothing_store','shoe_store','shopping_mall'];
+      }
+      if(index == 6){
+        this.types = ['park','tourist_attraction','aquarium'];
+      }
+    }
+  
+    addToFavP(index){
+      var loc = {lat: this.locations[index].lat, lng: this.locations[index].lng, placeId: this.locations[index].placeId};
+      this.placeService.addPlace(loc).subscribe(data =>console.log(data));
+    }
+  
     toggle(){
       this.visibility=!this.visibility;
     }
 
-    constructor(
-      private mapsAPILoader: MapsAPILoader,
-      private mapsAPILoader2: MapsAPILoader,
-      private ngZone: NgZone,
-      private data: DataService,
-      private httpService: HttpService
-    ) { }
 
-    ngOnInit() {
+    setAutocompliteToStartPoint(){
+      this.mapsAPILoader2.load().then(() => {
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefStart.nativeElement, {
+
+        });
+        autocomplete.addListener("place_changed", () => {
+          this.ngZone.run(() => {
+           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+            this.startPoint = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), placeId: place.place_id};
+          });
+        });
+       });
+       
+    }
+
+    setAutocompliteToEndPoint(){
+      this.mapsAPILoader2.load().then(() => {
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefEnd.nativeElement, {
+
+        });
+        autocomplete.addListener("place_changed", () => {
+          this.ngZone.run(() => {
+           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+            if (place.geometry === undefined || place.geometry === null) {
+              return;
+            }
+            this.endPoint = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),placeId: place.place_id};
+          });
+        });
+       });
+       
+    }
+
+    /*ngOnInit() {
       this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
       this.setPopPlaces();
       this.data.currentCityName.subscribe(ads => this.cityName = ads);
@@ -340,5 +530,5 @@ export class WayParamsPageComponent implements OnInit{
         this.data.changeFavPRemove(this.locations[i], this.favP);
       }
     console.log(this.favP);
-    }
-  }
+    }*/
+}

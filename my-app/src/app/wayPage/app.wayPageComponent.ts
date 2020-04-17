@@ -39,8 +39,7 @@ export class WayPageComponent{
   ngOnInit() {
     //this.data.currentLM.subscribe({loc, photo, rating, address, name, number, types} => {this.longitude: loc.lng,this.photo: photo, this.rating: rating, this.address: address, this.name: name, this.number: number, this.types : types});
     //this.data.currentPh.subscribe(ph => this.photo = ph);
-    this.dataSer.currentWay.subscribe(w => this.way = w);
-    this.showWay();
+    //this.dataSer.currentWay.subscribe(w => this.way = w);
 
     /*var accordionContainer = document.querySelector('.accordion-container');
     if (accordionContainer) {
@@ -60,29 +59,6 @@ export class WayPageComponent{
         }
       });
     }*/
-  }
-
-
-  showWay(){
-    var ph = [];
-    this.way.points.forEach(p => {
-      this.getDetails(p.placeId);
-    });
-    this.locations2 = this.way.points;
-     var length = this.locations2.length - 1;
-     var directs = [];
-     for(var i = 1; i < this.locations2.length - 1; i++){
-       var d = {location: {lat: this.locations2[i].lat, lng: this.locations2[i].lng}};
-       directs.push(d);
-     }
-     console.log(directs);
-     this.dir = {
-       origin: {lat: this.locations2[0].lat, lng:this.locations2[0].lng},
-       destination: {lat: this.locations2[length].lat, lng: this.locations2[length].lng},
-       waypoints: directs,
-       travelMode: google.maps.TravelMode.DRIVING
-     }
-    //this.data.changePhotos(ph);
   }
 
 
@@ -115,13 +91,5 @@ export class WayPageComponent{
       });
     }
 
-    newLocation(i: number){
-      this.dataSer.changeLandMark(this.way.points[i]);
-      this.dataSer.changePhotos(this.photos[i]);
-      this.dataSer.changeRating(this.rating[i]);
-      this.dataSer.changeAddress(this.data[i].address);
-      this.dataSer.changeName(this.data[i].name);
-      this.dataSer.changeTypes(this.types[i]);
-      this.dataSer.changeNumber(this.number[i]);
-    }
+    
 }

@@ -23,11 +23,8 @@ import {
     NG_GAPI_CONFIG,
     GoogleApiConfig
 } from "ng-gapi";
-import { FormComponent } from './form/app.formComponent';
 import { HeaderComponent } from './header/app.headerComponent';
 import {FooterComponent } from './footer/app.footerComponent';
-import {TimeSliderComponent } from './form/sliders/timeSlider/app.slider.timeComponent';
-import {FinanceSliderComponent } from './form/sliders/financeSlider/app.slider.financeComponent';
 import {DropDownComponent } from './header/dropdown/app.dropdownComponent';
 import {MapPageComponent } from './mapPage/app.mapPageComponent';
 import {MapFormComponent } from './map/app.MapComponent';
@@ -47,6 +44,9 @@ import {WayParamsPageComponent} from './wayParamsPage/app.wayParamsPageComponent
 import {LogInPageComponent} from './logInPage/app.logInPageComponent';
 import {SignUpPageComponent} from './signUpPage/app.signUpPageComponent';
 import {RouterModule} from '@angular/router';
+import { PlacesService } from './services/places.service';
+import { RoutesService } from './services/routes.service';
+import { PlaceOnRouteService } from './services/placesOnRoute.service';
 
 let gapiClientConfig: NgGapiClientConfig = {
     client_id: "951523443973-82b3n43cgkbntlrv9gcucinukkl5n36a.apps.googleusercontent.com",
@@ -63,11 +63,8 @@ let gapiClientConfig: NgGapiClientConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    FormComponent,
     HeaderComponent,
     FooterComponent,
-    TimeSliderComponent,
-    FinanceSliderComponent,
     DropDownComponent,
     MapPageComponent,
     MapFormComponent,
@@ -108,7 +105,7 @@ let gapiClientConfig: NgGapiClientConfig = {
       libraries: ['places']
     })
   ],
-  providers: [DataService, HttpService, UserService, FooService, authInterceptorProviders],
+  providers: [DataService, HttpService, UserService, FooService, authInterceptorProviders, PlacesService, RoutesService, PlaceOnRouteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

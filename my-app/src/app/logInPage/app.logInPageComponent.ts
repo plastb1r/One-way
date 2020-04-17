@@ -47,8 +47,4 @@ export class LogInPageComponent implements OnInit {
       //window.location.reload();
       window.location.replace("http://localhost:4200/profilePage");
     }
-    reloadPageToReg() {
-        //window.location.reload();
-        window.location.replace("http://localhost:4200/signUpPage");
-    }
 }

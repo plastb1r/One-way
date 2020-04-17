@@ -38,7 +38,7 @@ export class DropDownComponent {
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
-        this.location = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: 12, placeId: place.place_id, choose: false}];
+        this.location = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), placeId: place.place_id}];
 
         });
       });

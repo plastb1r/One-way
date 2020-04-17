@@ -9,8 +9,9 @@ import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Way } from 'src/app/domens/way';
 import { Data } from '../domens/data';
-import { Direction } from 'src/app/domens/placesOnRoute';
+import { Direction } from 'src/app/domens/placeOnRoute';
 import { stringify } from 'querystring';
+import { PlaceDetails } from '../domens/PlaceDetails';
 
 @Component({
   selector: 'map-form',
@@ -21,21 +22,12 @@ import { stringify } from 'querystring';
 @Injectable()
 export class MapFormComponent implements OnInit{
   public locations2: Array<Location>;
-  private geoCoder;
+  public details: Array<PlaceDetails>;
   public way: Way;
   private _opened: boolean = false;
-  private index: number;
-  private rating: number;
+
   public zoom: number = 12;
-  private address: string;
-  private photo: string;
-  private photos:  Array<string>;
-  private name: string;
   private previous;
-  private number: string;
-  private types: Array<string>;
-  private loc: Location;
-  private placeId: string;
   private markersLabels = ['A','B','C','D','E','F','Z','H','I','K','L','M','N','O','P','Q','R','S','T','V','X'];
   public visibilityOfPopularplaces : boolean;
   public visibility: Array<boolean> = new Array<boolean>(); //for places in way
@@ -48,12 +40,6 @@ export class MapFormComponent implements OnInit{
   private dirTrans: Array<Direction> = new Array<Direction>();
   private dirBic: Array<Direction> = new Array<Direction>();
   private dirCar: Array<Direction> = new Array<Direction>();
-  private dataw: Array<Data> = new Array<Data>();
-  private typesw:  Array<any> = new Array<any>();
-  private numberw: Array<string> = new Array<string>();
-  private ratingw: Array<number> = new Array<number>();
-  private photosw: Array<Array<string>> = new Array<Array<string>>();
-  private indexw: number = -1;
   private show: boolean = false;
 
 
@@ -64,9 +50,93 @@ export class MapFormComponent implements OnInit{
      private mapsAPILoader: MapsAPILoader,
      private ngZone: NgZone,
      private data: DataService,
-     private http: HttpClient,
      private httpService: HttpService
    ) { }
+
+   ngOnInit() {
+    //load Places Autocomplete
+    this.mapsAPILoader.load().then(() => {
+     this.data.currentVisibilityOfMap.subscribe(vis => this.visibilityOfPopularplaces = vis);
+     //this.data.currentWay.subscribe(w => this.way = w);
+     this.visibilityOfPopularplaces = true;
+     this.locations2 = JSON.parse(sessionStorage.getItem('locatsToShowOnMap'));
+     this.details = JSON.parse(sessionStorage.getItem('detailsToShowOnMap'));
+
+    let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+    });
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          console.log(place.geometry.location.lat() + ' ' + place.geometry.location.lng());
+          this.locations2 = [];
+          this.locations2 = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),placeId: place.place_id}];
+          sessionStorage.removeItem('locatsToShowOnMap');
+          sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations2));
+          sessionStorage.removeItem('detailsToShowOnMap');
+          this.details = [];
+          var photo = [];
+          photo.push(place.photos[0].getUrl({maxWidth: 400}));
+          this.details.push({name: place.name, address: place.formatted_address, photos: photo,
+          types: place.types});
+          sessionStorage.setItem('detailsToShowOnMap', JSON.stringify(this.details));
+        });
+      });
+   });
+ }
+
+ sendPlaceId(index){
+  sessionStorage.removeItem('landmark');
+  sessionStorage.setItem("landmark", this.locations2[index].placeId);
+}
+
+  /* loadPlaces(){
+    this.mapsAPILoader.load().then(() => {
+      let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
+      let mapOptions = {
+        center: city,
+        zoom: 15
+      }
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      let service = new google.maps.places.PlacesService(this.map);
+
+      var request = {
+        placeId: this.placeId,
+        fields: ['name', 'formatted_address', 'place_id', 'geometry', 'rating', 'international_phone_number', 'photos', 'types']
+      };
+
+      service.getDetails(request, (place, status) => {
+          console.log(place.geometry.location.lat())
+          this.getPlaces(place, status)
+      });
+
+    }, (err) => {
+      console.log(err);
+    });
+
+  }
+
+  getPlaces(results, status){
+      console.log("place"+results.photos);
+      this.name = results.name;
+      this.rating = results.rating;
+      this.types = results.types;
+      this.number = results.international_phone_number;
+      this.address = results.formatted_address;
+      this.lat = results.geometry.location.lat;
+      this.lng = results.geometry.location.lng;
+      for (var i = 0; i < results.photos.length ; i++) {
+        this.photo.push(results.photos[i].getUrl());
+      }
+      this.lat = results.geometry.location.lat();
+      this.lng = results.geometry.location.lng();
+      //this.placeDetails.push({name: results.name, address: results.formatted_address,photos:results.photos,
+        //types: results.types});
+      //console.log("details" + this.placeDetails[0].name);
+    }
 
    public placesFromAlg(){
     this.timeToNext = new Array<number>();
@@ -117,7 +187,7 @@ export class MapFormComponent implements OnInit{
   }
     
     public createWay(arr: Array<Location>){
-      arr.forEach(p => {
+      /*arr.forEach(p => {
         this.getDetailsForWay(p.placeId);
       });
       this.travelModes = ["walking", "transit", "driving", "walking", "transit", "driving"];
@@ -192,90 +262,7 @@ export class MapFormComponent implements OnInit{
    toggle(index: number){
     this.visibility[index] = !this.visibility[index];
   }
-
-   public getDetailsForWay(placeId: string){
-    this.httpService.getData(placeId).subscribe( value =>{
-      //var loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], zoom: 15, placeId: value['result']['place_id'],  choose: false};
-      var phot = value['result']['photos'];
-      var name = value['result']['name'];
-      var address = value['result']['formatted_address'];
-      var rating = value['result']['rating'];
-      var types = value['result']['types'];
-      var number = value['result']['international_phone_number'];
-
-      this.indexw += 1;
-      var ref = []
-      phot.forEach(ph => {
-        ref.push(ph['photo_reference']);
-      });
-
-      var photoRes = [];
-        ref.forEach(ph => {
-          photoRes.push('https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+ph+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ')
-        });
-      //console.log(value['result']['place_id']);
-      this.dataw.push({photo: photoRes[0],name: name,address: address,index: this.indexw, isAddedToWay: true, isAddedToFav: true});
-      console.log("data w" + this.dataw);
-      this.photosw.push(photoRes);
-      this.numberw.push(number);
-      this.ratingw.push(rating);
-      this.typesw.push(types);
-    });
-  }
-
-
-
-   ngOnInit() {
-     //load Places Autocomplete
-     this.mapsAPILoader.load().then(() => {
-      this.data.currentVisibilityOfMap.subscribe(vis => this.visibilityOfPopularplaces = vis);
-      this.data.currentWay.subscribe(w => this.way = w);
-      this.data.currentLocations.subscribe(locat => this.locations2 = locat);
-       this.geoCoder = new google.maps.Geocoder;
-       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-
-       });
-       autocomplete.addListener("place_changed", () => {
-         this.ngZone.run(() => {
-          let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
-            if (place.geometry === undefined || place.geometry === null) {
-              return;
-            }
-            this.locations2 = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: this.zoom, placeId: place.place_id,choose: false}];
-            this.placeId = place.place_id;
-            this.data.changeLocations(this.locations2);
-          });
-        });
-    });
-  }
-
-  public getDetails(placeId: string){
-    this.httpService.getData(placeId).subscribe( value =>{
-      this.name = value['result']['name'];
-      this.address = value['result']['formatted_address'];
-      this.rating = value['result']['rating'];
-      this.types = value['result']['types'];
-      this.number = value['result']['international_phone_number'];
-      this.loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], zoom: 15, placeId: value['result']['place_id'],  choose: false};
-      var phot = value['result']['photos'];
-      var ref = []
-      phot.forEach(ph => {
-        ref.push(ph['photo_reference']);
-      });
-
-      var photoRes = [];
-        ref.forEach(ph => {
-          photoRes.push('https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+ph+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ')
-        });
-      this.photos = photoRes;
-      this.photo = this.photos[0];
-    });
-    }
-
-    public markerClicked(infowindow, iy: number) {
-      this.placeId = this.locations2[iy].placeId;
-      console.log(this.placeId);
-      this.getDetails(this.placeId);
+    public markerClicked(infowindow) {
       if (this.previous) {
           this.previous.close();
       }
@@ -286,17 +273,6 @@ export class MapFormComponent implements OnInit{
     public _toggleOpened(): void {
       this._opened = !this._opened;
     }
-  
-    public newLocation(loc: Location, photos: Array<string>, rating: number, address: string, name: string, number: string, types: Array<string>){
-     this.data.changeLandMark(loc);
-     this.data.changePhotos(photos);
-     this.data.changeRating(rating);
-     this.data.changeAddress(address);
-     this.data.changeName(name);
-     this.data.changeNumber(number);
-     this.data.changeTypes(types);
-    }
-    
 
      public makeVis(){
       this.visibilityOfPopularplaces = false;
@@ -344,5 +320,5 @@ export class MapFormComponent implements OnInit{
       var label: string = '';
           label =this.markersLabels[index];
       return label;
-    }
+    }*/
 }

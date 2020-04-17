@@ -3588,8 +3588,9 @@ a:hover, a:active {
 
 .fa-heart:before {
   content: "";
+  color: red;
+  font-size: 20px;
 }
-
 .fa-star:before {
   content: "";
 }
@@ -4104,6 +4105,7 @@ a:hover, a:active {
 
 .fa-heart-o:before {
   content: "";
+  font-size: 20px;
 }
 
 .fa-sign-out:before {
@@ -5628,6 +5630,7 @@ a:hover, a:active {
 
 .fa-heartbeat:before {
   content: "";
+  font-size: 20px;
 }
 
 .fa-venus:before {

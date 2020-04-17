@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Way } from 'src/app/domens/way';
 import { Data } from '../domens/data';
-import { Direction } from 'src/app/domens/placesOnRoute';
+import { Direction } from 'src/app/domens/placeOnRoute';
 import { stringify } from 'querystring';
 
 @Component({
@@ -71,7 +71,7 @@ export class MapFormComponent implements OnInit{
    ) { }
 
    // sends places to alg 
-   placesFromAlg(){
+   /*placesFromAlg(){
     this.timeToNext = new Array<number>();
     this.travelModes =  new  Array<string>();
     this.travelModesStr = new Array<string>();
@@ -185,7 +185,7 @@ export class MapFormComponent implements OnInit{
         destination: {lat: arr[i+1].lat, lng: arr[i+1].lng},
         travelMode: google.maps.TravelMode.WALKING
         }
-        this.dirWalk.push(this.dir);*/
+        this.dirWalk.push(this.dir);
       
         
       if(this.travelModes[i] == "TRANSIT")
@@ -247,7 +247,7 @@ export class MapFormComponent implements OnInit{
       this.ratingw.push(rating);
       this.typesw.push(types);
     });
-  }
+  }*/
 
   
 
@@ -260,7 +260,7 @@ export class MapFormComponent implements OnInit{
          //{lat: this.loc.lat, lng: this.loc.lng, zoom: 12}
       //];
       this.data.currentVisibilityOfMap.subscribe(vis => this.visibilityOfPopularplaces = vis);
-      this.data.currentWay.subscribe(w => this.way = w);
+      //this.data.currentWay.subscribe(w => this.way = w);
       this.data.currentLocations.subscribe(locat => this.locations2 = locat);
 
       /*if(!this.visibilityOfPopularplaces){
@@ -283,7 +283,7 @@ export class MapFormComponent implements OnInit{
            }
 
            //set latitude, longitude and zoom
-           this.locations2 = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: this.zoom, placeId: place.place_id,choose: false}];
+           this.locations2 = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), placeId: place.place_id}];
            this.placeId = place.place_id;
            this.data.changeLocations(this.locations2);
            //this.visibilityOfPopularplaces = true; //make true visibility when return to a point after way
@@ -300,9 +300,9 @@ export class MapFormComponent implements OnInit{
       this.rating = value['result']['rating'];
       this.types = value['result']['types'];
       this.number = value['result']['international_phone_number'];
-      this.loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], zoom: 15, placeId: value['result']['place_id'],  choose: false};
+      this.loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], placeId: value['result']['place_id']};
       var phot = value['result']['photos'];
-      var ref = []
+      var ref = [];
       phot.forEach(ph => {
         ref.push(ph['photo_reference']);
       });

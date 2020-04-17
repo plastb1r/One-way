@@ -6,6 +6,7 @@ import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
+import { RoutesService } from '../services/routes.service';
 
 @Component({
   templateUrl: './myWaysPage.html',
@@ -17,37 +18,29 @@ export class MyWaysPageComponent implements OnInit{
   //cityName: string;
   photo: Array<string> = new Array<string>();
   myWays: Array<Way> = new Array<Way>();
-  myFavP: Array<Location> = new Array<Location>();
-  myWay: Way = new Way(0, new Array<Location>(), "", "");
-  user: User;
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private dataSer: DataService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private routeService:RoutesService
   ) { }
 
   ngOnInit() {
-    this.dataSer.currentFavP.subscribe(f => this.myFavP = f);
-    this.dataSer.currentWay.subscribe(w => this.myWay = w);
-    //this.dataSer.currentCityName.subscribe(ads => this.cityName = ads);
-    //this.myWays.push(this.myWay);
-    var locs = [new Location( 45.49662480000001,-73.5729448, 15, "ChIJTXHP1WkayUwRIQHlGieFpoA", false), new Location(45.50431820000001,
-      -73.5622268, 15, "ChIJpRujkVoayUwR1waz1cDpTew", false)];
-    this.myWays = [new Way(0, locs,"Montreal, QC, Canada","Тестовый путь 1"), this.myWay];
-    this.user = new User("", "Ivan", "Voronezh", "ivan@gmail.com", 9999999, "twit", "faceb", "ivan1", "9999", this.myWays, this.myFavP);
-    this.myWays.forEach(w => {
-      this.getPhDetails(w.points[0].placeId);
-    })
-    //this.myWays = this.user.ways;
+    this.routeService.getAll().subscribe(data => {
+      console.log("routes" + data);
+      this.myWays=data; 
+      //this.places.forEach(f => this.loadPlaces(f.placeId));
+    });
+    //this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
   }
-
-  //проблема с переадресовкой пути
+    //this.myWays = [new Way(0, locs,"Montreal, QC, Canada","Тестовый путь 1"), this.myWay];
+    
 
   newLocation(i: number){
     console.log("index" + i);
-    this.dataSer.changeWay1(this.myWays[i]);
+    //this.dataSer.changeWay1(this.myWays[i]);
   }
 
   getPhDetails(placeId: string){

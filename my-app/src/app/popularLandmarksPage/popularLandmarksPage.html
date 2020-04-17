@@ -5,6 +5,7 @@
   <div class="row">
     <div class="col-md-12 listing-search-container listing-search-container--on-map">
       <div class="listing-keyword listing-keyword--on-map">
+        <div #map></div>
         популярные места <span class="keyword">{{cityName}}</span>
       </div><!-- .listing-keyword -->
 
@@ -21,7 +22,7 @@
                   </a>
                 </li>
                 <li>
-                  <a (click)="changePopularLocations()" routerLink="/mapPage">
+                  <a (click)="sendPopularLocations()" routerLink="/mapPage">
                     <i class="fa fa-location"></i>
                     Посмотреть на карте
                   </a>
@@ -90,7 +91,7 @@
               </div>
             </li>
           </ul>
-          <button class="button button--primary  button--larges button--pill" type="submit" (click)="setPopPlaces()" routerLink="/popularLandmarksPage">Посмотреть</button>
+          <button class="button button--primary  button--larges button--pill" type="submit" (click)="loadPlaces()" routerLink="/popularLandmarksPage">Посмотреть</button>
         </div>
   </div><!-- .row -->
 </div><!-- .container -->
@@ -98,29 +99,23 @@
 <section class="listing-list listing-list--layout-1">
   <div class="container" >
     <div class="row" >
-      <div class="col-md-4" *ngFor="let lm of dataLM, let i = index ">
+      <div class="col-md-4" *ngFor="let lm of placeDetails, let i = index ">
         <div class="listing hover-effect">
           <div class="listing__wrapper">
             <div class="listing__thumbnail">
               <a>
-                <img src={{lm.photo}}>
-                <a *ngIf="lm.isAddedToFav; then redHeart else whiteHeart"> </a>
+                <img src={{lm.photos[0]}}>
+                <a *ngIf="favorites[i]; then redHeart else whiteHeart"> </a>
                     <ng-template #redHeart>
-                      <span class="favorite c-white" (click)="addToFavP(lm.index)">
+                      <span class="favorite c-white" (click)="addToFavP(i)">
                         <i class="fa fa-heart"></i>
                       </span>
                     </ng-template>
                     <ng-template #whiteHeart>
-                      <span class="favorite c-white" (click)="addToFavP(lm.index)">
+                      <span class="favorite c-white" (click)="addToFavP(i)">
                         <i class="fa fa-heart-o"></i>
                       </span>
                     </ng-template>
-                  <span class="favorite c-white" (click)="addToFavP(lm.index)">
-                    <i class="fa fa-heart-o heart"></i>
-                  </span>
-                  <span *ngIf="lm.isAddedToFav" class="favorite c-white" (click)="addToFavP(lm.index)">
-                    <i class="fa fa-heart heart" ></i>
-                  </span>
               </a>
             </div><!-- .listing__thumbnail -->
             <div class="listing__detail">
@@ -129,7 +124,6 @@
                 </span>
               </a>
               <h3 class="listing__title">
-                
                 <a>{{lm.name}}</a>
               </h3>
               <p class="listing__location c-dusty-gray">
@@ -137,13 +131,13 @@
                 {{lm.address}}
               </p>
                 <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
-                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="newLocation(lm.index)" routerLink="/landmarkPage">Подробнее</button>
+                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="sendPlaceId(i)" routerLink="/landmarkPage">Подробнее</button>
                   <div *ngIf="lm.isAddedToWay; then thenBlock else elseBlock"></div>
                     <ng-template #thenBlock>
-                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="removeFromWay(lm.index)">Удалить из маршрута</button>
+                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="removeFromWay(i)">Удалить из маршрута</button>
                     </ng-template>
                     <ng-template #elseBlock>
-                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(lm.index)">Добавить к маршруту</button>
+                      <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(i)">Добавить к маршруту</button>
                     </ng-template>
                   
                 </div>

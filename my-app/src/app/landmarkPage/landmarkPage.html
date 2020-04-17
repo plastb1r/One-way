@@ -1,5 +1,6 @@
 <section class="single-listing single-listing--layout-2">
   <div class="header-container teal darken-3">
+
   </div><!-- .listing-header-map-container -->
   <div class="listing-main bg-wild-sand">
     <div class="container">
@@ -93,9 +94,9 @@
             </div><!-- .listing-section__header -->
             <mdb-carousel [isControls]="true" class="carousel slide carousel-fade" [animation]="'fade'">
               <!--First slide-->
-              <mdb-carousel-item  *ngFor="let ph of photo, let i = index ">
+              <mdb-carousel-item  *ngFor="let url of photo, let i = index ">
                 <div class="view w-100">
-                  <img class="d-block" src={{ph}}
+                  <img class="d-block" src={{url}}
                        alt="First slide">
                   <div class="mask rgba-black-light waves-light" mdbWavesEffect></div>
                 </div>
@@ -104,28 +105,28 @@
             </mdb-carousel>
           </div><!-- .listing-section -->
 
-          <div id="map" class="listing-section bg-white hover-effect" data-matching-link="#map-link">
+          <div id="map" class="listing-section bg-white hover-effect">
             <div class="listing-section__header">
               <h3 class="listing-section__title">Карта</h3>
-            </div><!-- .listing-section__header -->
-                <a class="" routerLink="/mapPage">
+            </div>
+                <a class="">
                   <div class="containerMap">
                     <agm-map
-                      [latitude]="loc.lat"
-                      [longitude]="loc.lng"
+                      [latitude]="lat"
+                      [longitude]="lng"
                       [zoom]="14"
                       [disableDoubleClickZoom]="true"
                       [showDefaultInfoWindow]="false">
                       <agm-marker
                       [markerDraggable]="true"
-                      [latitude]="loc.lat"
-                      [longitude]="loc.lng"
+                      [latitude]="lat"
+                      [longitude]="lng"
                       >
                       </agm-marker>
                     </agm-map>
                   </div>
                 </a>
-          </div><!-- .listing-section -->
+          </div> 
 
           <div id="add-review" class="listing-section bg-white hover-effect" data-matching-link="#add-review-link">
             <div class="listing-section__header">
@@ -294,3 +295,4 @@
   </div>
 </div>
 </section><!-- .single-listing -->
+<div #map1></div>

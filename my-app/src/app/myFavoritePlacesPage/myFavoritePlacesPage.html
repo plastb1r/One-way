@@ -1,4 +1,5 @@
 <div class="container">
+  <div #map></div>
    <div class="row">
      <div class="col-lg-3">
      <profile-sidebar></profile-sidebar>
@@ -12,36 +13,36 @@
    </th>
    <th></th>
  </tr><!-- .listing-row -->
- <tr class="listing-row"  *ngFor="let d of data, let i = index ">
+ <tr class="listing-row"  *ngFor="let l of placeDetails, let i = index ">
    <td class="listing listing-cell">
      <div class="listing__wrapper" >
        <div class="listing__thumbnail">
          <a href="single-listing-1.html">
-           <img src={{d.photo}}>
+           <img src={{l.photos[0]}}>
          </a>
        </div><!-- .listing__thumbnail -->
        <div class="listing__detail">
          <h3 class="listing__title">
-           <a href="single-listing-1.html">{{d.name}}</a>
+           <a href="single-listing-1.html">{{l.name}}</a>
          </h3>
          <p class="listing__review c-dusty-gray">
-           <span class="stars-outer" data-rating="4.5"> {{rating[d.index]}}
+           <span class="stars-outer" data-rating="4.5"> {{l.rating}}
              <span class="stars-inner"></span>
            </span>
          </p>
          <p class="listing__location c-dusty-gray">
            <i class="fa fa-map-marker"></i>
-           {{d.address}}
+           {{l.address}}
          </p>
        </div><!-- .listing__detail -->
      </div>
    </td>
    <td class="listing-action">
-     <button class="action remove" (click)="deleteFav(d.index)" type="submit" routerLink="/myFavoritePlacesPage">
+     <button class="action remove" (click)="deleteFav(i)" type="submit" routerLink="/myFavoritePlacesPage">
        <i class="fa fa-trash"></i>
        Удалить
      </button>
-     <button class="action" type="submit" (click)="newLocation(d.index)" routerLink="/landmarkPage">
+     <button class="action" type="submit" (click)="sendPlaceId(i)" routerLink="/landmarkPage">
      Подробнее
      </button>
    </td>
