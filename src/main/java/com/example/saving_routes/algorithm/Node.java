@@ -2,6 +2,7 @@ package com.example.saving_routes.algorithm;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class Node {
     private Double lat;
@@ -86,5 +87,18 @@ public class Node {
 
     public void setEdges(ArrayList<Edge> edges) {
         this.edges = edges;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(id, node.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

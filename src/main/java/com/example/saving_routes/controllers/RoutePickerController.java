@@ -16,7 +16,8 @@ import com.example.saving_routes.entity.PlaceOnRoute;
 import com.example.saving_routes.entity.Route;
 import com.example.saving_routes.entity.Transports;
 import com.example.saving_routes.repositories.RouteRepository;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,11 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/routes")
 class RouteGeneratorController {
 
+    public static Logger logger = LogManager.getLogger();
     @Autowired
     RouteRepository routeRepository;
 
     @PostMapping(path = "/generate")
-    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places)
+    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places, @RequestBody(required = false) Place startP, Place endP)
             throws IOException, ParseException {
         String[] travelModes = { "driving", "walking", "transit", "bicycling" };
         String[] transitModes = { "BUS", "SUBWAY", "TRAIN", "TRAM", "RAIL" };
@@ -65,9 +67,11 @@ class RouteGeneratorController {
                     content.append(inputLine);
                 }
                 queryContent.put(travelMode, content.toString());
+                logger.info("Data from GoogleAPI was received");
 
             } catch (final Exception ex) {
                 ex.printStackTrace();
+                logger.error("Connection to GoogleAPI error",ex);
             }
         }
 
@@ -76,16 +80,28 @@ class RouteGeneratorController {
         ArrayList<Node> test = new ArrayList<Node>();
 
         test = reader.readNodesToArray(placeId);
+        logger.info("Successfully read nodes from json file to array");
         for (Map.Entry<String, String> mode : queryContent.entrySet()) {
             reader.readEdgesArray(test, mode.getValue(), mode.getKey());
         }
+        logger.info("Successfully read edges from json file to array");
         distances.setNodes(test);
-        distances.simplifyGraph();
+        try{
+            distances.simplifyGraph();
+            logger.info("Graph was simplified");
+        }
+        catch (final Exception e)
+        {
+            logger.error("Simplify error", e);
+        }
+
         ArrayList<Node> test1 = new ArrayList<Node>(test);
         Node start;
         start=distances.getNodes().get(0);
+        logger.debug("Start node {}",start.getId());
         Node end;
         end=distances.getNodes().get(test1.size()-1);
+        logger.debug("End node {}",end.getId());
         test1.remove(test1.size()-1);
         test1.remove(0);
         LinkedList<Edge> resWay = new LinkedList<Edge>();
@@ -93,12 +109,18 @@ class RouteGeneratorController {
         Long sum = Long.valueOf(0);
         Long sums[] = new Long[distances.factorial(test1.size())];
         sums = distances.shortWayPermute(start, end, test1, sum, test1.size());
+        logger.debug("Graph was permuted");
         ArrayList<Node> minWay =  new ArrayList<Node>();
         minWay = distances.getMinWay();
 
-        distances.filterMinWay();
-
-
+        try{
+            distances.filterMinWay();
+            logger.info("Graph was filtered");
+        }
+        catch (final Exception e)
+        {
+            logger.error("Graph filter error", e);
+        }
         LinkedList<PlaceOnRoute> routes = new LinkedList<PlaceOnRoute>();
         int count = 0;
         for (Node p : minWay) {
