@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Location } from 'src/app/domens/location';
+import {Observable} from "rxjs";
+import {Way} from "../domens/way";
 
 @Injectable()
 export class HttpService{
@@ -27,12 +29,13 @@ export class HttpService{
       return this.http.post('http://localhost:8181/api/routes/generate', places);
     }
 
-    sendParamsToAlgorythm(pl: Array<Location>, st: Location, ed: Location)
+    sendParamsToAlgorythm(pl: Observable<Way>, st: Location, ed: Location, fh: number)
     {
       const start = st;
       const end = ed;
       const places = pl;
-      return this.http.post('http://localhost:8181/api/routes/generate', [places, start, end]);
+      const freeHours = fh;
+      return this.http.post('http://localhost:8181/api/routes/generate', [places, start, end, freeHours]);
     }
 
 

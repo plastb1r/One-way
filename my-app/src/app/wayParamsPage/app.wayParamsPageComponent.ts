@@ -85,7 +85,7 @@ export class WayParamsPageComponent implements OnInit{
               return;
             }
             //set latitude, longitude and zoom
-            
+
             this.locations = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), zoom: 15, placeId: place.place_id,choose: false}];
             this.getDetails(place.place_id);
             var data = [];
@@ -102,8 +102,8 @@ export class WayParamsPageComponent implements OnInit{
        });
     }
 
-    setParams(form: NgForm) { 
-      
+    setParams(form: NgForm) {
+
       var freeHours = form.controls['freeHours'].value;
       var placesToVisit =  form.controls['placesToVisit'].value;
       var transportations = new Array<string>();
@@ -122,8 +122,11 @@ export class WayParamsPageComponent implements OnInit{
       }
 
       console.log("transport " +  transportations);
-     
-      this.parameters = new Parameters(this.startPoint, this.endPoint, freeHours, new Array<string>(),transportations, placesToVisit);
+
+      this.parameters = new Parameters(this.startPoint, this.endPoint, freeHours, new Array<string>(), transportations, placesToVisit);
+      console.log("start" + this.parameters.startPoint);
+      console.log("end" + this.parameters.endPoint);
+      this.httpService.sendParamsToAlgorythm(this.data.currentWay, this.parameters.startPoint, this.parameters.endPoint, freeHours);
       console.log("parameters" +  this.parameters);
       console.log("hours " +  this.parameters.freeHours);
       console.log("places " +  this.parameters.placesToVisit);
@@ -161,7 +164,7 @@ export class WayParamsPageComponent implements OnInit{
           });
         });
        });
-       
+
     }
 
     setAutocompliteToEndPoint(){
@@ -179,7 +182,7 @@ export class WayParamsPageComponent implements OnInit{
           });
         });
        });
-       
+
     }
 
 

@@ -38,7 +38,7 @@ class RouteGeneratorController {
     RouteRepository routeRepository;
 
     @PostMapping(path = "/generate")
-    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places, @RequestBody(required = false) Place startP, Place endP)
+    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places, @RequestBody(required = false) Place startPoint, @RequestBody(required = false) Place endPoint, @RequestBody(required = false) Long freeTime)
             throws IOException, ParseException {
         String[] travelModes = { "driving", "walking", "transit", "bicycling" };
         String[] transitModes = { "BUS", "SUBWAY", "TRAIN", "TRAM", "RAIL" };
@@ -96,11 +96,24 @@ class RouteGeneratorController {
         }
 
         ArrayList<Node> test1 = new ArrayList<Node>(test);
-        Node start;
-        start=distances.getNodes().get(0);
+        Node start = new Node();
+        Node end = new Node();
+        for(Node node: distances.getNodes())
+        {
+            if(node.getId().equals(startPoint.getId()))
+            {
+                start.setId(startPoint.getId());
+                start.setLat(Double.valueOf(startPoint.getLat()));
+                start.setLng(Double.valueOf(startPoint.getLng()));
+            }
+            if(node.getId().equals(endPoint.getId()))
+            {
+                end.setId(endPoint.getId());
+                end.setLat(Double.valueOf(endPoint.getLat()));
+                end.setLng(Double.valueOf(endPoint.getLng()));
+            }
+        }
         logger.debug("Start node {}",start.getId());
-        Node end;
-        end=distances.getNodes().get(test1.size()-1);
         logger.debug("End node {}",end.getId());
         test1.remove(test1.size()-1);
         test1.remove(0);
