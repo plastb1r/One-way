@@ -1,4 +1,5 @@
 <div class="container">
+  <div #map></div>
    <div class="row">
      <div class="col-lg-3">
      <profile-sidebar></profile-sidebar>
@@ -22,7 +23,7 @@
      <div class="listing__wrapper">
        <div class="listing__thumbnail">
          <a >
-           <img src={{photo[d.index]}}>
+           <img src={{photo[i]}}>
          </a>
        </div><!-- .listing__thumbnail -->
        <div class="listing__detail">
@@ -32,11 +33,11 @@
        </div><!-- .listing__detail -->
      </div>
    </td>
-   <td>{{d.cityAddress}}</td>
+   <td>{{d.city.name}}</td>
    <td class="listing-action">
      <ul class="min-list">
        <li>
-         <button class="action edit" type="button" (click)="newLocation(d.index)" routerLink="/wayPage">
+         <button class="action edit" type="button" (click)="newLocation(i)" routerLink="/wayPage">
            <i class="fa fa-pencil"></i>
            Подробнее
          </button>

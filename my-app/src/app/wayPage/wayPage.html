@@ -1,5 +1,6 @@
 <section class="single-listing single-listing--layout-2">
   <div class="header-container teal darken-3">
+    <div #map></div>
   </div><!-- .listing-header-map-container -->
   <div class="listing-main bg-wild-sand">
     <div class="container">
@@ -21,8 +22,8 @@
                     <ul class="min-list inline-list listing-actions t-center">
                       <li class="t-center listing-action listing-action--favorite">
                         <a href="#">
-                          <i class="fa fa-heart c-silver-charlice"></i>
-                          Сохранить маршрут
+                          <i class="fa fa-trash c-silver-charlice"></i>
+                          Удалить маршрут
                         </a>
                       </li>
                       <li class="t-center listing-action listing-action--share">
@@ -77,9 +78,9 @@
             </div><!-- .listing-section__header -->
             <mdb-carousel [isControls]="true" class="carousel slide carousel-fade"  [animation]="'fade'">
               <!--First slide-->
-              <mdb-carousel-item  *ngFor="let d of data, let i = index ">
+              <mdb-carousel-item  *ngFor="let d of details, let i = index ">
                 <div class="view w-100">
-                  <img class="d-block" src={{d.photo}}>
+                  <img class="d-block" src={{d.photos[0]}}>
                   <div class="mask rgba-black-light waves-light" mdbWavesEffect></div>
                 </div>
               </mdb-carousel-item>
@@ -91,42 +92,49 @@
              <h3 class="listing-section__title">Маршрут</h3>
            </div><!-- .listing-section__header -->
 
-           <div class="accordion-container">
-             <div class="accordion"  *ngFor="let d of data, let i = index ">
-               <div class="accordion__header" (click)="toggle(d.index)">
-                   <h4>{{d.name}}</h4>
-               </div><!-- .accordion__header -->
-
-               <div class=" toggle" *ngIf="visibility[d.index]">
-                 <div class="d-sm-flex accordion__inner ">
-                   <div class="c-dove-gray accordion__desc" >
-                     <ul class="min-list listing-contact-list">
-                       <li class="d-flex align-items-center c-silver-charlice listing-contact">
-                         <i class="fa fa-compass listing-contact__icon"></i>
-                        {{d.address}}
-                       </li>
-
-                         <a href="#">
-                           <i class="fa fa-heart c-silver-charlice"></i>
-                           Сохранить
-                         </a>
-
-                         <a (click)="newLocation(d.index)" routerLink="/landmarkPage">
-                           <i class="fa fa-share-alt c-silver-charlice"></i>
-                           Подробнее
-                         </a>
-                     </ul><!-- .listing-contact-list -->
-                   </div><!-- .accordion__desc -->
-                 </div><!-- .accordion__inner -->
-               </div><!-- .accordion__content -->
-             </div><!-- .accordion -->
-           </div><!-- .accordion-container -->
+            <div  *ngFor="let d of details, let i = index " class="accordion">
+                <div class="accordion-container">
+                    <div class="accordion__header" >
+                       {{d.name}}
+                    </div><!-- .accordion__header -->
+     
+                    <div class="toggle">
+                      <div class="d-sm-flex accordion__inner ">
+                        <div class="c-dove-gray accordion__desc" >
+                          <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                            <i class="fa fa-compass listing-contact__icon"></i>
+                            {{d.address}}
+                          </li>
+                          <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                            <i class="fa fa-clock-o listing-contact__icon"></i>
+                            {{label}} {{timeToNext[i]}} (минуты)
+                          </li>
+                          <li  class="d-flex align-items-center c-silver-charlice listing-contact">
+                            <i class={{travelModesIcons[i]}}></i>
+                            {{transportToNext[i]}}
+                          </li>
+                          <ul class="min-list listing-contact-list">
+                              <a href="#">
+                                <i class="fa fa-heart c-silver-charlice"></i>
+                                Сохранить
+                              </a>
+     
+                              <a (click) ="sendPlaceId(i)" routerLink="/landmarkPage" >
+                                <i class="fa fa-share-alt c-silver-charlice"></i>
+                                Подробнее
+                              </a>
+                          </ul><!-- .listing-contact-list -->
+                        </div><!-- .accordion__desc -->
+                      </div><!-- .accordion__inner -->
+                    </div><!-- .accordion__content -->
+              </div><!-- .listing-section -->
+            </div>
          </div><!-- .listing-section -->
 
-         <div id="map" class="listing-section bg-white hover-effect" data-matching-link="#map-link">
+         <!--<div id="map" class="listing-section bg-white hover-effect" data-matching-link="#map-link">
            <div class="listing-section__header">
              <h3 class="listing-section__title">Карта</h3>
-           </div><!-- .listing-section__header -->
+           </div>
                <a class="" routerLink="/mapPage">
                  <div class="containerMap">
                    <agm-map
@@ -148,7 +156,14 @@
                    </agm-map>
                  </div>
                </a>
-         </div><!-- .listing-section -->
+         </div>-->
+         <div class="listing-section bg-white hover-effect" data-matching-link="#map-link">
+           <div class="listing-section__header">
+             <h3 class="listing-section__title">Карта</h3>
+           </div>
+               <a class="" routerLink="/mapPage"> Хочешь построить этот маршрут?
+               </a>
+         </div>
 
           <div id="add-review" class="listing-section bg-white hover-effect" data-matching-link="#add-review-link">
             <div class="listing-section__header">
@@ -235,7 +250,7 @@
               <ul class="min-list listing-contact-list">
                 <li class="d-flex align-items-center c-silver-charlice listing-contact">
                   <i class="fa fa-compass listing-contact__icon"></i>
-                  <span class="c-primary">{{way.cityAddress}}</span>
+                  <span class="c-primary">{{way.city.name}}</span>
                 </li>
               </ul><!-- .listing-contact-list -->
 

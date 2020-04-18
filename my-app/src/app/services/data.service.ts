@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Location } from 'src/app/domens/location';
 import { Way } from 'src/app/domens/way';
 import { Subject } from 'rxjs';
-import { PlaceDetails } from '../domens/PlaceDetails';
+import { PlaceDetails } from '../domens/placeDetails';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {

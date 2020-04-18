@@ -3,7 +3,7 @@ import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { Location } from 'src/app/domens/location';
 import {DataService} from 'src/app/services/data.service';
 import { Way } from 'src/app/domens/way';
-import { PlaceDetails } from '../domens/PlaceDetails';
+import { PlaceDetails } from '../domens/placeDetails';
 
 @Component({
   templateUrl: './landmarkPage.html',
@@ -75,7 +75,6 @@ export class LandmarkPageComponent implements OnInit{
   }*/
 
   ngOnInit() {
-    this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
     this.placeId = sessionStorage.getItem('landmark');
     console.log(this.placeId);
     this.loadPlaces();
@@ -83,7 +82,7 @@ export class LandmarkPageComponent implements OnInit{
 
   loadPlaces(){
     this.mapsAPILoader.load().then(() => {
-      let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
+      let city = {lat: 147.4984232, lng:  19.0705289};
       let mapOptions = {
         center: city,
         zoom: 15

@@ -9,7 +9,7 @@ import { Data } from 'src/app/domens/data';
 import {Parameters} from 'src/app/domens/params';
 import {NgForm} from '@angular/forms';
 import { PopularLandmarksPageComponent } from '../popularLandmarksPage/app.popularLandmarksPageComponent';
-import { PlaceDetails } from '../domens/PlaceDetails';
+import { PlaceDetails } from '../domens/placeDetails';
 import { PlacesService } from '../services/places.service';
 
 @Component({

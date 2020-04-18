@@ -7,7 +7,7 @@ import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
 import { PlacesService } from '../services/places.service';
-import { PlaceDetails } from '../domens/PlaceDetails';
+import { PlaceDetails } from '../domens/placeDetails';
 
 @Component({
   templateUrl: './myFavoritePlacesPage.html',
@@ -44,6 +44,7 @@ export class MyFavoritePlacesPageComponent{
     console.log(placeid);
     this.mapsAPILoader.load().then(() => {
       let city = {lat: this.places[0].lat, lng:  this.places[0].lng};
+      console.log(city);
       let mapOptions = {
         center: city,
         zoom: 15
@@ -79,5 +80,4 @@ export class MyFavoritePlacesPageComponent{
     this.user.favPlaces.splice(i, 1);
     console.log(this.user.favPlaces);
   }*/
-
 }

@@ -15,39 +15,59 @@ import { RoutesService } from '../services/routes.service';
 })
 export class MyWaysPageComponent implements OnInit{
 
-  //cityName: string;
+  @ViewChild('map', {static: false})
+  mapElement: ElementRef;
+
+  map: any;
   photo: Array<string> = new Array<string>();
   myWays: Array<Way> = new Array<Way>();
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone,
-    private dataSer: DataService,
-    private httpService: HttpService,
     private routeService:RoutesService
   ) { }
 
   ngOnInit() {
     this.routeService.getAll().subscribe(data => {
-      console.log("routes" + data);
-      this.myWays=data; 
-      //this.places.forEach(f => this.loadPlaces(f.placeId));
+      this.myWays=data;
+      console.log(this.myWays);
+      this.myWays.forEach(p => this.loadPlaces(p.places[0].place.placeId));
     });
-    //this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
   }
-    //this.myWays = [new Way(0, locs,"Montreal, QC, Canada","Тестовый путь 1"), this.myWay];
     
-
   newLocation(i: number){
-    console.log("index" + i);
-    //this.dataSer.changeWay1(this.myWays[i]);
+    sessionStorage.setItem("Way",JSON.stringify(this.myWays[i]));
   }
 
-  getPhDetails(placeId: string){
-    this.httpService.getData(placeId).subscribe( value =>{
-        var phot = value['result']['photos'];
-        var photoRe = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+phot[0]['photo_reference']+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ';
-        this.photo.push(photoRe);
+  loadPlaces(placeId){
+    this.mapsAPILoader.load().then(() => {
+      let city = {lat: this.myWays[0].places[0].place.lat, lng: this.myWays[0].places[0].place.lng};
+      let mapOptions = {
+        center: city,
+        zoom: 15
+      }
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      let service = new google.maps.places.PlacesService(this.map);
+
+      var request = {
+        placeId: placeId,
+        fields: ['photos']
+      };
+
+      service.getDetails(request, (place, status) => {
+          this.getPlaces(place, status)
+      });
+
+    }, (err) => {
+      console.log(err);
     });
+
+  }
+
+  getPlaces(results, status){
+    console.log("place"+results.photos);
+    this.photo.push(results.photos[0].getUrl());
   }
 }
+

@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Way } from 'src/app/domens/way';
 import { Data } from '../domens/data';
-import { Direction } from 'src/app/domens/placeOnRoute';
+import { Direction } from 'src/app/domens/direction';
 import { stringify } from 'querystring';
 
 @Component({

@@ -6,6 +6,8 @@ import { Way } from 'src/app/domens/way';
 import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
+import { PlaceDetails } from '../domens/placeDetails';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
   templateUrl: './wayPage.html',
@@ -13,83 +15,100 @@ import { Data } from 'src/app/domens/data';
 
 })
 export class WayPageComponent{
-  locations2: Array<Location>;
-  data: Array<Data> = new Array<Data>();
-  types:  Array<any> = new Array<any>();
-  number: Array<string> = new Array<string>();
-  rating: Array<number> = new Array<number>();
-  way: Way;
-  index: number = -1;
-  photos: Array<Array<string>> = new Array<Array<string>>();
-  dir = undefined;
-  visibility: Array<boolean> = new Array<boolean>();
+  @ViewChild('map', {static: false})
+  mapElement: ElementRef;
 
+  map: any;
+  details: Array<PlaceDetails> = new Array<PlaceDetails>();
+  timeToNext:  Array<number> = new Array<number>();
+  transportToNext:  Array<string> = new Array<string>();
+  visibility: Array<boolean> = new Array<boolean>();
+  travelModesIcons: Array<string> = new  Array<string>();
+  icons = ["fa fa-car listing-contact__icon", "fa fa-bus listing-contact__icon", "fa fa-bicycle listing-contact__icon", "fa fa-male listing-contact__icon"];
+  way: Way;
+  label: string = '';
   constructor(
-    private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone,
-    private dataSer: DataService,
-    private http: HttpClient,
-    private httpService: HttpService
+    private mapsAPILoader: MapsAPILoader
   ) { }
 
-  toggle(index: number){
-    this.visibility[index] = !this.visibility[index];
-  }
 
   ngOnInit() {
-    //this.data.currentLM.subscribe({loc, photo, rating, address, name, number, types} => {this.longitude: loc.lng,this.photo: photo, this.rating: rating, this.address: address, this.name: name, this.number: number, this.types : types});
-    //this.data.currentPh.subscribe(ph => this.photo = ph);
-    //this.dataSer.currentWay.subscribe(w => this.way = w);
-
-    /*var accordionContainer = document.querySelector('.accordion-container');
-    if (accordionContainer) {
-      accordionContainer.addEventListener('click', function (e) {
-        //var header = e.target.closest('.accordion__header');
-        if (!header) return;
-        //var accordion = header.parentNode;
-        var content = header.nextElementSibling;
-        var height = content.firstElementChild.getBoundingClientRect().height;
-
-        if (accordion.classList.contains('is-open')) {
-          content.style.height = '0px';
-          accordion.classList.remove('is-open');
-        } else {
-          content.style.height = height + 'px';
-          accordion.classList.add('is-open');
-        }
-      });
-    }*/
+    this.way = JSON.parse(sessionStorage.getItem("Way"));
+    this.way.places.forEach(p => {
+      this.loadPlaces(p.place.placeId);
+      this.timeToNext.push(p.timeToNext);
+      this.transportToNext.push(p.transportToNext);
+    }
+    );
+    this.setLastPlacesInArrays();
+    this.setTravelModes();
   }
 
+  setLastPlacesInArrays(){
+    this.timeToNext.splice(this.timeToNext.length-1,1);
+    this.timeToNext.push(this.way.timeToGo);
+    this.transportToNext.splice(this.transportToNext.length-1,1);
+    this.transportToNext.push("Маршрут окончен");
+    this.label = 'Весь маршрут занял ';
+  }
 
-    public getDetails(placeId: string){
-      this.httpService.getData(placeId).subscribe( value =>{
-        //var loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], zoom: 15, placeId: value['result']['place_id'],  choose: false};
-        var phot = value['result']['photos'];
-        var name = value['result']['name'];
-        var address = value['result']['formatted_address'];
-        var rating = value['result']['rating'];
-        var types = value['result']['types'];
-        var number = value['result']['international_phone_number'];
+  sendPlaceId(index){
+    sessionStorage.removeItem('landmark');
+    sessionStorage.setItem("landmark", this.way.places[index].place.placeId);
+  }
 
-        this.index += 1;
-        var ref = []
-        phot.forEach(ph => {
-          ref.push(ph['photo_reference']);
-        });
+  loadPlaces(placeId){
+    this.mapsAPILoader.load().then(() => {
+      let city = {lat: this.way.places[0].place.lat, lng: this.way.places[0].place.lng};
+      let mapOptions = {
+        center: city,
+        zoom: 15
+      }
 
-        var photoRes = [];
-          ref.forEach(ph => {
-            photoRes.push('https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+ph+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ')
-          });
-        //console.log(value['result']['place_id']);
-        this.data.push({photo: photoRes[0],name: name,address: address,index: this.index, isAddedToWay: true, isAddedToFav: true});
-        this.photos.push(photoRes);
-        this.number.push(number);
-        this.rating.push(rating);
-        this.types.push(types);
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      let service = new google.maps.places.PlacesService(this.map);
+
+
+      var request = {
+        placeId: placeId,
+        fields: ['name', 'formatted_address',  'photos']
+      };
+
+      service.getDetails(request, (place, status) => {
+          this.getPlaces(place, status)
       });
-    }
 
-    
+    }, (err) => {
+      console.log(err);
+    });
+
+  }
+
+  getPlaces(results, status){
+    console.log("place"+results.photos);
+    var photo = [];
+    photo.push(results.photos[0].getUrl());
+    this.details.push({name: results.name, address: results.formatted_address, photos: photo});
+  }
+
+  public setTravelModes(){
+    this.transportToNext.forEach(tm => {
+      if(tm == "walking")
+      {
+        this.travelModesIcons.push(this.icons[3]);
+      }
+      if(tm == "transit")
+      {
+        this.travelModesIcons.push(this.icons[1]);
+      }
+      if(tm == "driving")
+      {
+        this.travelModesIcons.push(this.icons[0]);
+      }
+      if(tm == "bycycle")
+      {
+        this.travelModesIcons.push(this.icons[2]);
+      }
+    })
+  }
 }

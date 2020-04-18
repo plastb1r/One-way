@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { Location } from 'src/app/domens/location';
-import { PlaceDetails } from '../domens/PlaceDetails';
+import { PlaceDetails } from '../domens/placeDetails';
 import { PlacesService } from '../services/places.service';
 
 @Component({
@@ -118,7 +118,6 @@ export class PopularLandmarksPageComponent implements OnInit{
   setIndex(index: number){
     if(index == 0){
       this.types = ['restaurant','cafe', 'bakery', 'food'];
-
     }
     if(index == 1){
       this.types = ['lodging'];
