@@ -8,6 +8,7 @@ import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
 import { PlaceDetails } from '../domens/placeDetails';
 import { IfStmt } from '@angular/compiler';
+import { PlacesService } from '../services/places.service';
 
 @Component({
   templateUrl: './wayPage.html',
@@ -19,6 +20,7 @@ export class WayPageComponent{
   mapElement: ElementRef;
 
   map: any;
+  places:Array<Location> = new Array<Location>();
   details: Array<PlaceDetails> = new Array<PlaceDetails>();
   timeToNext:  Array<number> = new Array<number>();
   transportToNext:  Array<string> = new Array<string>();
@@ -28,14 +30,15 @@ export class WayPageComponent{
   way: Way;
   label: string = '';
   constructor(
-    private mapsAPILoader: MapsAPILoader
+    private mapsAPILoader: MapsAPILoader,
+    private placeService: PlacesService
   ) { }
 
 
   ngOnInit() {
     this.way = JSON.parse(sessionStorage.getItem("Way"));
     this.way.places.forEach(p => {
-      this.loadPlaces(p.place.placeId);
+      this.loadPlaces(p.place);
       this.timeToNext.push(p.timeToNext);
       this.transportToNext.push(p.transportToNext);
     }
@@ -54,12 +57,17 @@ export class WayPageComponent{
 
   sendPlaceId(index){
     sessionStorage.removeItem('landmark');
-    sessionStorage.setItem("landmark", this.way.places[index].place.placeId);
+    sessionStorage.setItem("landmark", this.way.places[index].place);
+  }
+
+  addToFavP(index){
+    var loc = {lat: this.places[index].lat, lng: this.places[index].lng, placeId: this.way.places[index].place};
+    this.placeService.addPlace(loc).subscribe(data =>console.log(data));
   }
 
   loadPlaces(placeId){
     this.mapsAPILoader.load().then(() => {
-      let city = {lat: this.way.places[0].place.lat, lng: this.way.places[0].place.lng};
+      let city = {lat: 51.673727, lng: 39.21114};
       let mapOptions = {
         center: city,
         zoom: 15
@@ -71,7 +79,7 @@ export class WayPageComponent{
 
       var request = {
         placeId: placeId,
-        fields: ['name', 'formatted_address',  'photos']
+        fields: ['name', 'formatted_address',  'photos', "place_id", "geometry"]
       };
 
       service.getDetails(request, (place, status) => {
@@ -89,6 +97,7 @@ export class WayPageComponent{
     var photo = [];
     photo.push(results.photos[0].getUrl());
     this.details.push({name: results.name, address: results.formatted_address, photos: photo});
+    this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
   }
 
   public setTravelModes(){

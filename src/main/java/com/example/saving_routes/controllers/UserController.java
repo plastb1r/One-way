@@ -193,9 +193,9 @@ public class UserController {
         Route savedRoute = routeRepository.saveAndFlush(newRoute);
 
         route.getPlaces().forEach(placeOnRoute -> {
-            Place place = placeRepository.saveAndFlush(placeOnRoute.getPlace());
+            //Place place = placeRepository.saveAndFlush(placeOnRoute.getPlace());
             placeOnRoute.setRoute(newRoute);
-            placeOnRoute.setPlace(place);
+            //placeOnRoute.setPlace(place);
             placeOnRouteRepository.saveAndFlush(placeOnRoute);
         });
         return savedRoute;
@@ -203,13 +203,18 @@ public class UserController {
 
     @DeleteMapping(path = "/routes/{routeId}")
     public String deleteRoute(@PathVariable Integer routeId) {
+		Route route = routeRepository.findAllById(routeId);
+		Iterable<PlaceOnRoute> pl =placeOnRouteRepository.findAllByRoute(route);
+		for(PlaceOnRoute p: pl){
+			placeOnRouteRepository.deleteById(p.getId());
+		}
         routeRepository.deleteById(routeId);
         return routeRepository.existsById(routeId) ? "error" : "deleted";
     }
 
     @GetMapping(path = "/places/{placeId}")
     public Place getPlaceById(@PathVariable String placeId) {
-        return placeRepository.findAllById(Integer.parseInt(placeId));
+        return placeRepository.findAllById(placeId);
     }
 
     @GetMapping(path = "/places")

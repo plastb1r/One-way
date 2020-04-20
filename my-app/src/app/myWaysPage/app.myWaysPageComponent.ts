@@ -31,7 +31,7 @@ export class MyWaysPageComponent implements OnInit{
     this.routeService.getAll().subscribe(data => {
       this.myWays=data;
       console.log(this.myWays);
-      this.myWays.forEach(p => this.loadPlaces(p.places[0].place.placeId));
+      this.myWays.forEach(p => this.loadPlaces(p.places[0].place));
     });
   }
     
@@ -41,7 +41,7 @@ export class MyWaysPageComponent implements OnInit{
 
   loadPlaces(placeId){
     this.mapsAPILoader.load().then(() => {
-      let city = {lat: this.myWays[0].places[0].place.lat, lng: this.myWays[0].places[0].place.lng};
+      let city = {lat: 51.673727, lng: 39.21114};
       let mapOptions = {
         center: city,
         zoom: 15
@@ -69,5 +69,10 @@ export class MyWaysPageComponent implements OnInit{
     console.log("place"+results.photos);
     this.photo.push(results.photos[0].getUrl());
   }
+
+  deleteWay(id){
+    this.routeService.deleteById(id).subscribe(data => console.log(data));
+    window.location.reload();
+    }
 }
 

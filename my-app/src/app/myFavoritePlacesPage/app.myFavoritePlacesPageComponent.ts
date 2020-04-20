@@ -76,8 +76,13 @@ export class MyFavoritePlacesPageComponent{
       console.log("details" + this.placeDetails[0].name);
     }
 
-  /*deleteFav(i: number){
-    this.user.favPlaces.splice(i, 1);
-    console.log(this.user.favPlaces);
-  }*/
+  deleteFav(i: number){
+    console.log(this.places);
+    console.log(i);
+    console.log(this.places[i].placeId);
+    this.placeService.deleteById(this.places[i].placeId).subscribe(data =>console.log(data));
+    this.places.splice(i, 1);
+    sessionStorage.setItem("places", JSON.stringify(this.places));
+    window.location.reload();
+  }
 }

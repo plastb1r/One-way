@@ -129,11 +129,11 @@ class RouteGeneratorController {
                     count++;
                     if(!p.getEdges().isEmpty())
                     {
-                        routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,count,p.getEdges().get(0).getDuration(),Transports.valueOf(p.getEdges().get(0).getTravelMode())));
+                        //routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,count,p.getEdges().get(0).getDuration(),Transports.valueOf(p.getEdges().get(0).getTravelMode())));
                     }
                     else
                     {
-                        routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,0,0L,null));
+                        //routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,0,0L,null));
                     }
                 }
             }

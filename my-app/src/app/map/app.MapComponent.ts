@@ -56,7 +56,6 @@ export class MapFormComponent implements OnInit{
    ngOnInit() {
     //load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
-     this.data.currentVisibilityOfMap.subscribe(vis => this.visibilityOfPopularplaces = vis);
      //this.data.currentWay.subscribe(w => this.way = w);
      this.visibilityOfPopularplaces = true;
      this.locations2 = JSON.parse(sessionStorage.getItem('locatsToShowOnMap'));

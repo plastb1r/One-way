@@ -32,9 +32,9 @@ public class PlaceOnRoute {
     @Column(name = "place_on_route_id")
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "place_id")
-    private Place place;
+    //@ManyToOne
+    @Column(name = "place_id")
+    private String place;
 
     @JsonIgnore
     @ManyToOne
