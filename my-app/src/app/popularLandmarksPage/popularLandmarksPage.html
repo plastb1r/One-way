@@ -105,9 +105,9 @@
             <div class="listing__thumbnail">
               <a>
                 <img src={{lm.photos[0]}}>
-                <a *ngIf="locations[i]; then redHeart else whiteHeart"> </a>
+                <a *ngIf="locations[i].choose; then redHeart else whiteHeart"> </a>
                     <ng-template #redHeart>
-                      <span class="favorite c-white" (click)="addToFavP(i)">
+                      <span class="favorite c-white" (click)="deleteFromFavP(locations[i], i)" >
                         <i class="fa fa-heart"></i>
                       </span>
                     </ng-template>
@@ -120,7 +120,7 @@
             </div><!-- .listing__thumbnail -->
             <div class="listing__detail">
               <a>
-                <span *ngIf="lm.isAddedToWay" class="favoriteLabel c-secondary">Добавлена к маршруту
+                <span *ngIf="locations[i].addedToWay" class="favoriteLabel c-secondary">Добавлена к маршруту
                 </span>
               </a>
               <h3 class="listing__title">
@@ -132,9 +132,8 @@
               </p>
                 <div class="d-lg-flex justify-content-lg-between align-items-lg-center">
                   <button class="button button--primary  button--larges button--pill b" type="submit" (click)="sendPlaceId(i)" routerLink="/landmarkPage">Подробнее</button>
-                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="deleteFromWay(i)">удалить</button>
 
-                  <div *ngIf="lm.isAddedToWay; then thenBlock else elseBlock"></div>
+                  <div *ngIf="locations[i].addedToWay; then thenBlock else elseBlock"></div>
                     <ng-template #thenBlock>
                       <button class="button button--primary  button--larges button--pill b" type="submit" (click)="deleteFromWay(i)">Удалить из маршрута</button>
                     </ng-template>

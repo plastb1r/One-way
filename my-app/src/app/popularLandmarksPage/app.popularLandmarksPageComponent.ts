@@ -23,9 +23,9 @@ export class PopularLandmarksPageComponent implements OnInit{
   placeDetails: Array<PlaceDetails> = new Array<PlaceDetails>();
   locations: Array<Location> = new Array<Location>();
   types = [];
-  favorites: Array<boolean> = new Array<boolean>();
   places = [];
   visibility: boolean = true;
+  wayPlaces:Array<Location> = new Array<Location>();
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
@@ -40,7 +40,11 @@ export class PopularLandmarksPageComponent implements OnInit{
     this.cityName = sessionStorage.getItem('cityAddress');
     this.placeService.getAll().subscribe(data => this.places=data);
     this.loadPlaces();
-    console.log("Way" + sessionStorage.getItem("LocatsToWay"));
+    if(sessionStorage.getItem("LocatsToWay")){
+      this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+    }
+    console.log("Way" + this.wayPlaces);
+
   }
 
   loadPlaces(){
@@ -85,46 +89,37 @@ export class PopularLandmarksPageComponent implements OnInit{
         });
 
         for (var i = 1; i < results.length ; i++) {
+          var choose = false;
+          var addedToWay = false;
           if(results[i].photos){
-            this.placeDetails.push({name: results[i].name, address: results[i].vicinity,photos: [results[i].photos[0].getUrl()],
-              types: results[i].types, rating: results[i].rating});
-            for(var j = 0; j<this.places.length; j++){
-              var loc;
+            CancelLoop: for(var j = 0; j<this.places.length; j++){
               console.log("place " + this.places[j].placeId);
               console.log("results" + results[i].place_id);
               if(results[i].place_id == this.places[j].placeId )
               {
-                loc = {lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id,choose: true };
-                this.locations.push(loc);
-                break;
-                //this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id,choose: true });
-                //console.log(this.locations[i].choose);
-                //j = this.places.length;
-                //break;
-              }
-              else{
-                loc = {lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: false};
-                /*if(j == this.places.length - 1)
-                {
-                  console.log(j);
-                  console.log(loc);
-                  this.locations.push(loc);
-                }*/
-                //this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: false});
-                //console.log(this.locations[i].choose);
-               // break;
+                choose = true;
+                break CancelLoop;
               }
             }
+
+            CancelLoop2: for(var j = 0; j<this.wayPlaces.length; j++){
+              if(results[i].place_id == this.wayPlaces[j].placeId )
+              {
+                addedToWay = true;
+                break CancelLoop2;
+              }
+            }
+            this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: choose, addedToWay: addedToWay});
+            this.placeDetails.push({name: results[i].name, address: results[i].vicinity,photos: [results[i].photos[0].getUrl()],
+              types: results[i].types, rating: results[i].rating});
+                
           }
         }
-      //console.log("details" + this.placeDetails);
-      console.log("locations" + JSON.stringify(this.locations[0].choose));
-      console.log("locations" + JSON.stringify(this.locations[1].choose));
-      console.log("locations" + JSON.stringify(this.locations[2].choose));
 
       console.log("locations" + JSON.stringify(this.locations));
     }
   }
+
 
   sendPlaceId(index){
     sessionStorage.removeItem('landmark');
@@ -166,7 +161,25 @@ export class PopularLandmarksPageComponent implements OnInit{
   addToFavP(index){
     var loc = {lat: this.locations[index].lat, lng: this.locations[index].lng, placeId: this.locations[index].placeId};
     this.placeService.addPlace(loc).subscribe(data =>console.log(data));
-    //this.locations[index].choose = true;
+    this.locations[index].choose = true;
+    sessionStorage.removeItem('locatsToShowOnMap');
+    sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+  }
+
+  deleteFromFavP(loc: Location, ind){
+    var i;
+    this.places.forEach(p => {
+      if(p.placeId == loc.placeId)
+        i = this.places.indexOf(p);
+    });
+
+    this.placeService.deleteById(this.places[i].placeId).subscribe(data =>console.log(data));
+    this.places.splice(i, 1);
+    this.locations[ind].choose = false;
+
+    sessionStorage.removeItem('locatsToShowOnMap');
+    sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+    console.log("locations" + JSON.stringify(this.locations));
   }
 
   toggle(){
@@ -180,6 +193,10 @@ export class PopularLandmarksPageComponent implements OnInit{
     }
     locs.push(this.locations[i]);
     sessionStorage.setItem("LocatsToWay", JSON.stringify(locs));
+    this.locations[i].addedToWay = true;
+    sessionStorage.removeItem('locatsToShowOnMap');
+    sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+    console.log("Way" + sessionStorage.getItem("LocatsToWay"));
   }
 
   deleteFromWay(j: number){
@@ -199,6 +216,9 @@ export class PopularLandmarksPageComponent implements OnInit{
           return 0;
         }
       });
+      this.locations[j].addedToWay = false;
+      sessionStorage.removeItem('locatsToShowOnMap');
+      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
   }
 
   /*checkInArray(placeId): boolean{

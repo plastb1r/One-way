@@ -91,6 +91,6 @@ export class HomePageComponent implements OnInit{
     sessionStorage.setItem('cityAddress', this.address);
     sessionStorage.removeItem('cityAddressLocat');
     sessionStorage.setItem('cityAddressLocat', JSON.stringify(this.location));
-    this.data.changeLocations(this.location);
+    //this.data.changeLocations(this.location);
   }
 }

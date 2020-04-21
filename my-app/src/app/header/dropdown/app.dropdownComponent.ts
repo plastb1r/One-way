@@ -46,6 +46,6 @@ export class DropDownComponent {
   }
 
   _newLocation(){
-  this.data.changeLocations(this.location);
+  //this.data.changeLocations(this.location);
   }
 }

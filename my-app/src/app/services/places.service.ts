@@ -23,7 +23,7 @@ import { Location } from 'src/app/domens/location';
        return this.http.put<Location>(this.placesUrl, place);
      }
 
-     deleteById(id: number) {
+     deleteById(id: string) {
        return this.http.delete(this.placesUrl + '/' + id);
      }
 
