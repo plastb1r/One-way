@@ -201,7 +201,6 @@ export class PopularLandmarksPageComponent implements OnInit{
 
   deleteFromWay(j: number){
     var locs = new Array<Location>();
-    //sessionStorage.removeItem("LocatsToWay");
     locs = JSON.parse(sessionStorage.getItem("LocatsToWay"));
     console.log(locs);
     locs.forEach(l => 

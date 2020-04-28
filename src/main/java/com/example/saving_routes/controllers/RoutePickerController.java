@@ -11,6 +11,7 @@ import com.example.saving_routes.algorithm.Edge;
 import com.example.saving_routes.algorithm.Graph;
 import com.example.saving_routes.algorithm.JsonReader;
 import com.example.saving_routes.algorithm.Node;
+import com.example.saving_routes.entity.Parameters;
 import com.example.saving_routes.entity.Place;
 import com.example.saving_routes.entity.PlaceOnRoute;
 import com.example.saving_routes.entity.Route;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,27 +32,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping(path = "api/routes")
+@RequestMapping(path = "api/auth")
 class RouteGeneratorController {
 
     public static Logger logger = LogManager.getLogger();
-    @Autowired
+
     RouteRepository routeRepository;
 
     @PostMapping(path = "/generate")
-    public List<PlaceOnRoute> genereateRoutes(@RequestBody(required = false) List<Place> places, @RequestBody(required = false) Place startP, Place endP)
+    public List<PlaceOnRoute> genereateRoutes(@RequestBody Parameters params)
             throws IOException, ParseException {
-        String[] travelModes = { "driving", "walking", "transit", "bicycling" };
+        //String[] travelModes = {  "walking", "transit", "bicycling" };
+        String[] travelModes = params.getTransportations();
         String[] transitModes = { "BUS", "SUBWAY", "TRAIN", "TRAM", "RAIL" };
         ArrayList<String> placeId = new ArrayList<String>();
         String str = "";
 
-        str += "place_id:" + places.get(0).getId();
-        placeId.add(places.get(0).getId());
-        for (int i = 1; i < places.size(); i++) {
-            str += "|place_id:" + places.get(i).getId();
-            placeId.add(places.get(i).getId());
+        /*str += "place_id:" + params.getLocats().get(0).getId();
+        placeId.add(params.getLocats().get(0).getId());
+        for (int i = 1; i < params.getLocats().size(); i++) {
+            str += "|place_id:" + params.getLocats().get(i).getId();
+            placeId.add(params.getLocats().get(i).getId());
+        }*/
+
+        str += "place_id:" + params.getStartPoint().getId();
+        placeId.add(params.getStartPoint().getId());
+        for (int i = 0; i < params.getLocats().size(); i++) {
+            str += "|place_id:" + params.getLocats().get(i).getId();
+            placeId.add(params.getLocats().get(i).getId());
         }
+        str += "|place_id:" + params.getEndPoint().getId();
+        placeId.add(params.getEndPoint().getId());
 
         HashMap<String, String> queryContent = new HashMap<>();
         String query = new String();
@@ -80,6 +92,7 @@ class RouteGeneratorController {
         ArrayList<Node> test = new ArrayList<Node>();
 
         test = reader.readNodesToArray(placeId);
+        //test = reader.readNodesToArray(params.getLocats());
         logger.info("Successfully read nodes from json file to array");
         for (Map.Entry<String, String> mode : queryContent.entrySet()) {
             reader.readEdgesArray(test, mode.getValue(), mode.getKey());
@@ -124,19 +137,19 @@ class RouteGeneratorController {
         LinkedList<PlaceOnRoute> routes = new LinkedList<PlaceOnRoute>();
         int count = 0;
         for (Node p : minWay) {
-            for (Place pl : places) {
-                if (p.getId() == pl.getId()) {
+           // for (Place pl : places) {
+               // if (p.getId() == pl.getId()) {
                     count++;
                     if(!p.getEdges().isEmpty())
                     {
-                        //routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,count,p.getEdges().get(0).getDuration(),Transports.valueOf(p.getEdges().get(0).getTravelMode())));
+                        routes.add(new PlaceOnRoute(0,p.getId(),null,count,p.getEdges().get(0).getDuration(),Transports.valueOf(p.getEdges().get(0).getTravelMode())));
                     }
                     else
                     {
-                        //routes.add(new PlaceOnRoute(0,new Place(p.getId(), pl.getLat(), pl.getLng(), null),null,0,0L,null));
+                        routes.add(new PlaceOnRoute(0,p.getId(),null,0,0L,null));
                     }
-                }
-            }
+               // }
+            //}
         }
 
         return routes;

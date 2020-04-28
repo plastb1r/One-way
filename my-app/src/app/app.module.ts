@@ -15,6 +15,8 @@ import { UserService } from 'src/app/services/user.service';
 import { FooService } from 'src/app/services/foo.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { ParametersService } from 'src/app/services/parameters.service';
+import {MapRoutePageComponent} from './mapRoutePage/app.mapRoutePageComponent';
 import {
     GoogleApiModule,
     GoogleApiService,
@@ -47,6 +49,7 @@ import {RouterModule} from '@angular/router';
 import { PlacesService } from './services/places.service';
 import { RoutesService } from './services/routes.service';
 import { PlaceOnRouteService } from './services/placesOnRoute.service';
+import {RouteOnMapComponent} from './routeOnMap/app.routeOnMapComponent';
 
 let gapiClientConfig: NgGapiClientConfig = {
     client_id: "951523443973-82b3n43cgkbntlrv9gcucinukkl5n36a.apps.googleusercontent.com",
@@ -79,7 +82,9 @@ let gapiClientConfig: NgGapiClientConfig = {
     WayParamsPageComponent,
     LogInPageComponent,
     SignUpPageComponent,
-    BoardUserComponent
+    BoardUserComponent,
+    RouteOnMapComponent,
+    MapRoutePageComponent
   ],
   imports: [
     BrowserModule,
@@ -105,7 +110,7 @@ let gapiClientConfig: NgGapiClientConfig = {
       libraries: ['places']
     })
   ],
-  providers: [DataService, HttpService, UserService, FooService, authInterceptorProviders, PlacesService, RoutesService, PlaceOnRouteService],
+  providers: [DataService, HttpService, UserService, FooService,ParametersService, authInterceptorProviders, PlacesService, RoutesService, PlaceOnRouteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

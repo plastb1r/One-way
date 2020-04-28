@@ -99,26 +99,30 @@
       <div class="listing hover-effect">
         <div class="d-sm-flex align-items-sm-center listing__wrapper">
           <div class="listing__thumbnail">
-            <a href="">
+            <a>
               <img src="{{lm.photos[0]}}">
-              <a *ngIf="favorites[i]; then redHeart else whiteHeart"> </a>
-                    <ng-template #redHeart>
-                      <span class="favorite c-white" (click)="addToFavP(i)">
-                        <i class="fa fa-heart"></i>
-                      </span>
-                    </ng-template>
-                    <ng-template #whiteHeart>
-                      <span class="favorite c-white" (click)="addToFavP(i)">
-                        <i class="fa fa-heart-o"></i>
-                      </span>
-                    </ng-template>
-            </a>
+              <a *ngIf="locations[i].choose; then redHeart else whiteHeart"> </a>
+              <ng-template #redHeart>
+                <span class="favorite c-white" (click)="deleteFromFavP(locations[i], i)" >
+                  <i class="fa fa-heart"></i>
+                </span>
+              </ng-template>
+              <ng-template #whiteHeart>
+                <span class="favorite c-white" (click)="addToFavP(i)">
+                  <i class="fa fa-heart-o"></i>
+                </span>
+              </ng-template>
+        </a>
           </div><!-- .listing__thumbnail -->
           <div class="d-flex justify-content-between align-items-center listing__detail">
             <div class="listing__detail-left">
               <h3 class="listing__title">
                 <a href="">{{lm.name}}</a>
               </h3>
+              <a>
+                <span *ngIf="locations[i].addedToWay" class="favoriteLabel c-secondary">Добавлена к маршруту
+                </span>
+              </a>
               <p class="listing__review c-dusty-gray">
                 <span class="stars-outer" data-rating="5"> {{lm.rating}}
                   <span class="stars-inner"></span>
@@ -131,13 +135,16 @@
               </p>
             </div>
 
-            <div class="listing__detail-right">
-              <button class="action remove" (click)="addToWay(lm.index)" type="submit">
-              Добавить к маршруту
-              </button>
-              <button class="action remove" type="submit" (click)="sendPlaceId(i)" routerLink="/landmarkPage">
-              Подробнее
-              </button>
+             <div class="listing__detail-right">
+              <button class="button button--primary  button--larges button--pill b" type="submit" (click)="sendPlaceId(i)" routerLink="/landmarkPage">Подробнее</button>
+              <div *ngIf="locations[i].addedToWay; then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock>
+                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="deleteFromWay(i)">Удалить из маршрута</button>
+                </ng-template>
+                <ng-template #elseBlock>
+                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(i)">Добавить к маршруту</button>
+                </ng-template>
+              
             </div>
           </div><!-- .listing__detail -->
         </div><!-- .listing__wrapper -->
@@ -159,7 +166,7 @@
     </ul>
    </div>
   </div><!-- .pricing-table -->
-  <form class="main-search " #paramsForm="ngForm"  (ngSubmit)="setParams(paramsForm)">
+  <form class="main-search " #paramsForm="ngForm" >
   <div class="pricing-table bg-white ">
    <div class="pricing-table__body">
      <ul class="pricing-table__features min-list">
@@ -181,7 +188,7 @@
            </div><!-- .main-search__group -->
 
            <div class="main-search__group main-search__group--tertiary">
-             <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">
+             <button type="submit" class="button button--medium button--pill button--primary" routerLink="/mapRoutePage" (click)="setParams(paramsForm)">
                <i class="fa fa-search"></i> Построить маршрут
              </button>
            </div>
@@ -261,12 +268,12 @@
         </div>
       </li>
       <li>
-     <div class="form-group">
-       <label for="car-rental" class="icheck_label">
-         <input type="checkbox" name="car-rental" id="car-rental">
-         Велосипедный
-       </label>
-     </div>
+        <div class="form-group">
+          <label for="BICYCLING" class="icheck_label">
+            <input type="checkbox" name="BICYCLING" id="BICYCLING" required [(ngModel)]="BICYCLING">
+            На велосипеде
+          </label>
+        </div>
    </li>
 
    <li>

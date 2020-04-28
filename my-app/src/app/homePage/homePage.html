@@ -12,7 +12,7 @@
             <input type="text" name="name" id="main-search-name"  (keydown.enter)="$event.preventDefault()" class="form-input form-input--pill form-input--border-c-gallery"  placeholder="Москва" autocorrect="off" autocapitalize="off" spellcheck="off" #search>
           </div><!-- .main-search__group -->
           <div class="main-search__group main-search__group--tertiary">
-            <button type="submit" class="button button--medium button--pill button--primary" (click)="_newLocation(-1)" routerLink="/popularLandmarksPage">
+            <button type="submit" class="button button--medium button--pill button--primary" (click)="_newLocation(-1)" routerLink="/wayParamsPage">
               <i class="fa fa-search"></i> Найти
             </button>
           </div>
@@ -27,7 +27,7 @@
   <div class="container-fluid p-0">
     <div class="row no-gutters">
       <div class="col-lg-4 col-sm-6">
-        <a class="portfolio-box" (click)="_newLocation(0)" routerLink="/popularLandmarksPage">
+        <a class="portfolio-box" (click)="_newLocation(0)" routerLink="/wayParamsPage">
           <img class="img-fluid" src="/assets/img/Berlin.jpg" alt="">
           <div class="portfolio-box-caption">
             <div class="project-category text-white-50">
@@ -40,7 +40,7 @@
         </a>
       </div>
       <div class="col-lg-4 col-sm-6">
-        <a class="portfolio-box" (click)="_newLocation(1)" routerLink="/popularLandmarksPage">
+        <a class="portfolio-box" (click)="_newLocation(1)" routerLink="/wayParamsPage">
           <img class="img-fluid" src="/assets/img/Budapesht.jpg" alt="">
           <div class="portfolio-box-caption">
             <div class="project-category text-white-50">
@@ -53,7 +53,7 @@
         </a>
       </div>
       <div class="col-lg-4 col-sm-6">
-        <a class="portfolio-box" (click)="_newLocation(2)" routerLink="/popularLandmarksPage">
+        <a class="portfolio-box" (click)="_newLocation(2)" routerLink="/wayParamsPage">
           <img class="img-fluid" src="/assets/img/London.jpg" alt="">
           <div class="portfolio-box-caption">
             <div class="project-category text-white-50">
@@ -66,7 +66,7 @@
         </a>
       </div>
       <div class="col-lg-4 col-sm-6">
-        <a class="portfolio-box" (click)="_newLocation(3)" routerLink="/popularLandmarksPage">
+        <a class="portfolio-box" (click)="_newLocation(3)" routerLink="/wayParamsPage">
           <img class="img-fluid" src="/assets/img/Saint-P.jpg" alt="">
           <div class="portfolio-box-caption">
             <div class="project-category text-white-50">
@@ -79,7 +79,7 @@
         </a>
       </div>
       <div class="col-lg-4 col-sm-6">
-        <a class="portfolio-box" (click)="_newLocation(4)" routerLink="/popularLandmarksPage">
+        <a class="portfolio-box" (click)="_newLocation(4)" routerLink="/wayParamsPage">
           <img class="img-fluid" src="/assets/img/Moscow.jpg" alt="">
           <div class="portfolio-box-caption">
             <div class="project-category text-white-50">
@@ -92,7 +92,7 @@
           </a>
       </div>
       <div class="col-lg-4 col-sm-6">
-          <a class="portfolio-box" (click)="_newLocation(5)" routerLink="/popularLandmarksPage">
+          <a class="portfolio-box" (click)="_newLocation(5)" routerLink="/wayParamsPage">
           <img class="img-fluid" src="/assets/img/Paris.jpg" alt="">
           <div class="portfolio-box-caption p-3">
             <div class="project-category text-white-50">

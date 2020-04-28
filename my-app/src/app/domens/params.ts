@@ -3,9 +3,10 @@ export class Parameters {
     constructor(
       public startPoint: Location,
       public endPoint: Location,
-      public freeHours: number,
-      public typesOfWay: Array<string>,
-      public typesOfTransport: Array<string>,
-      public placesToVisit: number
+      public locats:Array<Location>,
+      public transportations?: Array<string>,
+      public freeHours?: number,
+      public typesOfWay?: Array<string>,
+      public placesToVisit?: number
     ) {}
   }

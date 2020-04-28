@@ -11,6 +11,9 @@ import {NgForm} from '@angular/forms';
 import { PopularLandmarksPageComponent } from '../popularLandmarksPage/app.popularLandmarksPageComponent';
 import { PlaceDetails } from '../domens/placeDetails';
 import { PlacesService } from '../services/places.service';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { ParametersService } from '../services/parameters.service';
+import { PlaceOnRoute } from '../domens/placeOnRoute';
 
 @Component({
   templateUrl: './wayParamsPage.html',
@@ -29,6 +32,9 @@ export class WayParamsPageComponent implements OnInit{
 
     @ViewChild('endPoint', {static: true})
     public searchElementRefEnd: ElementRef;
+
+    wayPlaces:Array<Location> = new Array<Location>();
+
     /*locations: Array<Location> = new Array<Location>();
     locations1: Array<Location> = new Array<Location>();
     test;
@@ -70,21 +76,30 @@ export class WayParamsPageComponent implements OnInit{
     visibility: boolean = false;
     startPoint: Location;
     endPoint: Location;
+    parameters: Parameters;
   
     constructor(
       private mapsAPILoader: MapsAPILoader,
       private mapsAPILoader2: MapsAPILoader,
       private placeService: PlacesService,
       private ngZone: NgZone,
+      private parametersService: ParametersService
     )
     {}
   
     ngOnInit() {
-      //this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
+      this.setAutocompliteToStartPoint();
+      this.setAutocompliteToEndPoint();
+
       this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
       this.cityName = sessionStorage.getItem('cityAddress');
       this.placeService.getAll().subscribe(data =>  this.places=data);
       this.loadPlaces();
+      if(sessionStorage.getItem("LocatsToWay")){
+        this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      }
+      console.log("Way" + JSON.stringify(this.wayPlaces));
+
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
       });
       autocomplete.addListener("place_changed", () => {
@@ -149,24 +164,32 @@ export class WayParamsPageComponent implements OnInit{
           });
   
           for (var i = 1; i < results.length ; i++) {
+            var choose = false;
+            var addedToWay = false;
             if(results[i].photos){
-              this.places.forEach(pl => {
-                if(pl.placeId == results[i].place_id)
+              CancelLoop: for(var j = 0; j<this.places.length; j++){
+
+                if(results[i].place_id == this.places[j].placeId )
                 {
-                  this.favorites.push(true);
+                  choose = true;
+                  break CancelLoop;
                 }
-                else{ this.favorites.push(false)}
-              });
+              }
   
-              
+              CancelLoop2: for(var j = 0; j<this.wayPlaces.length; j++){
+                if(results[i].place_id == this.wayPlaces[j].placeId )
+                {
+                  addedToWay = true;
+                  break CancelLoop2;
+                }
+              }
+              this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: choose, addedToWay: addedToWay});
               this.placeDetails.push({name: results[i].name, address: results[i].vicinity,photos: [results[i].photos[0].getUrl()],
                 types: results[i].types, rating: results[i].rating});
-              this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id });
+                  
             }
           }
-        console.log("details" + this.placeDetails);
-        console.log("locations" + this.locations);
-        console.log("favs" + this.favorites);
+
       }
     }
   
@@ -206,11 +229,6 @@ export class WayParamsPageComponent implements OnInit{
       if(index == 6){
         this.types = ['park','tourist_attraction','aquarium'];
       }
-    }
-  
-    addToFavP(index){
-      var loc = {lat: this.locations[index].lat, lng: this.locations[index].lng, placeId: this.locations[index].placeId};
-      this.placeService.addPlace(loc).subscribe(data =>console.log(data));
     }
   
     toggle(){
@@ -253,6 +271,112 @@ export class WayParamsPageComponent implements OnInit{
        });
        
     }
+
+    addToFavP(index){
+      var loc = {lat: this.locations[index].lat, lng: this.locations[index].lng, placeId: this.locations[index].placeId};
+      this.placeService.addPlace(loc).subscribe(data =>console.log(data));
+      this.locations[index].choose = true;
+      sessionStorage.removeItem('locatsToShowOnMap');
+      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+    }
+  
+    deleteFromFavP(loc: Location, ind){
+      var i;
+      this.places.forEach(p => {
+        if(p.placeId == loc.placeId)
+          i = this.places.indexOf(p);
+      });
+  
+      this.placeService.deleteById(this.places[i].placeId).subscribe(data =>console.log(data));
+      this.places.splice(i, 1);
+      this.locations[ind].choose = false;
+  
+      sessionStorage.removeItem('locatsToShowOnMap');
+      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+      console.log("locations" + JSON.stringify(this.locations));
+    }
+
+    addToWay(i: number){
+      var locs = [];
+      if(JSON.parse(sessionStorage.getItem("LocatsToWay")) != null){
+        locs = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      }
+      locs.push(this.locations[i]);
+      sessionStorage.setItem("LocatsToWay", JSON.stringify(locs));
+      this.locations[i].addedToWay = true;
+      sessionStorage.removeItem('locatsToShowOnMap');
+      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+      console.log("Way" + sessionStorage.getItem("LocatsToWay"));
+    }
+  
+    deleteFromWay(j: number){
+      var locs = new Array<Location>();
+      locs = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      console.log(locs);
+      locs.forEach(l => 
+        {
+          if(l.placeId == this.locations[j].placeId)
+          {
+            var ind = locs.indexOf(l);
+            console.log("index" + ind);
+            locs.splice(ind, 1);
+            sessionStorage.setItem("LocatsToWay", JSON.stringify(locs));
+            console.log("Way" + sessionStorage.getItem("LocatsToWay"));
+            return 0;
+          }
+        });
+      this.locations[j].addedToWay = false;
+      sessionStorage.removeItem('locatsToShowOnMap');
+      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+      console.log("way" + locs);
+    }
+
+    setParams(form: NgForm) { 
+      
+      var freeHours = form.controls['freeHours'].value;
+      var placesToVisit =  form.controls['placesToVisit'].value;
+      var transportations = new Array<string>();
+
+      if(form.controls['WALKING'].value)
+      {
+        transportations.push("walking");
+      }
+      if(form.controls['DRIVING'].value)
+      {
+        transportations.push("driving");
+      }
+      if(form.controls['TRANSIT'].value)
+      {
+        transportations.push("transit");
+      }
+      if(form.controls['BICYCLING'].value)
+      {
+        transportations.push("bicycling");
+      }
+
+      if(transportations.length == 0){
+        transportations = ["driving", "walking", "transit", "bicycling"];
+      }
+      var locats = new Array<Location>();
+      locats = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      this.parameters = new Parameters(this.startPoint, this.endPoint,locats,transportations);
+      console.log("parameters" +  this.parameters);
+      console.log(this.startPoint);
+      console.log( this.endPoint);
+      let placesFromRoute = Array<PlaceOnRoute>();
+
+      this.parametersService.sendParams(this.parameters).subscribe( data => 
+        {
+          //console.log(data);
+          //placesFromRoute = data;
+          sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
+          window.location.replace("/mapRoutePage");
+        }
+      );
+    }
+
+    
+
 
     /*ngOnInit() {
       this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);

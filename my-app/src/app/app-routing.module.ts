@@ -12,6 +12,7 @@ import {WayParamsPageComponent} from './wayParamsPage/app.wayParamsPageComponent
 import {LogInPageComponent} from './logInPage/app.logInPageComponent';
 import {SignUpPageComponent} from 'src/app/signUpPage/app.signUpPageComponent';
 import { BoardUserComponent } from './board-user/board-user.component';
+import {MapRoutePageComponent} from './mapRoutePage/app.mapRoutePageComponent';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'landmarkPage',
     component: LandmarkPageComponent
+  },
+  {
+    path: 'mapRoutePage',
+    component: MapRoutePageComponent
   },
   {
     path: 'popularLandmarksPage',
