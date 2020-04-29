@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +63,7 @@ public class UserController {
     @Autowired
     private PlaceOnRouteRepository placeOnRouteRepository;
     @Autowired
-    private CityRepository cityRepository;
+	private CityRepository cityRepository;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -182,23 +183,22 @@ public class UserController {
 		newRoute.setId(route.getId());
 		newRoute.setName(route.getName());
 		newRoute.setTimeToGo(route.getTimeToGo());
-
         City city = cityRepository.saveAndFlush(route.getCity());
         newRoute.setCity(city);
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
 		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
 		User user = userRepository.findById(us.getId()).get();	
-        newRoute.setOwner(user);
+		newRoute.setOwner(user);
 
-        Route savedRoute = routeRepository.saveAndFlush(newRoute);
-
+		Route savedRoute = routeRepository.saveAndFlush(newRoute);
+		List<PlaceOnRoute> pl = new ArrayList<>();
         route.getPlaces().forEach(placeOnRoute -> {
-            //Place place = placeRepository.saveAndFlush(placeOnRoute.getPlace());
-            placeOnRoute.setRoute(newRoute);
-            //placeOnRoute.setPlace(place);
-            placeOnRouteRepository.saveAndFlush(placeOnRoute);
-        });
+			placeOnRoute.setRoute(newRoute);
+			PlaceOnRoute place = placeOnRouteRepository.saveAndFlush(placeOnRoute);
+			pl.add(place);
+		});
+
+		savedRoute.setPlaces(pl);
         return savedRoute;
     }
 

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, NgZone,ElementRef, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, NgZone,ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import { MapsAPILoader, MouseEvent, AgmMap } from '@agm/core';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { Location } from 'src/app/domens/location';
@@ -13,6 +13,10 @@ import { Direction } from 'src/app/domens/direction';
 import { stringify } from 'querystring';
 import { PlaceDetails } from '../domens/placeDetails';
 import { PlaceOnRoute } from '../domens/placeOnRoute';
+import { THIS_EXPR, IfStmt } from '@angular/compiler/src/output/output_ast';
+import { NgForm } from '@angular/forms';
+import { RoutesService } from '../services/routes.service';
+import { City } from '../domens/city';
 
 
 @Component({
@@ -46,6 +50,7 @@ export class RouteOnMapComponent implements OnInit{
   mapElement: ElementRef;
 
   map: any;
+  routeCity;
   ind=-1;
   places:Array<Location> = new Array<Location>();
   details: Array<PlaceDetails> = new Array<PlaceDetails>();
@@ -63,122 +68,102 @@ export class RouteOnMapComponent implements OnInit{
      private mapsAPILoader: MapsAPILoader,
      private ngZone: NgZone,
      private data: DataService,
-     private httpService: HttpService
+     private httpService: HttpService,
+     private routeService: RoutesService
    ) { }
 
    ngOnInit() {
     //load Places Autocomplete
-    //this.details = JSON.parse(sessionStorage.getItem('detailsToShowOnMap'));
-    this.placesOnRoute = JSON.parse(sessionStorage.getItem("placesFromRoute"));
-    //this.loadWay(this.setDirections);
     this.cityLoc = JSON.parse(sessionStorage.getItem("cityAddressLocat"));
-    this.load(this.loadWay(this.setDirections));
-    }
-
-    load=(callback) =>
-    {
-      callback();
+    this.placesOnRoute = JSON.parse(sessionStorage.getItem("placesFromRoute"));
+    console.log("places from algorythm" + sessionStorage.getItem("placesFromRoute"));
+    this.placesOnRoute.forEach(p => {
+      console.log("p" + p.place);
+      this.loadPlaces(p.place);
+      this.timeToNext.push((Math.round(p.timeToNext/60)));
+      console.log("p" + this.timeToNext);
+      this.travelModes.push(p.transportToNext);
+      console.log("p" + this.travelModes);
+    })
+   
+    console.log(this.cityLoc);
     }
 
     sendPlaceId(index){
         sessionStorage.removeItem('landmark');
-        sessionStorage.setItem("landmark", this.locations[index].placeId);
+        sessionStorage.setItem("landmark", this.places[index].placeId);
     }
 
-    loadWay = (callback)=>{
-
-        for(var i = 0; i < this.placesOnRoute.length;i++ )
+    setDirections(){
+      console.log("this.places" + this.places);
+      for(var i = 0; i < this.travelModes.length-1; i++){
+        if(this.travelModes[i] == "walking")
         {
-            console.log("p" + this.placesOnRoute[i].place);
-            this.loadPlaces(this.placesOnRoute[i].place);
-            this.timeToNext.push((Math.round(this.placesOnRoute[i].timeToNext/60)));
-            this.travelModes.push(this.placesOnRoute[i].transportToNext);
+            var dir = {
+            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
+            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+            travelMode: google.maps.TravelMode.WALKING
+            }
+            this.dirWalk.push(dir);
+        }
+  
+        if(this.travelModes[i] == "transit")
+        {
+          var dir = {
+            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
+            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+            travelMode: google.maps.TravelMode.WALKING
+            }
+            this.dirTrans.push(dir);
+        }
+        if(this.travelModes[i] == "driving")
+        {
+          var dir =  {
+            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
+            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+            travelMode: google.maps.TravelMode.DRIVING
+            }
+            this.dirCar.push(dir);
+        }
+        if(this.travelModes[i] == "bicycling")
+        {
+          var dir = {
+            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
+            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+            travelMode: google.maps.TravelMode.BICYCLING
+            }
+            this.dirBic.push(dir);
         }
 
-        console.log(this.travelModes);
-        this.setTravelModes();
-
-        callback();
-        console.log("callback");
-        /*this.placesOnRoute.forEach(p => {
-            console.log("p" + p.place);
-            this.loadPlaces(p.place);
-            this.timeToNext.push(p.timeToNext);
-            this.transportToNext.push(p.transportToNext);
-          }
-        );*/
+        //console.log("cfgh"+this.dirBic);
+        //console.log(this.dirTrans);
+      }
+    }
+    
+    setTravelModes(){
+      this.travelModes.forEach(tm => {
+        if(tm == "walking")
+        {
+          this.travelModesIcons.push(this.icons[3]);
+          this.travelModesStr.push("Пешком")
         }
-      
-        setDirections(){
-          console.log("this.places" + this.places);
-          for(var i = 0; i < this.travelModes.length-1; i++){
-            if(this.travelModesStr[i] == "walking")
-            {
-                var dir = {
-                origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-                destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
-                travelMode: google.maps.TravelMode.WALKING
-                }
-                this.dirWalk.push(dir);
-            }
-      
-            if(this.travelModesStr[i] == "transit")
-            {
-              var dir = {
-                origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-                destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
-                travelMode: google.maps.TravelMode.WALKING
-                }
-                this.dirTrans.push(dir);
-            }
-            if(this.travelModesStr[i] == "driving")
-            {
-              var dir =  {
-                origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-                destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
-                travelMode: google.maps.TravelMode.DRIVING
-                }
-                this.dirCar.push(dir);
-            }
-            if(this.travelModesStr[i] == "bicycling")
-            {
-              var dir = {
-                origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-                destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
-                travelMode: google.maps.TravelMode.BICYCLING
-                }
-                this.dirBic.push(dir);
-            }
-
-            console.log("cfgh"+this.dirBic);
-            console.log(this.dirTrans);
-          }
+        if(tm == "transit")
+        {
+          this.travelModesIcons.push(this.icons[1]);
+          this.travelModesStr.push("Транзит")
         }
-        
-        setTravelModes(){
-          this.travelModes.forEach(tm => {
-            if(tm == "walking")
-            {
-              this.travelModesIcons.push(this.icons[3]);
-              this.travelModesStr.push("Пешком")
-            }
-            if(tm == "transit")
-            {
-              this.travelModesIcons.push(this.icons[1]);
-              this.travelModesStr.push("Транзит")
-            }
-            if(tm == "driving")
-            {
-              this.travelModesIcons.push(this.icons[0]);
-              this.travelModesStr.push("На машине")
-            }
-            if(tm == "bicycling")
-            {
-              this.travelModesIcons.push(this.icons[2]);
-              this.travelModesStr.push("На велосипеде")
-            }
-          })
+        if(tm == "driving")
+        {
+          this.travelModesIcons.push(this.icons[0]);
+          this.travelModesStr.push("На машине")
         }
+        if(tm == "bicycling")
+        {
+          this.travelModesIcons.push(this.icons[2]);
+          this.travelModesStr.push("На велосипеде")
+        }
+      })
+    }
 
     loadPlaces(placeId){
       this.mapsAPILoader.load().then(() => {
@@ -194,7 +179,7 @@ export class RouteOnMapComponent implements OnInit{
   
           var request = {
           placeId: placeId,
-          fields: ['name', 'formatted_address',  'photos', "place_id", "geometry"]
+          fields: ['name', 'formatted_address',  'photos', "place_id", "geometry", "address_components"]
           };
   
           service.getDetails(request, (place, status) => {
@@ -206,13 +191,21 @@ export class RouteOnMapComponent implements OnInit{
       });
   
     }
-
+  
     getPlaces(results, status) {
       var photo = [];
       photo.push(results.photos[0].getUrl());
       this.details.push({name: results.name, address: results.formatted_address, photos: photo});
+      //this.routeCity = results.address_components[3].long_name;
+      //console.log(results.address_components);
+      //console.log(this.routeCity);
       this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
+      if (this.places.length == this.placesOnRoute.length){
+        this.setTravelModes();
+        this.setDirections();
+      }
       console.log(this.ind + "   " + results.place_id);
+
       this.label.push(this.markersLabels[this.ind+=1]);
     }
 
@@ -221,12 +214,19 @@ export class RouteOnMapComponent implements OnInit{
         this.visibility[index] = !this.visibility[index];
     }
 
+    saveWay(form: NgForm){
+      let name = form.controls['name'].value;
+      console.log(this.placesOnRoute);
+      let way: Way = new Way(name, this.placesOnRoute[this.placesOnRoute.length -1].timeToNext, 
+        this.placesOnRoute, new City(sessionStorage.getItem("cityAddress")));
+      this.routeService.addWay(way).subscribe(data => console.log(data));
+    }
+
     public markerClicked(infowindow) {
-        if (this.previous) {
-            this.previous.close();
-        }
-        this.previous = infowindow;
-    
+      if (this.previous) {
+          this.previous.close();
+      }
+      this.previous = infowindow;
     }
     
     public _toggleOpened(): void {

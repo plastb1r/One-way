@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.function.ToLongFunction;
 
 import com.example.saving_routes.algorithm.Edge;
 import com.example.saving_routes.algorithm.Graph;
@@ -146,13 +147,21 @@ class RouteGeneratorController {
                     }
                     else
                     {
-                        routes.add(new PlaceOnRoute(0,p.getId(),null,0,0L,null));
+                        routes.add(new PlaceOnRoute(0,p.getId(),null,count,countTime(routes),null));
                     }
                // }
             //}
         }
 
         return routes;
+    }
+
+    public Long countTime(LinkedList<PlaceOnRoute> routes){
+        Long time = Long.valueOf(0);;
+        for (PlaceOnRoute p : routes) {
+            time += p.getTimeToNext();
+        }
+        return time;
     }
 
     @GetMapping(path = "/find")

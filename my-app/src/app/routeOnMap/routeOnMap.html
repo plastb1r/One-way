@@ -37,12 +37,7 @@
                             {{travelModesStr[i]}}
                           </li>
                           <ul class="min-list listing-contact-list">
-                              <a href="#">
-                                <i class="fa fa-heart c-silver-charlice"></i>
-                                Сохранить
-                              </a>
-     
-                              <a  routerLink="/landmarkPage">
+                              <a  (click)="sendPlaceId(i)" routerLink="/landmarkPage">
                                 <i class="fa fa-share-alt c-silver-charlice"></i>
                                 Подробнее
                               </a>
@@ -52,6 +47,13 @@
                     </div><!-- .accordion__content -->
               </div><!-- .listing-section -->
           </div>
+          <form class="main-search " #wayName="ngForm" >
+            <div class="main-search__group main-search__group--primary">
+              <label for="name" class="c-primary">Задайте имя маршруту</label>
+              <input type="text" name="name" id="name" class="form-input form-input--pill form-input--border-c-gallery" required [(ngModel)]="name" placeholder="Мой путь"  autocorrect="off" autocapitalize="off"  spellcheck="off">
+            </div><!-- .main-search__group -->
+            <button class="button button--primary  button--larges button--pill b" type="submit" (click)="saveWay(wayName)">Сохранить маршрут</button>
+          </form>
           </div>
         </ng-sidebar>
   
@@ -61,8 +63,8 @@
   </div>
 
   <agm-map
-    [latitude]="cityLoc.lat"
-    [longitude]="cityLoc.lng"
+    [latitude]="cityLoc[0].lat"
+    [longitude]="cityLoc[0].lng"
     [zoom]="15"
     [disableDoubleClickZoom]="true"
 >
@@ -70,7 +72,7 @@
     *ngFor="let location of places, let i = index"
     [latitude]="location.lat"
     [longitude]="location.lng"
-    (markerClick)="markerClicked(window,i)"
+    (markerClick)="markerClicked(window)"
     [label]="label[i]"
     >
     

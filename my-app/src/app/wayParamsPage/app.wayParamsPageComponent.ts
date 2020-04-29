@@ -99,28 +99,30 @@ export class WayParamsPageComponent implements OnInit{
         this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
       }
       console.log("Way" + JSON.stringify(this.wayPlaces));
-
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-      });
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
-            if (place.geometry === undefined || place.geometry === null) {
-              return;
-            }
-            this.locations = [];
-            this.locations= [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),placeId: place.place_id}];
-            sessionStorage.removeItem('locatsToShowOnMap');
-            sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
-            sessionStorage.removeItem('detailsToShowOnMap');
-            this.placeDetails = [];
-            var photo = [];
-            photo.push(place.photos[0].getUrl({maxWidth: 400}));
-            this.placeDetails.push({name: place.name, address: place.formatted_address, photos: photo,
-            types: place.types});
-            sessionStorage.setItem('detailsToShowOnMap', JSON.stringify(this.placeDetails));
-          });
-      });
+      let that = this;
+      this.mapsAPILoader.load().then(() => {
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        });
+        autocomplete.addListener("place_changed", () => {
+          this.ngZone.run(() => {
+            let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
+              if (place.geometry === undefined || place.geometry === null) {
+                return;
+              }
+              this.locations = [];
+              this.locations= [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),placeId: place.place_id}];
+              sessionStorage.removeItem('locatsToShowOnMap');
+              sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+              sessionStorage.removeItem('detailsToShowOnMap');
+              this.placeDetails = [];
+              var photo = [];
+              photo.push(place.photos[0].getUrl({maxWidth: 400}));
+              this.placeDetails.push({name: place.name, address: place.formatted_address, photos: photo,
+              types: place.types});
+              sessionStorage.setItem('detailsToShowOnMap', JSON.stringify(this.placeDetails));
+            });
+        });
+      })
     }
   
     loadPlaces(){
@@ -355,7 +357,7 @@ export class WayParamsPageComponent implements OnInit{
       }
 
       if(transportations.length == 0){
-        transportations = ["driving", "walking", "transit", "bicycling"];
+        transportations = ["walking"];
       }
       var locats = new Array<Location>();
       locats = JSON.parse(sessionStorage.getItem("LocatsToWay"));
@@ -367,9 +369,8 @@ export class WayParamsPageComponent implements OnInit{
 
       this.parametersService.sendParams(this.parameters).subscribe( data => 
         {
-          //console.log(data);
-          //placesFromRoute = data;
           sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
+          console.log("params" + sessionStorage.getItem("placesFromRoute"));
           window.location.replace("/mapRoutePage");
         }
       );

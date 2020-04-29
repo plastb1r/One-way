@@ -182,17 +182,11 @@
              <input type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Парк Победы"  autocorrect="off" autocapitalize="off"  spellcheck="off" #endPoint>
            </div><!-- .main-search__group -->
 
-           <div class="main-search__group">
-             <label for="freeHours" class="c-primary">Количество свободного времени</label>
-             <input type="text" name="freeHours" id="freeHours" class="form-input form-input--pill form-input--border-c-gallery"  required [(ngModel)]="freeHours" placeholder="2 часа">
-           </div><!-- .main-search__group -->
-
            <div class="main-search__group main-search__group--tertiary">
              <button type="submit" class="button button--medium button--pill button--primary" routerLink="/mapRoutePage" (click)="setParams(paramsForm)">
                <i class="fa fa-search"></i> Построить маршрут
              </button>
            </div>
-
       </div><!-- .main-search-container -->
      </ul>
    </div>
@@ -205,6 +199,11 @@
            <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
            <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
          </div><!-- .main-search__group -->
+
+         <div class="main-search__group">
+          <label for="freeHours" class="c-primary">Количество свободного времени</label>
+          <input type="text" name="freeHours" id="freeHours" class="form-input form-input--pill form-input--border-c-gallery"  required [(ngModel)]="freeHours" placeholder="2 часа">
+        </div><!-- .main-search__group -->
 
          <ul class="pricing-table__features min-list">
              <div class="main-search__group main-search__group--primary">
@@ -294,14 +293,6 @@
      </div>
    </li>
 
-   <li>
-     <div class="form-group">
-       <label for="wireless-internet" class="icheck_label">
-         <input type="checkbox" name="wireless-internet" id="wireless-internet">
-         На метро
-       </label>
-     </div>
-   </li>
 </ul>
  <div class="main-search__group">
    <label for="main-search-number-of-pl" class="c-primary bold">Количество мест для посещения</label>

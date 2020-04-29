@@ -28,7 +28,7 @@ export class WayPageComponent{
   travelModesIcons: Array<string> = new  Array<string>();
   icons = ["fa fa-car listing-contact__icon", "fa fa-bus listing-contact__icon", "fa fa-bicycle listing-contact__icon", "fa fa-male listing-contact__icon"];
   way: Way;
-  label: string = '';
+  label:Array<string> = new Array<string>();
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private placeService: PlacesService
@@ -41,6 +41,7 @@ export class WayPageComponent{
       this.loadPlaces(p.place);
       this.timeToNext.push(p.timeToNext);
       this.transportToNext.push(p.transportToNext);
+      this.label.push('');
     }
     );
     this.setLastPlacesInArrays();
@@ -52,7 +53,8 @@ export class WayPageComponent{
     this.timeToNext.push(this.way.timeToGo);
     this.transportToNext.splice(this.transportToNext.length-1,1);
     this.transportToNext.push("Маршрут окончен");
-    this.label = 'Весь маршрут занял ';
+    this.label.splice(this.label.length-1,1);
+    this.label.push('Весь маршрут занял ');
   }
 
   sendPlaceId(index){
