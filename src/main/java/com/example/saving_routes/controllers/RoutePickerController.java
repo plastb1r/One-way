@@ -2,6 +2,7 @@ package com.example.saving_routes.controllers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -21,15 +22,17 @@ import com.example.saving_routes.repositories.RouteRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -64,6 +67,7 @@ class RouteGeneratorController {
         }
         str += "|place_id:" + params.getEndPoint().getId();
         placeId.add(params.getEndPoint().getId());
+    
 
         HashMap<String, String> queryContent = new HashMap<>();
         String query = new String();
@@ -76,9 +80,17 @@ class RouteGeneratorController {
                 HttpURLConnection connection = (HttpURLConnection) new URL(query).openConnection();
                 final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
+                try {
+                    for (String line = null; (line = in.readLine()) != null;) {
+                        content.append(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
+                /*while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }*/
                 queryContent.put(travelMode, content.toString());
                 logger.info("Data from GoogleAPI was received");
 

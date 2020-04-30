@@ -16,12 +16,6 @@
 
               <ul class="min-list inline-list listing-filter listing-filter--list">
                 <li>
-                  <a href="#">
-                    <i class="fa fa-star-o"></i>
-                    По рейтингу
-                  </a>
-                </li>
-                <li>
                   <a (click)="sendPopularLocations()" routerLink="/mapPage">
                     <i class="fa fa-location"></i>
                     Посмотреть на карте
@@ -41,7 +35,7 @@
             <li>
               <div class="form-group">
                 <label for="accommodation" class="icheck_label">
-                  <input type="checkbox" (click)="setIndex(0)" name="accommodation" id="accommodation">
+                  <input type="radio" (click)="setIndex(0);loadPlaces()" name="accommodation" id="accommodation">
                   Гастрономический гид
                 </label>
               </div>
@@ -49,7 +43,7 @@
             <li>
               <div class="form-group">
                 <label for="apartments" class="icheck_label">
-                  <input type="checkbox" (click)="setIndex(1)" name="apartments" id="apartments">
+                  <input type="radio" (click)="setIndex(1);loadPlaces()" name="apartments" id="apartments">
                   Отели
                 </label>
               </div>
@@ -58,7 +52,7 @@
             <li>
               <div class="form-group">
                 <label for="car-rental" class="icheck_label">
-                  <input type="checkbox" (click)="setIndex(2)" name="car-rental" id="car-rental">
+                  <input type="radio" (click)="setIndex(2);loadPlaces()" name="car-rental" id="car-rental">
                   Бары
                 </label>
               </div>
@@ -67,7 +61,7 @@
             <li>
               <div class="form-group">
                 <label for="street-parking" class="icheck_label">
-                  <input type="checkbox" (click)="setIndex(3)" name="street-parking" id="street-parking">
+                  <input type="radio" (click)="setIndex(3);loadPlaces()" name="street-parking" id="street-parking">
                   Активный отдых
                 </label>
               </div>
@@ -76,7 +70,7 @@
             <li>
               <div class="form-group">
                 <label for="smoking-allowed" class="icheck_label">
-                  <input type="checkbox" (click)="setIndex(4)" name="smoking-allowed" id="smoking-allowed">
+                  <input type="radio" (click)="setIndex(4);loadPlaces()" name="smoking-allowed" id="smoking-allowed">
                   Галереи и музеи
                 </label>
               </div>
@@ -85,13 +79,12 @@
             <li>
               <div class="form-group">
                 <label for="wireless-internet" class="icheck_label">
-                  <input type="checkbox" (click)="setIndex(5)" name="wireless-internet" id="wireless-internet">
+                  <input type="radio" (click)="setIndex(5);loadPlaces()" name="wireless-internet" id="wireless-internet">
                   Аутлеты и ТЦ
                 </label>
               </div>
             </li>
           </ul>
-          <button class="button button--primary  button--larges button--pill" type="submit" (click)="loadPlaces()" routerLink="/popularLandmarksPage">Посмотреть</button>
         </div>
   </div><!-- .row -->
 </div><!-- .container -->

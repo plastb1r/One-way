@@ -14,9 +14,8 @@
         <div class="d-lg-flex">
           <ul class="min-list inline-list listing-filter listing-filter--list">
             <li>
-              <a href="#">
-                <i class="fa fa-star-o"></i>
-                По рейтингу
+              <a (click)="clearAddedPlaces()">
+                Удалить точки из машрута
               </a>
             </li>
             <li>
@@ -25,6 +24,7 @@
                 Посмотреть на карте
               </a>
             </li>
+
           </ul><!-- .listing-filter -->
           <a (click)="toggle()" class="listing-expand">
             Больше фильтров
@@ -34,12 +34,14 @@
       </div><!-- .listing-filter-container -->
 
     </div><!-- .d-md-flex -->
+    
     <div [ngClass]="{invisible: visibility}" class="d-lg-flex justify-content-lg-between align-items-lg-center hideDiv listing-keyword--on-map ">
+
         <ul class="min-list inline-list listing-filter listing-filter--list">
           <li>
             <div class="form-group">
               <label for="accommodation" class="icheck_label">
-                <input type="checkbox" (click)="setIndex(0)" name="accommodation" id="accommodation">
+                <input type="radio" (click)="setIndex(0);loadPlaces()" name="selection" id="accommodation">
                 Гастрономический гид
               </label>
             </div>
@@ -47,7 +49,7 @@
           <li>
             <div class="form-group">
               <label for="apartments" class="icheck_label">
-                <input type="checkbox" (click)="setIndex(1)" name="apartments" id="apartments">
+                <input type="radio" (click)="setIndex(1);loadPlaces()" name="selection" id="apartments">
                 Отели
               </label>
             </div>
@@ -56,7 +58,7 @@
           <li>
             <div class="form-group">
               <label for="car-rental" class="icheck_label">
-                <input type="checkbox" (click)="setIndex(2)" name="car-rental" id="car-rental">
+                <input type="radio" (click)="setIndex(2);loadPlaces()" name="selection" id="car-rental">
                 Бары
               </label>
             </div>
@@ -65,7 +67,7 @@
           <li>
             <div class="form-group">
               <label for="street-parking" class="icheck_label">
-                <input type="checkbox" (click)="setIndex(3)" name="street-parking" id="street-parking">
+                <input type="radio" (click)="setIndex(3);loadPlaces()" name="selection" id="street-parking">
                 Активный отдых
               </label>
             </div>
@@ -74,7 +76,7 @@
           <li>
             <div class="form-group">
               <label for="smoking-allowed" class="icheck_label">
-                <input type="checkbox" (click)="setIndex(4)" name="smoking-allowed" id="smoking-allowed">
+                <input type="radio" (click)="setIndex(4);loadPlaces()" name="selection" id="smoking-allowed">
                 Галереи и музеи
               </label>
             </div>
@@ -83,13 +85,12 @@
           <li>
             <div class="form-group">
               <label for="wireless-internet" class="icheck_label">
-                <input type="checkbox" (click)="setIndex(5)" name="wireless-internet" id="wireless-internet">
+                <input type="radio" (click)="setIndex(5);loadPlaces()" name="selection" id="wireless-internet">
                 Аутлеты и ТЦ
               </label>
             </div>
           </li>
         </ul>
-        <button class="button button--primary  button--larges button--pill" type="submit"  (click)="loadPlaces()" routerLink="/wayParamsPage">Посмотреть</button>
       </div>
   </div><!-- .listing-filter-container -->
 
@@ -183,7 +184,7 @@
            </div><!-- .main-search__group -->
 
            <div class="main-search__group main-search__group--tertiary">
-             <button type="submit" class="button button--medium button--pill button--primary" routerLink="/mapRoutePage" (click)="setParams(paramsForm)">
+             <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">
                <i class="fa fa-search"></i> Построить маршрут
              </button>
            </div>

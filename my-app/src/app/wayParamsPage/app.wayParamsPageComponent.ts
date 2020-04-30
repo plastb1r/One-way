@@ -70,7 +70,7 @@ export class WayParamsPageComponent implements OnInit{
     cityName: string;
     placeDetails: Array<PlaceDetails> = new Array<PlaceDetails>();
     locations: Array<Location> = new Array<Location>();
-    types = [];
+    types = ['park','tourist_attraction','aquarium'];
     favorites: Array<boolean> = new Array<boolean>();
     places = [];
     visibility: boolean = false;
@@ -90,7 +90,6 @@ export class WayParamsPageComponent implements OnInit{
     ngOnInit() {
       this.setAutocompliteToStartPoint();
       this.setAutocompliteToEndPoint();
-
       this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
       this.cityName = sessionStorage.getItem('cityAddress');
       this.placeService.getAll().subscribe(data =>  this.places=data);
@@ -99,7 +98,6 @@ export class WayParamsPageComponent implements OnInit{
         this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
       }
       console.log("Way" + JSON.stringify(this.wayPlaces));
-      let that = this;
       this.mapsAPILoader.load().then(() => {
         let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
         });
@@ -211,7 +209,6 @@ export class WayParamsPageComponent implements OnInit{
     setIndex(index: number){
       if(index == 0){
         this.types = ['restaurant','cafe', 'bakery', 'food'];
-  
       }
       if(index == 1){
         this.types = ['lodging'];
@@ -254,6 +251,19 @@ export class WayParamsPageComponent implements OnInit{
         });
        });
        
+    }
+
+    clearAddedPlaces(){
+      var locs = new Array<Location>();
+      this.locations.forEach(l => 
+        {
+          l.addedToWay = false;
+          sessionStorage.setItem("LocatsToWay", JSON.stringify(locs));
+          return 0;
+        });
+      sessionStorage.removeItem('locatsToShowOnMap');
+      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+      console.log("way" + sessionStorage.getItem("LocatsToWay"));
     }
 
     setAutocompliteToEndPoint(){

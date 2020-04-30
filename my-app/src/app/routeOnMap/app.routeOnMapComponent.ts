@@ -194,7 +194,12 @@ export class RouteOnMapComponent implements OnInit{
   
     getPlaces(results, status) {
       var photo = [];
-      photo.push(results.photos[0].getUrl());
+      if(results.photos.length != 0){
+        photo.push(results.photos[0].getUrl());
+      }
+      else{
+        photo.push("/assets/img/place.jpeg");
+      }
       this.details.push({name: results.name, address: results.formatted_address, photos: photo});
       //this.routeCity = results.address_components[3].long_name;
       //console.log(results.address_components);
