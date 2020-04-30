@@ -2,7 +2,154 @@
 </div><!-- .listing-header-map-container -->
 <div class="d-xl-flex">
   <div #map></div>
-
+  <div class="order-xl-0 listing-column listing-column--xl-50 bg-wild-sand">
+    <div class="pricing-table bg-white head">
+     <div class="pricing-table__body ">
+      <ul class="min-list inline-list listing-tabs">
+       <li class="listing-tab">
+         <h5 class="c-black">
+           Создай свой маршрут уже сейчас!
+         </h5>
+       </li><!-- .listing-tab -->
+      </ul>
+     </div>
+    </div><!-- .pricing-table -->
+    <form class="main-search " #paramsForm="ngForm" >
+    <div class="pricing-table bg-white ">
+     <div class="pricing-table__body">
+       <ul class="pricing-table__features min-list">
+         <div class="main-search-container">
+          
+             <div class="main-search__group main-search__group--primary">
+               <label for="main-search-name" class="c-primary">Начало маршрута</label>
+               <input type="text" name="name" id="main-search-name" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь"  autocorrect="off" autocapitalize="off"  spellcheck="off" #startPoint>
+             </div><!-- .main-search__group -->
+  
+             <div class="main-search__group">
+               <label for="main-search-location" class="c-primary">Конец маршрута</label>
+               <input type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Парк Победы"  autocorrect="off" autocapitalize="off"  spellcheck="off" #endPoint>
+             </div><!-- .main-search__group -->
+  
+             <div class="main-search__group main-search__group--tertiary">
+               <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">
+                 <i class="fa fa-search"></i> Построить маршрут
+               </button>
+             </div>
+        </div><!-- .main-search-container -->
+       </ul>
+     </div>
+  </div><!-- .pricing-table -->
+  
+  <div class="pricing-table bg-white params">
+   <div class="pricing-table__body ">
+  
+           <div class="main-search__group main-search__group--primary">
+             <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
+             <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
+           </div><!-- .main-search__group -->
+  
+           <div class="main-search__group">
+            <label for="freeHours" class="c-primary">Количество свободного времени</label>
+            <input type="text" name="freeHours" id="freeHours" class="form-input form-input--pill form-input--border-c-gallery"  required [(ngModel)]="freeHours" placeholder="2 часа">
+          </div><!-- .main-search__group -->
+  
+           <ul class="pricing-table__features min-list">
+               <div class="main-search__group main-search__group--primary">
+                 <label for="main-search-relax-types" class="c-primary bold">Вид отдыха</label>
+             </div><!-- .main-search__group -->
+             <li>
+                <div class="form-group">
+                  <label for="accommodation" class="icheck_label">
+                    <input type="checkbox" name="accommodation" id="accommodation" >
+                    Культурный
+                  </label>
+                </div>
+              </li>
+              <li>
+             <div class="form-group">
+               <label for="car-rental" class="icheck_label">
+                 <input type="checkbox" name="car-rental" id="car-rental">
+                 По музеям
+               </label>
+             </div>
+           </li>
+  
+           <li>
+             <div class="form-group">
+               <label for="street-parking" class="icheck_label">
+                 <input type="checkbox" name="street-parking" id="street-parking">
+                 По историческим местам
+               </label>
+             </div>
+           </li>
+  
+           <li>
+             <div class="form-group">
+               <label for="smoking-allowed" class="icheck_label">
+                 <input type="checkbox" name="smoking-allowed" id="smoking-allowed">
+                 Активный
+               </label>
+             </div>
+           </li>
+  
+           <li>
+             <div class="form-group">
+               <label for="wireless-internet" class="icheck_label">
+                 <input type="checkbox" name="wireless-internet" id="wireless-internet">
+                 Гастрономический гид
+               </label>
+             </div>
+           </li>
+     </ul>
+  
+     <ul class="pricing-table__features min-list">
+         <div class="main-search__group main-search__group--primary">
+           <label for="main-search-transport-types" class="c-primary bold">Вид транспорта</label>
+       </div><!-- .main-search__group -->
+       <li>
+          <div class="form-group">
+            <label for="WALKING" class="icheck_label">
+              <input type="checkbox" name="WALKING" id="WALKING" required [(ngModel)]="WALKING">
+              Пеший
+            </label>
+          </div>
+        </li>
+        <li>
+          <div class="form-group">
+            <label for="BICYCLING" class="icheck_label">
+              <input type="checkbox" name="BICYCLING" id="BICYCLING" required [(ngModel)]="BICYCLING">
+              На велосипеде
+            </label>
+          </div>
+     </li>
+  
+     <li>
+       <div class="form-group">
+         <label for="DRIVING" class="icheck_label">
+           <input type="checkbox" name="DRIVING" id="DRIVING" required [(ngModel)]="DRIVING">
+           На машине
+         </label>
+       </div>
+     </li>
+  
+     <li>
+       <div class="form-group">
+         <label for="TRANSIT" class="icheck_label">
+           <input type="checkbox" name="TRANSIT" id="TRANSIT" required [(ngModel)]="TRANSIT">
+           На автобусе
+         </label>
+       </div>
+     </li>
+  
+  </ul>
+   <div class="main-search__group">
+     <label for="main-search-number-of-pl" class="c-primary bold">Количество мест для посещения</label>
+     <input type="text" name="placesToVisit" id="placesToVisit" class="form-input form-input--pill form-input--border-c-gallery" required [(ngModel)]="placesToVisit" placeholder="3">
+   </div><!-- .main-search__group -->
+   </div>
+  </div><!-- .pricing-table -->
+  </form>
+  </div><!-- .listing-column -->
 <div class="order-xl-1 listing-column listing-column--xl-50 listing-column--content ">
   <div class="c-black">
     популярные места <span class="keyword">{{cityName}}</span>
@@ -137,13 +284,13 @@
             </div>
 
              <div class="listing__detail-right">
-              <button class="button button--primary  button--larges button--pill b" type="submit" (click)="sendPlaceId(i)" routerLink="/landmarkPage">Подробнее</button>
+              <button class="button button--primary  button--large button--pill b" type="submit" (click)="sendPlaceId(i)" routerLink="/landmarkPage">Подробнее</button>
               <div *ngIf="locations[i].addedToWay; then thenBlock else elseBlock"></div>
                 <ng-template #thenBlock>
-                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="deleteFromWay(i)">Удалить из маршрута</button>
+                  <button class="button button--primary  button--large button--pill b" type="submit" (click)="deleteFromWay(i)">Удалить из маршрута</button>
                 </ng-template>
                 <ng-template #elseBlock>
-                  <button class="button button--primary  button--larges button--pill b" type="submit" (click)="addToWay(i)">Добавить к маршруту</button>
+                  <button class="button button--primary  button--large button--pill b" type="submit" (click)="addToWay(i)">Добавить к маршруту</button>
                 </ng-template>
               
             </div>
@@ -155,152 +302,5 @@
   </div><!-- .d-md-flex -->
 
 </div><!-- .listing-column -->
-<div class="order-xl-0 listing-column listing-column--xl-50 bg-wild-sand">
-  <div class="pricing-table bg-white head">
-   <div class="pricing-table__body ">
-    <ul class="min-list inline-list listing-tabs">
-     <li class="listing-tab">
-       <h5 class="c-black">
-         Создай свой маршрут уже сейчас!
-       </h5>
-     </li><!-- .listing-tab -->
-    </ul>
-   </div>
-  </div><!-- .pricing-table -->
-  <form class="main-search " #paramsForm="ngForm" >
-  <div class="pricing-table bg-white ">
-   <div class="pricing-table__body">
-     <ul class="pricing-table__features min-list">
-       <div class="main-search-container">
-        
-           <div class="main-search__group main-search__group--primary">
-             <label for="main-search-name" class="c-primary">Введите начало маршрута</label>
-             <input type="text" name="name" id="main-search-name" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь"  autocorrect="off" autocapitalize="off"  spellcheck="off" #startPoint>
-           </div><!-- .main-search__group -->
 
-           <div class="main-search__group">
-             <label for="main-search-location" class="c-primary">Введите конец маршрута</label>
-             <input type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Парк Победы"  autocorrect="off" autocapitalize="off"  spellcheck="off" #endPoint>
-           </div><!-- .main-search__group -->
-
-           <div class="main-search__group main-search__group--tertiary">
-             <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">
-               <i class="fa fa-search"></i> Построить маршрут
-             </button>
-           </div>
-      </div><!-- .main-search-container -->
-     </ul>
-   </div>
-</div><!-- .pricing-table -->
-
-<div class="pricing-table bg-white params">
- <div class="pricing-table__body ">
-
-         <div class="main-search__group main-search__group--primary">
-           <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
-           <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
-         </div><!-- .main-search__group -->
-
-         <div class="main-search__group">
-          <label for="freeHours" class="c-primary">Количество свободного времени</label>
-          <input type="text" name="freeHours" id="freeHours" class="form-input form-input--pill form-input--border-c-gallery"  required [(ngModel)]="freeHours" placeholder="2 часа">
-        </div><!-- .main-search__group -->
-
-         <ul class="pricing-table__features min-list">
-             <div class="main-search__group main-search__group--primary">
-               <label for="main-search-relax-types" class="c-primary bold">Вид отдыха</label>
-           </div><!-- .main-search__group -->
-           <li>
-              <div class="form-group">
-                <label for="accommodation" class="icheck_label">
-                  <input type="checkbox" name="accommodation" id="accommodation" >
-                  Культурный
-                </label>
-              </div>
-            </li>
-            <li>
-           <div class="form-group">
-             <label for="car-rental" class="icheck_label">
-               <input type="checkbox" name="car-rental" id="car-rental">
-               По музеям
-             </label>
-           </div>
-         </li>
-
-         <li>
-           <div class="form-group">
-             <label for="street-parking" class="icheck_label">
-               <input type="checkbox" name="street-parking" id="street-parking">
-               По историческим местам
-             </label>
-           </div>
-         </li>
-
-         <li>
-           <div class="form-group">
-             <label for="smoking-allowed" class="icheck_label">
-               <input type="checkbox" name="smoking-allowed" id="smoking-allowed">
-               Активный
-             </label>
-           </div>
-         </li>
-
-         <li>
-           <div class="form-group">
-             <label for="wireless-internet" class="icheck_label">
-               <input type="checkbox" name="wireless-internet" id="wireless-internet">
-               Гастрономический гид
-             </label>
-           </div>
-         </li>
-   </ul>
-
-   <ul class="pricing-table__features min-list">
-       <div class="main-search__group main-search__group--primary">
-         <label for="main-search-transport-types" class="c-primary bold">Вид транспорта</label>
-     </div><!-- .main-search__group -->
-     <li>
-        <div class="form-group">
-          <label for="WALKING" class="icheck_label">
-            <input type="checkbox" name="WALKING" id="WALKING" required [(ngModel)]="WALKING">
-            Пеший
-          </label>
-        </div>
-      </li>
-      <li>
-        <div class="form-group">
-          <label for="BICYCLING" class="icheck_label">
-            <input type="checkbox" name="BICYCLING" id="BICYCLING" required [(ngModel)]="BICYCLING">
-            На велосипеде
-          </label>
-        </div>
-   </li>
-
-   <li>
-     <div class="form-group">
-       <label for="DRIVING" class="icheck_label">
-         <input type="checkbox" name="DRIVING" id="DRIVING" required [(ngModel)]="DRIVING">
-         На машине
-       </label>
-     </div>
-   </li>
-
-   <li>
-     <div class="form-group">
-       <label for="TRANSIT" class="icheck_label">
-         <input type="checkbox" name="TRANSIT" id="TRANSIT" required [(ngModel)]="TRANSIT">
-         На автобусе
-       </label>
-     </div>
-   </li>
-
-</ul>
- <div class="main-search__group">
-   <label for="main-search-number-of-pl" class="c-primary bold">Количество мест для посещения</label>
-   <input type="text" name="placesToVisit" id="placesToVisit" class="form-input form-input--pill form-input--border-c-gallery" required [(ngModel)]="placesToVisit" placeholder="3">
- </div><!-- .main-search__group -->
- </div>
-</div><!-- .pricing-table -->
-</form>
-</div><!-- .listing-column -->
 </div>

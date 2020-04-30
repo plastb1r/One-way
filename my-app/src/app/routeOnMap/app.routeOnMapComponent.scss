@@ -1,11 +1,17 @@
 .containerMap {
     border: 3px solid #1c2331;
-    margin-top: 20%;
+    margin-top: 50px;
     margin-bottom: 20%;
     padding: 0;
     height: 700px;
     position: relative;
-    width: 90%;
+    width: 80%;
+    margin-left: -15%;
+  }
+
+  .map-title{
+    margin-top: 150px;
+    margin-left: 10%;
   }
 
   agm-map {
@@ -19,11 +25,13 @@
   }
   
   .siderbar-container{
+    margin-top: 50px;
     position: absolute;
-    height: 90%;
+    height: 700px;
     z-index: 99;
-    width: 35%;
-    margin-left: 65%;
+    width: 20%;
+    margin-left: 50%;
+    border: 3px solid #1c2331;
   }
   
   .input-place-container{
@@ -2701,8 +2709,8 @@
   }
   
   h5 {
-    font-size: 20px;
-    font-size: 1.25rem;
+    font-size: 40px;
+    font-size: 1.5rem;
   }
   
   h6 {

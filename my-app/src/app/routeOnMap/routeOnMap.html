@@ -1,67 +1,64 @@
-
+<h5 class="c-black map-title">
+  Твой маршрут построен!
+</h5>
+    <div class="siderbar-container">
+      <!-- Page content -->
+      <ng-sidebar-container>
+          <!-- A sidebar -->
+          <ng-sidebar [(opened)]="_opened" position="right">
+            <div class="ways-sidebar">
+              <div  *ngFor="let d of details, let i = index " class="accordion">
+                  <div class="accordion-container">
+                      <div class="accordion__header" (click)="toggle(i)">
+                        {{d.name}}
+                      </div><!-- .accordion__header -->
+       
+                      <div class=" toggle">
+                        <div class="d-sm-flex accordion__inner ">
+                          <div class="c-dove-gray accordion__desc" >
+                            <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                              <i class="fa fa-compass listing-contact__icon"></i>
+                              {{d.address}}
+                            </li>
+                            <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                              <i class="fa fa-clock-o listing-contact__icon"></i>
+                              {{timeToNext[i]}} (минуты)
+                            </li>
+                            <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                              <i class={{travelModesIcons[d.index]}}></i>
+                              {{travelModesStr[i]}}
+                            </li>
+                            <ul class="min-list listing-contact-list">
+                                <a  (click)="sendPlaceId(i)" routerLink="/landmarkPage">
+                                  <i class="fa fa-share-alt c-silver-charlice"></i>
+                                  Подробнее
+                                </a>
+                            </ul><!-- .listing-contact-list -->
+                          </div><!-- .accordion__desc -->
+                        </div><!-- .accordion__inner -->
+                      </div><!-- .accordion__content -->
+                </div><!-- .listing-section -->
+            </div>
+            <form class="main-search " #wayName="ngForm" >
+              <div class="main-search__group main-search__group--primary">
+                <label for="name" class="c-primary">Задайте имя маршруту</label>
+                <input type="text" name="name" id="name" class="form-input form-input--pill form-input--border-c-gallery" required [(ngModel)]="name" placeholder="Мой путь"  autocorrect="off" autocapitalize="off"  spellcheck="off">
+              </div><!-- .main-search__group -->
+              <button class="button button--primary  button--larges button--pill b" type="submit" (click)="saveWay(wayName)">Сохранить маршрут</button>
+            </form>
+            </div>
+          </ng-sidebar>
+    
+        </ng-sidebar-container>
   
+  
+    </div>
     <div #map></div>
-<div class="containerMap">
+<div class="containerMap" position="left">
   <div class="input-place-container">
     <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Search Nearest Location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #searchplace>
   </div>
-  <div class="siderbar-container">
-    <!-- Page content -->
-    <div ng-sidebar-content>
-      <button class="btn-way teal darken-3 text-white" (click)="_toggleOpened()">Посмотреть маршруты</button>
-    </div>
-
-    <ng-sidebar-container>
-        <!-- A sidebar -->
-        <ng-sidebar [(opened)]="_opened" position="right">
-          <div class="ways-sidebar">
-            <div  *ngFor="let d of details, let i = index " class="accordion">
-                <div class="accordion-container">
-                    <div class="accordion__header" (click)="toggle(i)">
-                      {{d.name}}
-                    </div><!-- .accordion__header -->
-     
-                    <div class=" toggle">
-                      <div class="d-sm-flex accordion__inner ">
-                        <div class="c-dove-gray accordion__desc" >
-                          <li class="d-flex align-items-center c-silver-charlice listing-contact">
-                            <i class="fa fa-compass listing-contact__icon"></i>
-                            {{d.address}}
-                          </li>
-                          <li class="d-flex align-items-center c-silver-charlice listing-contact">
-                            <i class="fa fa-clock-o listing-contact__icon"></i>
-                            {{timeToNext[i]}} (минуты)
-                          </li>
-                          <li class="d-flex align-items-center c-silver-charlice listing-contact">
-                            <i class={{travelModesIcons[d.index]}}></i>
-                            {{travelModesStr[i]}}
-                          </li>
-                          <ul class="min-list listing-contact-list">
-                              <a  (click)="sendPlaceId(i)" routerLink="/landmarkPage">
-                                <i class="fa fa-share-alt c-silver-charlice"></i>
-                                Подробнее
-                              </a>
-                          </ul><!-- .listing-contact-list -->
-                        </div><!-- .accordion__desc -->
-                      </div><!-- .accordion__inner -->
-                    </div><!-- .accordion__content -->
-              </div><!-- .listing-section -->
-          </div>
-          <form class="main-search " #wayName="ngForm" >
-            <div class="main-search__group main-search__group--primary">
-              <label for="name" class="c-primary">Задайте имя маршруту</label>
-              <input type="text" name="name" id="name" class="form-input form-input--pill form-input--border-c-gallery" required [(ngModel)]="name" placeholder="Мой путь"  autocorrect="off" autocapitalize="off"  spellcheck="off">
-            </div><!-- .main-search__group -->
-            <button class="button button--primary  button--larges button--pill b" type="submit" (click)="saveWay(wayName)">Сохранить маршрут</button>
-          </form>
-          </div>
-        </ng-sidebar>
-  
-      </ng-sidebar-container>
-
-
-  </div>
-
+ 
   <agm-map
     [latitude]="cityLoc[0].lat"
     [longitude]="cityLoc[0].lng"

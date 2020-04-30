@@ -1779,6 +1779,8 @@ html {
     display: -webkit-box !important;
     display: -ms-flexbox !important;
     display: flex !important;
+    margin: auto;
+    max-width: 1200px;
   }
   .d-xl-inline-flex {
     display: -webkit-inline-box !important;
@@ -2881,7 +2883,8 @@ textarea {
 }
 
 .button--large {
-  padding: 12px 48px;
+  height: 40px;
+  width: 200px;
 }
 
 .button--square {
@@ -2890,7 +2893,10 @@ textarea {
 
 .button--pill {
   border-radius: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .button--block {
@@ -18763,11 +18769,11 @@ margin-top: 20px;
   position: relative;
 }
 
-@media screen and (min-width: 1200px) {
+/*@media screen and (min-width: 1200px) {
   .listing-column--xl-50 {
     width: 50%;
   }
-}
+}*/
 
 .listing-column--content {
   padding: 30px;
@@ -19270,7 +19276,8 @@ margin-top: 20px;
   border-radius: 3px;
   position: relative;
   margin-top: 30px;
-  margin-left: 250px;
+  //margin-left: 250px;
+  margin: 20px;
   padding: 30px;
   border: 1px solid #eeeeee;
   overflow: hidden;
