@@ -34,33 +34,8 @@ export class WayParamsPageComponent implements OnInit{
     public searchElementRefEnd: ElementRef;
 
     wayPlaces:Array<Location> = new Array<Location>();
-
-    /*locations: Array<Location> = new Array<Location>();
-    locations1: Array<Location> = new Array<Location>();
-    test;
-    label = "Добавлено";
-    photo: Array<string>;
-    name:Array<string>;
-    cityName: string;
-    address:  Array<string>;
-    city: Location;
-    cityLocation: Array<Location> ;
-    types:  Array<any>;
-    number: string;
-    rating: Array<number>;
-    photos: Array<string>;
-    visibility: boolean = true;
-    index: number = -1;
-    dataLM: Array<Data>;
-    pt: string = "";
-    wayArray: Array<Location> = new Array<Location>();
-    ind: number = 0;
-    //prev = this.locations;
-    way: Way;
-    favP: Array<Location>;
-    submitted = false;
-    parameters: Parameters;
-    */
+    start = false;
+    end = false;
 
     @ViewChild('map', {static: false})
     mapElement: ElementRef;
@@ -199,7 +174,6 @@ export class WayParamsPageComponent implements OnInit{
     }
   
     sendPopularLocations(){
-      //this.data.changeLocations(this.locations);
       sessionStorage.removeItem('locatsToShowOnMap');
       sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
       sessionStorage.removeItem('detailsToShowOnMap');
@@ -236,6 +210,7 @@ export class WayParamsPageComponent implements OnInit{
 
 
     setAutocompliteToStartPoint(){
+     
       this.mapsAPILoader2.load().then(() => {
         let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefStart.nativeElement, {
 
@@ -244,9 +219,12 @@ export class WayParamsPageComponent implements OnInit{
           this.ngZone.run(() => {
            let place: google.maps.places.PlaceResult = autocomplete.getPlace();
             if (place.geometry === undefined || place.geometry === null) {
+              this.startPoint = null;
+              this.start = false;
               return;
             }
-            this.startPoint = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), placeId: place.place_id};
+              this.startPoint = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), placeId: place.place_id};
+              this.start = true;
           });
         });
        });
@@ -275,9 +253,12 @@ export class WayParamsPageComponent implements OnInit{
           this.ngZone.run(() => {
            let place: google.maps.places.PlaceResult = autocomplete.getPlace();
             if (place.geometry === undefined || place.geometry === null) {
+              this.end = false;
+              this.endPoint = null;
               return;
             }
             this.endPoint = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng(),placeId: place.place_id};
+            this.end = true;
           });
         });
        });

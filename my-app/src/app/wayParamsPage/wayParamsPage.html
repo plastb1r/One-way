@@ -19,17 +19,28 @@
      <div class="pricing-table__body">
        <ul class="pricing-table__features min-list">
          <div class="main-search-container">
-          
+ 
              <div class="main-search__group main-search__group--primary">
-               <label for="main-search-name" class="c-primary">Начало маршрута</label>
-               <input type="text" name="name" id="main-search-name" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь"  autocorrect="off" autocapitalize="off"  spellcheck="off" #startPoint>
+               <label for="startPoint" class="c-primary">Начало маршрута</label>
+               <input type="text" 
+               required 
+                name="startPoint" id="startPoint" class="form-input form-input--pill form-input--border-c-gallery form-control" placeholder="Красная площадь"  autocorrect="off" autocapitalize="off"  spellcheck="off" #startPoint>
+               <div class="alert" *ngIf="startPoint.required && !start">
+                Начало маршрута обязательно для построения маршрута!
+              </div>
              </div><!-- .main-search__group -->
+
+           
   
              <div class="main-search__group">
                <label for="main-search-location" class="c-primary">Конец маршрута</label>
-               <input type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Парк Победы"  autocorrect="off" autocapitalize="off"  spellcheck="off" #endPoint>
+               <input required type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery form-control" placeholder="Парк Победы"  autocorrect="off" autocapitalize="off"  spellcheck="off" #endPoint>
+               <div class="alert" *ngIf="endPoint.required && !end">
+                Конец маршрута обязателен для построения маршрута!
+              </div>  
              </div><!-- .main-search__group -->
-  
+
+             
              <div class="main-search__group main-search__group--tertiary">
                <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">
                  <i class="fa fa-search"></i> Построить маршрут
@@ -187,16 +198,16 @@
         <ul class="min-list inline-list listing-filter listing-filter--list">
           <li>
             <div class="form-group">
-              <label for="accommodation" class="icheck_label">
-                <input type="radio" (click)="setIndex(0);loadPlaces()" name="selection" id="accommodation">
+              <label for="food" class="icheck_label">
+                <input type="radio" (click)="setIndex(0);loadPlaces()" name="food" id="food">
                 Гастрономический гид
               </label>
             </div>
           </li>
           <li>
             <div class="form-group">
-              <label for="apartments" class="icheck_label">
-                <input type="radio" (click)="setIndex(1);loadPlaces()" name="selection" id="apartments">
+              <label for="hotels" class="icheck_label">
+                <input type="radio" (click)="setIndex(1);loadPlaces()" name="hotels" id="hotels">
                 Отели
               </label>
             </div>
@@ -204,8 +215,8 @@
 
           <li>
             <div class="form-group">
-              <label for="car-rental" class="icheck_label">
-                <input type="radio" (click)="setIndex(2);loadPlaces()" name="selection" id="car-rental">
+              <label for="bars" class="icheck_label">
+                <input type="radio" (click)="setIndex(2);loadPlaces()" name="bars" id="bars">
                 Бары
               </label>
             </div>
@@ -213,8 +224,8 @@
 
           <li>
             <div class="form-group">
-              <label for="street-parking" class="icheck_label">
-                <input type="radio" (click)="setIndex(3);loadPlaces()" name="selection" id="street-parking">
+              <label for="active" class="icheck_label">
+                <input type="radio" (click)="setIndex(3);loadPlaces()" name="active" id="active">
                 Активный отдых
               </label>
             </div>
@@ -222,8 +233,8 @@
 
           <li>
             <div class="form-group">
-              <label for="smoking-allowed" class="icheck_label">
-                <input type="radio" (click)="setIndex(4);loadPlaces()" name="selection" id="smoking-allowed">
+              <label for="museums" class="icheck_label">
+                <input type="radio" (click)="setIndex(4);loadPlaces()" name="museums" id="museums">
                 Галереи и музеи
               </label>
             </div>
@@ -231,8 +242,8 @@
 
           <li>
             <div class="form-group">
-              <label for="wireless-internet" class="icheck_label">
-                <input type="radio" (click)="setIndex(5);loadPlaces()" name="selection" id="wireless-internet">
+              <label for="shops" class="icheck_label">
+                <input type="radio" (click)="setIndex(5);loadPlaces()" name="shops" id="shops">
                 Аутлеты и ТЦ
               </label>
             </div>

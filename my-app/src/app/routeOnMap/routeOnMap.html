@@ -7,10 +7,10 @@
           <!-- A sidebar -->
           <ng-sidebar [(opened)]="_opened" position="right">
             <div class="ways-sidebar">
-              <div  *ngFor="let d of details, let i = index " class="accordion">
+              <div  *ngFor="let d of placesOnRoute, let i = index " class="accordion">
                   <div class="accordion-container">
                       <div class="accordion__header" (click)="toggle(i)">
-                        {{d.name}}
+                        {{markersLabels[i]}}:  {{d.name}}
                       </div><!-- .accordion__header -->
        
                       <div class=" toggle">
@@ -29,7 +29,7 @@
                               {{travelModesStr[i]}}
                             </li>
                             <ul class="min-list listing-contact-list">
-                                <a  (click)="sendPlaceId(i)" routerLink="/landmarkPage">
+                                <a  (click)="sendPlaceId(d.place)" routerLink="/landmarkPage">
                                   <i class="fa fa-share-alt c-silver-charlice"></i>
                                   Подробнее
                                 </a>
@@ -66,26 +66,26 @@
     [disableDoubleClickZoom]="true"
 >
 <agm-marker
-    *ngFor="let location of places, let i = index"
-    [latitude]="location.lat"
-    [longitude]="location.lng"
+    *ngFor="let loc of placesOnRoute, let i = index"
+    [latitude]="loc.lat"
+    [longitude]="loc.lng"
     (markerClick)="markerClicked(window)"
-    [label]="label[i]"
+    [label]="markersLabels[i]"
     >
     
     <agm-info-window #window>
       <div class="container">
         <div class="col100 mt-4">
-        <h5>{{details[i].name}} | {{details[i].rating}}</h5>
+        <h5>{{loc.name}} | {{loc.rating}}</h5>
         </div>
         <div class="col100 mt-1" >
-        {{ details[i].address}}
+        {{loc.address}}
         </div>
         <div class="col100 mt-4 d-flex justify-content-center">
-          <img height="200" width="300" src={{details[i].photos[0]}}>
+          <img height="200" width="300" src={{loc.photo}}>
         </div>
         <div class="col100 mt-4 d-flex justify-content-center">
-          <button class="btn btn-outline-dark" type="submit"  routerLink="/landmarkPage">Подробнее</button>
+          <button class="btn btn-outline-dark" type="submit" (click)="sendPlaceId(loc.place)"  routerLink="/landmarkPage">Подробнее</button>
         </div>
       </div>
   </agm-info-window >

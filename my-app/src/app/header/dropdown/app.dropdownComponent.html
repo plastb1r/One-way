@@ -8,16 +8,11 @@
             <label for="exampleDropdownFormEmail1">Какой город ищем?</label>
             <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Москва" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #searche>
           </div>
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-            <label class="form-check-label" for="dropdownCheck">
-              Запомнить город
-            </label>
-          </div>
-          <button class="btn btn-grey my-2 my-sm-2" type="submit" (click)="_newLocation(); myDrop.close();" routerLink="/mapPage">Найти</button>
+          <button class="btn btn-grey my-2 my-sm-2" type="submit" (click)="changeCity(); myDrop.close();">Сохранить</button>
         </form>
-        <div class="dropdown-divider"></div>
-        <button ngbDropdownItem>Впервые на сайте? Зарегистрируйся!</button>
+        <li class="setting"> 
+          <a class ="setting__link" routerLink="/signUpPage" ngbDropdownItem> Зарегистрируйся!</a>
+        </li>
       </div>
     </div>
   </div>

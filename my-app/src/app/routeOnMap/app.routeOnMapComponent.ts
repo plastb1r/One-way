@@ -79,15 +79,15 @@ export class RouteOnMapComponent implements OnInit{
     console.log("Точки от алгоритма", sessionStorage.getItem("placesFromRoute"));
     this.placesOnRoute.forEach(p => {
       console.log("id точки, переданной в функцию", p.place);
-      this.loadPlaces(p.place);
+      this.loadPlaces(p);
       this.timeToNext.push((Math.round(p.timeToNext/60)));
       this.travelModes.push(p.transportToNext);
     })
     }
 
-    sendPlaceId(index){
+    sendPlaceId(placeId){
         sessionStorage.removeItem('landmark');
-        sessionStorage.setItem("landmark", this.places[index].placeId);
+        sessionStorage.setItem("landmark", placeId);
     }
 
     setDirections(){
@@ -157,7 +157,7 @@ export class RouteOnMapComponent implements OnInit{
       })
     }
 
-    loadPlaces(placeId){
+    loadPlaces(p){
       this.mapsAPILoader.load().then(() => {
           let city = {lat: 51.673727, lng: 39.21114};
           let mapOptions = {
@@ -170,12 +170,12 @@ export class RouteOnMapComponent implements OnInit{
   
   
           var request = {
-          placeId: placeId,
+          placeId: p.place,
           fields: ['name', 'formatted_address',  'photos', "place_id", "geometry", "address_components"]
           };
   
           service.getDetails(request, (place, status) => {
-              this.getPlaces(place, status);
+              this.getPlaces(place, status, p);
           });
   
       }, (err) => {
@@ -184,7 +184,7 @@ export class RouteOnMapComponent implements OnInit{
   
     }
   
-    getPlaces(results, status) {
+    getPlaces(results, status,p) {
       var photo = [];
       if(results.photos.length != 0){
         photo.push(results.photos[0].getUrl());
@@ -193,13 +193,20 @@ export class RouteOnMapComponent implements OnInit{
         photo.push("/assets/img/place.jpeg");
       }
       console.log("точка, пришедшая в функцию", results.place_id);
-      this.details.push({name: results.name, address: results.formatted_address, photos: photo});
+      p['name'] = results.name;
+      p['address'] = results.formatted_address;
+      p['photo'] = photo;
+      p['lat'] = results.geometry.location.lat();
+      p['lng'] = results.geometry.location.lng();
+      //p['label'] = this.markersLabels[this.ind+=1];
+      console.log(this.placesOnRoute);
+      //this.details.push({name: results.name, address: results.formatted_address, photos: photo});
       this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
       if (this.places.length == this.placesOnRoute.length){
         this.setTravelModes();
         this.setDirections();
       }
-      this.label.push(this.markersLabels[this.ind+=1]);
+      //this.label.push(this.markersLabels[this.ind+=1]);
     }
 
 

@@ -5,11 +5,13 @@ import {DataService} from 'src/app/services/data.service';
 
 @Component({
   selector: 'dropdown',
-  templateUrl: './app.dropdownComponent.html'
+  templateUrl: './app.dropdownComponent.html',
+  styleUrls: ['./app.dropdownComponent.scss']
 })
 export class DropDownComponent {
   private geoCoder;
   location: Array<Location>;
+  address: string ='';
 
   @ViewChild('searche', {static: false})
   public searchElementRef: ElementRef;
@@ -38,6 +40,7 @@ export class DropDownComponent {
           if (place.geometry === undefined || place.geometry === null) {
             return;
           }
+        this.address = place.formatted_address;
         this.location = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), placeId: place.place_id}];
 
         });
@@ -45,7 +48,10 @@ export class DropDownComponent {
     });
   }
 
-  _newLocation(){
-  //this.data.changeLocations(this.location);
+  changeCity(){
+    sessionStorage.removeItem('cityAddress');
+    sessionStorage.setItem('cityAddress', this.address);
+    sessionStorage.removeItem('cityAddressLocat');
+    sessionStorage.setItem('cityAddressLocat', JSON.stringify(this.location));
   }
 }
