@@ -52,6 +52,10 @@ export class WayParamsPageComponent implements OnInit{
     startPoint: Location;
     endPoint: Location;
     parameters: Parameters;
+
+    geolocation;
+    circle;
+    options;
   
     constructor(
       private mapsAPILoader: MapsAPILoader,
@@ -63,19 +67,34 @@ export class WayParamsPageComponent implements OnInit{
     {}
   
     ngOnInit() {
-      this.setAutocompliteToStartPoint();
-      this.setAutocompliteToEndPoint();
       this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
       this.cityName = sessionStorage.getItem('cityAddress');
+
+      this.geolocation = {
+        lat: this.cityLocation[0].lat,
+        lng: this.cityLocation[0].lng
+      };
+
+      this.options = {
+        types: ['establishment', 'geocode']
+      };
+
+      this.setAutocompliteToStartPoint();
+      this.setAutocompliteToEndPoint();
+
       this.placeService.getAll().subscribe(data =>  this.places=data);
       this.loadPlaces();
       if(sessionStorage.getItem("LocatsToWay")){
         this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
       }
       console.log("Way" + JSON.stringify(this.wayPlaces));
+      
       this.mapsAPILoader.load().then(() => {
-        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-        });
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, this.options);
+        this.circle = new google.maps.Circle(
+          {center: this.geolocation, radius: 70000});
+        autocomplete.setBounds(this.circle.getBounds());
+        autocomplete.setOptions({strictBounds: true})
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
             let place:  google.maps.places.PlaceResult = autocomplete.getPlace();
@@ -112,7 +131,7 @@ export class WayParamsPageComponent implements OnInit{
         let service = new google.maps.places.PlacesService(this.map);
         service.nearbySearch({
           location: city,
-          radius: 10000,
+          radius: 70000,
           types: this.types
          
         }, (results, status) => {
@@ -210,14 +229,16 @@ export class WayParamsPageComponent implements OnInit{
 
 
     setAutocompliteToStartPoint(){
-     
       this.mapsAPILoader2.load().then(() => {
-        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefStart.nativeElement, {
-
-        });
+        this.circle = new google.maps.Circle(
+          {center: this.geolocation, radius: 70000});
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefStart.nativeElement, this.options);
+        autocomplete.setBounds(this.circle.getBounds());
+        autocomplete.setOptions({strictBounds: true})
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
-           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+            let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
             if (place.geometry === undefined || place.geometry === null) {
               this.startPoint = null;
               this.start = false;
@@ -227,8 +248,8 @@ export class WayParamsPageComponent implements OnInit{
               this.start = true;
           });
         });
-       });
-       
+      });
+    
     }
 
     clearAddedPlaces(){
@@ -246,9 +267,13 @@ export class WayParamsPageComponent implements OnInit{
 
     setAutocompliteToEndPoint(){
       this.mapsAPILoader2.load().then(() => {
-        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefEnd.nativeElement, {
-
-        });
+        this.circle = new google.maps.Circle(
+          {center: this.geolocation, radius: 70000});
+      
+        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRefEnd.nativeElement, this.options);
+        
+        autocomplete.setBounds(this.circle.getBounds());
+        autocomplete.setOptions({strictBounds: true})
         autocomplete.addListener("place_changed", () => {
           this.ngZone.run(() => {
            let place: google.maps.places.PlaceResult = autocomplete.getPlace();

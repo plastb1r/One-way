@@ -50,6 +50,7 @@ export class RouteOnMapComponent implements OnInit{
   mapElement: ElementRef;
 
   map: any;
+  service;
   routeCity;
   ind=-1;
   places:Array<Location> = new Array<Location>();
@@ -66,24 +67,35 @@ export class RouteOnMapComponent implements OnInit{
 
    constructor(
      private mapsAPILoader: MapsAPILoader,
-     private ngZone: NgZone,
-     private data: DataService,
-     private httpService: HttpService,
      private routeService: RoutesService
    ) { }
 
-   ngOnInit() {
-    //load Places Autocomplete
+  ngOnInit() {
     this.cityLoc = JSON.parse(sessionStorage.getItem("cityAddressLocat"));
     this.placesOnRoute = JSON.parse(sessionStorage.getItem("placesFromRoute"));
     console.log("Точки от алгоритма", sessionStorage.getItem("placesFromRoute"));
-    this.placesOnRoute.forEach(p => {
-      console.log("id точки, переданной в функцию", p.place);
-      this.loadPlaces(p);
-      this.timeToNext.push((Math.round(p.timeToNext/60)));
-      this.travelModes.push(p.transportToNext);
-    })
-    }
+
+    this.mapsAPILoader.load().then(() => {
+      let city = {lat: 51.673727, lng: 39.21114};
+      let mapOptions = {
+      center: city,
+      zoom: 15
+      }
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      this.service = new google.maps.places.PlacesService(this.map);
+      this.placesOnRoute.forEach(p => {
+        console.log("id точки, переданной в функцию", p.place);
+        this.loadPlaces(p);
+        this.timeToNext.push((Math.round(p.timeToNext/60)));
+        this.travelModes.push(p.transportToNext);
+      })
+      }, (err) => {
+          console.log(err);
+    });
+
+    
+  }
 
     sendPlaceId(placeId){
         sessionStorage.removeItem('landmark');
@@ -91,22 +103,36 @@ export class RouteOnMapComponent implements OnInit{
     }
 
     setDirections(){
+      let lat: number;
+      let lng: number;
+
+      let nextlat: number;
+      let nextlng: number;
+
       for(var i = 0; i < this.travelModes.length-1; i++){
+
+        lat =  this.placesOnRoute[i]['lat'];
+        lng =  this.placesOnRoute[i]['lng'];
+
+        nextlat = this.placesOnRoute[i+1]['lat'];
+        nextlng = this.placesOnRoute[i+1]['lng'];
+
         if(this.travelModes[i] == "walking")
         {
             var dir = {
-            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+              origin: {lat: lat, lng: lng},
+              destination: {lat: nextlat, lng: nextlng},
             travelMode: google.maps.TravelMode.WALKING
             }
             this.dirWalk.push(dir);
+            console.log(this.dirWalk);
         }
   
         if(this.travelModes[i] == "transit")
         {
           var dir = {
-            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+            origin: {lat: lat, lng: lng},
+            destination: {lat: nextlat, lng: nextlng},
             travelMode: google.maps.TravelMode.WALKING
             }
             this.dirTrans.push(dir);
@@ -114,8 +140,8 @@ export class RouteOnMapComponent implements OnInit{
         if(this.travelModes[i] == "driving")
         {
           var dir =  {
-            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+            origin: {lat: lat, lng: lng},
+            destination: {lat: nextlat, lng: nextlng},
             travelMode: google.maps.TravelMode.DRIVING
             }
             this.dirCar.push(dir);
@@ -123,8 +149,8 @@ export class RouteOnMapComponent implements OnInit{
         if(this.travelModes[i] == "bicycling")
         {
           var dir = {
-            origin: {lat: this.places[i].lat, lng: this.places[i].lng},
-            destination: {lat: this.places[i+1].lat, lng: this.places[i+1].lng},
+            origin: {lat: lat, lng: lng},
+            destination: {lat: nextlat, lng: nextlng},
             travelMode: google.maps.TravelMode.BICYCLING
             }
             this.dirBic.push(dir);
@@ -158,30 +184,14 @@ export class RouteOnMapComponent implements OnInit{
     }
 
     loadPlaces(p){
-      this.mapsAPILoader.load().then(() => {
-          let city = {lat: 51.673727, lng: 39.21114};
-          let mapOptions = {
-          center: city,
-          zoom: 15
-          }
-  
-          this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-          let service = new google.maps.places.PlacesService(this.map);
-  
-  
-          var request = {
-          placeId: p.place,
-          fields: ['name', 'formatted_address',  'photos', "place_id", "geometry", "address_components"]
-          };
-  
-          service.getDetails(request, (place, status) => {
-              this.getPlaces(place, status, p);
-          });
-  
-      }, (err) => {
-          console.log(err);
+      var request = {
+      placeId: p.place,
+      fields: ['name', 'formatted_address',  'photos', "place_id", "geometry", "address_components"]
+      };
+
+      this.service.getDetails(request, (place, status) => {
+          this.getPlaces(place, status, p);
       });
-  
     }
   
     getPlaces(results, status,p) {

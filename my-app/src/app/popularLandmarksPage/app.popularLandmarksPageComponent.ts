@@ -29,13 +29,11 @@ export class PopularLandmarksPageComponent implements OnInit{
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private placeService: PlacesService,
-    private data: DataService
+    private placeService: PlacesService
   )
   {}
   
   ngOnInit() {
-    //this.data.currentLocations.subscribe(loc => this.cityLocation = [{lat:loc[0].lat, lng:loc[0].lng, zoom: 15, placeId:loc[0].placeId,  choose: false}]);
     this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
     this.cityName = sessionStorage.getItem('cityAddress');
     this.placeService.getAll().subscribe(data => this.places=data);
@@ -61,7 +59,7 @@ export class PopularLandmarksPageComponent implements OnInit{
       let service = new google.maps.places.PlacesService(this.map);
       service.nearbySearch({
         location: city,
-        radius: 10000,
+        radius: 70000,
         types: this.types
        
       }, (results, status) => {
@@ -219,121 +217,4 @@ export class PopularLandmarksPageComponent implements OnInit{
       sessionStorage.removeItem('locatsToShowOnMap');
       sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
   }
-
-  /*checkInArray(placeId): boolean{
-    for(var i = 0; i < this.locations.length; i++)
-      {
-        if(placeId == this.locations[i].placeId)
-        {
-          return true;
-        }
-      }
-    return false;
-  }*/
-
-  /*locations: Array<Location>;
-  test;
-  photo: Array<string>;
-  name:Array<string>;
-  cityName: string;
-  address:  Array<string>;
-  city: Location;
-  cityLocation: Array<Location> ;
-  types:  Array<any>;
-  number: string;
-  rating: Array<number>;
-  photos: Array<string>;
-  visibility: boolean = true;
-  index: number = -1;
-  dataLM: Array<Data>;
-  pt: string = "";
-  wayArray: Array<Location> = new Array<Location>();
-  ind: number = 0;
-  ind2: number = 0;
-  prev = this.locations;
-  way: Way;
-  favP: Array<Location>;
-
-  placeDetails: PlaceDetails[];
-  locats: Location[];
-  map;
-
-
-  /*getDetails(placeId: string){
-  this.httpService.getData(placeId).subscribe( value =>{
-      //this.name = value['result']['name'];
-      //this.address = value['result']['formatted_address'];
-      //this.rating = value['result']['rating'];
-      this.types = value['result']['types'];
-      //this.number = value['result']['international_phone_number'];
-      //this.loc = {lat:value['result']['geometry']['location']['lat'],lng: value['result']['geometry']['location']['lng'], zoom: 15,placeId: value['place_id'],  choose: false};
-      var phot = value['result']['photos'];
-      var photoRe = [];
-        phot.forEach(ph => {
-          photoRe.push('https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference='+ph['photo_reference']+'&key=AIzaSyBMgGGii-qFTTx5Obv-gwHljLtZbt8fAbQ')
-        });
-      this.photos = photoRe;
-      console.log(this.photos);
-      //this.photo = this.photos[0];
-    });
-  }
-
-  changeIndInArray(i: number){
-    this.data.currentWay.subscribe(w => this.way = w);
-    this.way.points.forEach(l => {
-      if (l.lat == this.locations[i].lat && l.lng == this.locations[i].lng)
-      {
-        this.ind2 = 1;
-      }
-      else {this.ind2 = 0;}
-    });
-  }
-
-  addToWay(i: number){
-    this.changeIndInArray(i);
-    this.way.name = 'Тестовый путь 2';
-    this.way.index = 1;
-    this.data.currentCityName.subscribe(w => this.way.cityAddress = w);
-    if(this.ind2 == 0){
-      this.data.changeWay(this.locations[i], this.way, 1);
-    }
-    //this.data.currentWay.subscribe(w => this.way = w);
-    console.log(this.way);
-    this.dataLM[i].isAddedToWay = !this.dataLM[i].isAddedToWay;
-  }
-
-  removeFromWay(i: number){
-    this.changeIndInArray(i);
-    if(this.ind2 == 1){
-      this.data.changeWay(this.locations[i], this.way, 2);
-    }
-    //this.data.currentWay.subscribe(w => this.way = w);
-    console.log(this.way);
-    this.dataLM[i].isAddedToWay = !this.dataLM[i].isAddedToWay;
-  }
-
-  checkFavPInArray(i: number){
-    this.data.currentFavP.subscribe(f => this.favP = f);
-    this.favP.forEach(f => {
-      if (f.placeId == this.locations[i].placeId)
-      {
-        this.ind = 1;
-      }
-      else {
-        this.ind = 0;
-      }
-    });
-  }
-//problem with second
-  addToFavP(i: number){
-    this.checkFavPInArray(i);
-    if(this.ind == 0){
-      this.data.changeFavP(this.locations[i], this.favP);
-    }
-    this.dataLM[i].isAddedToFav = !this.dataLM[i].isAddedToFav;
-    if(this.dataLM[i].isAddedToFav == false) {
-      this.data.changeFavPRemove(this.locations[i], this.favP);
-    }
-  console.log(this.favP);
-  }*/
 }
