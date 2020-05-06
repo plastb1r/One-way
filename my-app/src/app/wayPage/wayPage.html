@@ -78,9 +78,9 @@
             </div><!-- .listing-section__header -->
             <mdb-carousel [isControls]="true" class="carousel slide carousel-fade"  [animation]="'fade'">
               <!--First slide-->
-              <mdb-carousel-item  *ngFor="let d of details, let i = index ">
+              <mdb-carousel-item  *ngFor="let d of way.places, let i = index ">
                 <div class="view w-100">
-                  <img class="d-block" src={{d.photos[0]}}>
+                  <img class="d-block" src={{d.photo}}>
                   <div class="mask rgba-black-light waves-light" mdbWavesEffect></div>
                 </div>
               </mdb-carousel-item>
@@ -92,7 +92,7 @@
              <h3 class="listing-section__title">Маршрут</h3>
            </div><!-- .listing-section__header -->
 
-            <div  *ngFor="let d of details, let i = index " class="accordion">
+            <div  *ngFor="let d of way.places, let i = index " class="accordion">
                 <div class="accordion-container">
                     <div class="accordion__header" >
                        {{d.name}}
@@ -131,32 +131,6 @@
             </div>
          </div><!-- .listing-section -->
 
-         <!--<div id="map" class="listing-section bg-white hover-effect" data-matching-link="#map-link">
-           <div class="listing-section__header">
-             <h3 class="listing-section__title">Карта</h3>
-           </div>
-               <a class="" routerLink="/mapPage">
-                 <div class="containerMap">
-                   <agm-map
-                     [latitude]="locations2[0].lat"
-                     [longitude]="locations2[0].lng"
-                     [zoom]="locations2[0].zoom"
-                     [disableDoubleClickZoom]="true"
-                     [showDefaultInfoWindow]="true">
-
-                     <agm-marker
-                     [markerDraggable]="true"
-                     *ngFor="let location of locations2, let iy = index"
-                     [latitude]="location.lat"
-                     [longitude]="location.lng"
-                     >
-                   <agm-direction *ngIf="dir" [origin]="dir.origin" [destination]="dir.destination"  [waypoints]="dir.waypoints"></agm-direction>
-                     </agm-marker>
-
-                   </agm-map>
-                 </div>
-               </a>
-         </div>-->
          <div class="listing-section bg-white hover-effect" data-matching-link="#map-link">
            <div class="listing-section__header">
              <h3 class="listing-section__title">Карта</h3>

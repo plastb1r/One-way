@@ -54,64 +54,29 @@
   <div class="pricing-table bg-white params">
    <div class="pricing-table__body ">
   
-           <div class="main-search__group main-search__group--primary">
-             <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
-             <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
-           </div><!-- .main-search__group -->
-  
-           <div class="main-search__group">
-            <label for="freeHours" class="c-primary">Количество свободного времени</label>
-            <input type="text" name="freeHours" id="freeHours" class="form-input form-input--pill form-input--border-c-gallery"  required [(ngModel)]="freeHours" placeholder="2 часа">
-          </div><!-- .main-search__group -->
-  
-           <ul class="pricing-table__features min-list">
-               <div class="main-search__group main-search__group--primary">
-                 <label for="main-search-relax-types" class="c-primary bold">Вид отдыха</label>
-             </div><!-- .main-search__group -->
-             <li>
-                <div class="form-group">
-                  <label for="accommodation" class="icheck_label">
-                    <input type="checkbox" name="accommodation" id="accommodation" >
-                    Культурный
-                  </label>
-                </div>
-              </li>
-              <li>
-             <div class="form-group">
-               <label for="car-rental" class="icheck_label">
-                 <input type="checkbox" name="car-rental" id="car-rental">
-                 По музеям
-               </label>
-             </div>
-           </li>
-  
-           <li>
-             <div class="form-group">
-               <label for="street-parking" class="icheck_label">
-                 <input type="checkbox" name="street-parking" id="street-parking">
-                 По историческим местам
-               </label>
-             </div>
-           </li>
-  
-           <li>
-             <div class="form-group">
-               <label for="smoking-allowed" class="icheck_label">
-                 <input type="checkbox" name="smoking-allowed" id="smoking-allowed">
-                 Активный
-               </label>
-             </div>
-           </li>
-  
-           <li>
-             <div class="form-group">
-               <label for="wireless-internet" class="icheck_label">
-                 <input type="checkbox" name="wireless-internet" id="wireless-internet">
-                 Гастрономический гид
-               </label>
-             </div>
-           </li>
-     </ul>
+      <div class="main-search__group main-search__group--primary">
+        <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
+        <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
+      </div><!-- .main-search__group -->
+
+      <div class="main-search__group">
+      <label for="freeHours" class="c-primary">Количество свободного времени</label>
+      <input type="text" name="freeHours" id="freeHours" class="form-input form-input--pill form-input--border-c-gallery"  required [(ngModel)]="freeHours" placeholder="2 часа">
+    </div><!-- .main-search__group -->
+
+      <ul class="pricing-table__features min-list">
+          <div class="main-search__group main-search__group--primary">
+            <label for="main-search-relax-types" class="c-primary bold">Вид отдыха</label>
+        </div><!-- .main-search__group -->
+        <li *ngFor="let item of way_options">
+          <div class="form-group">
+            <label for="culture_type" class="icheck_label">
+              <input type="checkbox" [checked]="item.selected" (change)="item.selected = !item.selected">
+                {{item.name}}
+            </label>
+          </div>
+        </li>
+    </ul>
   
      <ul class="pricing-table__features min-list">
          <div class="main-search__group main-search__group--primary">

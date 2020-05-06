@@ -6,5 +6,5 @@ export class PlaceOnRoute {
       public timeToNext: number,
       public transportToNext: string
     ) {}
-  }
+}
   

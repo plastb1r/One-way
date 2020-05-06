@@ -20,8 +20,8 @@ export class WayPageComponent{
   mapElement: ElementRef;
 
   map: any;
-  places:Array<Location> = new Array<Location>();
-  details: Array<PlaceDetails> = new Array<PlaceDetails>();
+  //places:Array<Location> = new Array<Location>();
+  //details: Array<PlaceDetails> = new Array<PlaceDetails>();
   timeToNext:  Array<number> = new Array<number>();
   transportToNext:  Array<string> = new Array<string>();
   visibility: Array<boolean> = new Array<boolean>();
@@ -38,7 +38,7 @@ export class WayPageComponent{
   ngOnInit() {
     this.way = JSON.parse(sessionStorage.getItem("Way"));
     this.way.places.forEach(p => {
-      this.loadPlaces(p.place);
+      this.loadPlaces(p);
       this.timeToNext.push(p.timeToNext);
       this.transportToNext.push(p.transportToNext);
       this.label.push('');
@@ -63,11 +63,14 @@ export class WayPageComponent{
   }
 
   addToFavP(index){
-    var loc = {lat: this.places[index].lat, lng: this.places[index].lng, placeId: this.way.places[index].place};
+    let lat: number = this.way.places[index]['lat'];
+    let lng: number = this.way.places[index]['lng'];
+
+    var loc = {lat: lat, lng: lng, placeId: this.way.places[index].place};
     this.placeService.addPlace(loc).subscribe(data =>console.log(data));
   }
 
-  loadPlaces(placeId){
+  loadPlaces(p){
     this.mapsAPILoader.load().then(() => {
       let city = {lat: 51.673727, lng: 39.21114};
       let mapOptions = {
@@ -80,12 +83,12 @@ export class WayPageComponent{
 
 
       var request = {
-        placeId: placeId,
+        placeId: p.place,
         fields: ['name', 'formatted_address',  'photos', "place_id", "geometry"]
       };
 
       service.getDetails(request, (place, status) => {
-          this.getPlaces(place, status)
+          this.getPlaces(place, status, p)
       });
 
     }, (err) => {
@@ -94,12 +97,19 @@ export class WayPageComponent{
 
   }
 
-  getPlaces(results, status){
+  getPlaces(results, status, p){
     console.log("place"+results.photos);
     var photo = [];
     photo.push(results.photos[0].getUrl());
-    this.details.push({name: results.name, address: results.formatted_address, photos: photo});
-    this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
+
+    p['name'] = results.name;
+    p['address'] = results.formatted_address;
+    p['photo'] = photo;
+    p['lat'] = results.geometry.location.lat();
+    p['lng'] = results.geometry.location.lng();
+
+    //this.details.push({name: results.name, address: results.formatted_address, photos: photo});
+    //this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
   }
 
   public setTravelModes(){

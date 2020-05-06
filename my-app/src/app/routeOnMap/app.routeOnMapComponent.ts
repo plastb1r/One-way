@@ -211,7 +211,7 @@ export class RouteOnMapComponent implements OnInit{
       //p['label'] = this.markersLabels[this.ind+=1];
       console.log(this.placesOnRoute);
       //this.details.push({name: results.name, address: results.formatted_address, photos: photo});
-      this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
+      //his.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
       if (this.places.length == this.placesOnRoute.length){
         this.setTravelModes();
         this.setDirections();
@@ -226,7 +226,10 @@ export class RouteOnMapComponent implements OnInit{
 
     saveWay(form: NgForm){
       let name = form.controls['name'].value;
-      console.log(this.placesOnRoute);
+      this.placesOnRoute.forEach(p => {
+        p.timeToNext = ((Math.round(p.timeToNext/60)));
+      })
+
       let way: Way = new Way(name, this.placesOnRoute[this.placesOnRoute.length -1].timeToNext, 
         this.placesOnRoute, new City(sessionStorage.getItem("cityAddress")));
       this.routeService.addWay(way).subscribe(data => console.log(data));
