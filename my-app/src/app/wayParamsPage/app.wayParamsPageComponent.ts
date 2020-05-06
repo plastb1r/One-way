@@ -48,6 +48,7 @@ export class WayParamsPageComponent implements OnInit{
     parameters: Parameters;
     way_options: Array<WayType>;
     route_places: Array<Location>;
+    index = 0;
 
     geolocation;
     circle;
@@ -160,7 +161,7 @@ export class WayParamsPageComponent implements OnInit{
             return 0;
           });
   
-          for (var i = 1; i < results.length ; i++) {
+          for (var i = 0; i < results.length ; i++) {
             var choose = false;
             var addedToWay = false;
             if(results[i].photos){
@@ -351,8 +352,8 @@ export class WayParamsPageComponent implements OnInit{
       console.log("way" + locs);
     }
 
-    loadPlacesForWay(types, placeCount, locats){
-      this.route_places = [];
+    loadPlacesForWay(types, placeCount, locats, form: NgForm){
+      
       this.mapsAPILoader.load().then(() => {
         let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
         let mapOptions = {
@@ -370,9 +371,55 @@ export class WayParamsPageComponent implements OnInit{
          
         }, (results, status) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
-            for (var i = 1; i < placeCount; i++) {
+
+            for (let i = 0; i < placeCount; i++) {
+                console.log(this.index);
                 locats.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: false, addedToWay: false});
+                locats[this.index]['rating'] = results[i]['rating'];
+                this.index ++;
             }
+
+            for(var t = 0; t < locats.length; t++)
+            {
+              for(var j = t + 1; j < locats.length; j++){
+                if (locats[t].placeId == locats[j].placeId){
+      
+                  locats.splice(t, 1);
+                  console.log("locats after filtering",locats);
+                }
+              }
+            };
+
+            var transportations = this.setTransportations(form)
+            console.log("transport",transportations);
+
+            locats.sort(function (a, b) {
+              if (a['rating'] < b['rating']) {
+                return 1;
+              }
+              if (a['rating'] > b['rating']) {
+                return -1;
+              }
+              // a должно быть равным b
+              return 0;
+            });
+            console.log("locats after sorting",locats);
+
+            this.route_places = [];
+            console.log(placeCount);
+            for(var t = 0; t < placeCount; t++){
+              this.route_places.push(locats[t]);
+            }
+            this.parameters = new Parameters(this.startPoint, this.endPoint, this.route_places, transportations);
+            console.log("parameters" +  JSON.stringify(this.parameters));
+
+            this.parametersService.sendParams(this.parameters).subscribe( data => 
+              {
+                sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
+                console.log("params" + sessionStorage.getItem("placesFromRoute"));
+                window.location.replace("/mapRoutePage");
+              }
+            );
         }
         });
   
@@ -381,44 +428,28 @@ export class WayParamsPageComponent implements OnInit{
       });
     }
 
-    setPlacesToVisit(count: number): Array<Location>{
+    setPlacesToVisit(count: number, form: NgForm): Array<Location>{
       let locats = new Array<Location>();
       if(this.way_options[0].selected){
-        this.loadPlacesForWay(this.way_options[0].types,count, locats);
-        console.log("locats",locats);
+        this.loadPlacesForWay(this.way_options[0].types,count,locats, form);
       }
       if(this.way_options[1].selected){
-        
+        this.loadPlacesForWay(this.way_options[1].types,count,locats, form);
       }
       if(this.way_options[2].selected){
-        
+        this.loadPlacesForWay(this.way_options[2].types,count,locats, form);
       }
       if(this.way_options[3].selected){
-        
+        this.loadPlacesForWay(this.way_options[3].types,count,locats, form);
       }
       if(this.way_options[4].selected){
-        
+        this.loadPlacesForWay(this.way_options[4].types,count,locats, form);
       }
-
-      locats.sort(function (a, b) {
-        if (a['rating'] < b['rating']) {
-          return 1;
-        }
-        if (a['rating'] > b['rating']) {
-          return -1;
-        }
-        // a должно быть равным b
-        return 0;
-      });
-      console.log("locats",locats);
+   
       return locats;
     }
 
-    setParams(form: NgForm) { 
-      
-      let freeHours = form.controls['freeHours'].value;
-      let placesToVisit =  form.controls['placesToVisit'].value;
-      
+    setTransportations(form: NgForm): Array<string>{
       var transportations = new Array<string>();
 
       if(form.controls['WALKING'].value)
@@ -441,23 +472,45 @@ export class WayParamsPageComponent implements OnInit{
       if(transportations.length == 0){
         transportations = ["walking"];
       }
+      return transportations;
+    }
+
+    setParams(form: NgForm) { 
+      
+      let freeHours = form.controls['freeHours'].value;
+      var transportations = this.setTransportations(form);
+      let placesToVisit: number =  form.controls['placesToVisit'].value;
+      let createWay: boolean = false;
+
       let locats = new Array<Location>();
-      locats = JSON.parse(sessionStorage.getItem("LocatsToWay"));
-      if(locats.length == 0){
-        locats = this.setPlacesToVisit(placesToVisit);
-        console.log("looooocs" + locats);
+
+      if(sessionStorage.getItem("LocatsToWay")){
+        locats = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+        createWay = true;
       }
-      this.parameters = new Parameters(this.startPoint, this.endPoint, locats, transportations);
-      console.log("parameters" +  this.parameters);
+
+
+      if(locats.length == 0){
+        createWay = false;
+        this.index = 0;
+        this.route_places = [];
+        locats = this.setPlacesToVisit(placesToVisit, form);
+      }
+
+      if(createWay){
+        this.parameters = new Parameters(this.startPoint, this.endPoint, locats, transportations);
+        this.parametersService.sendParams(this.parameters).subscribe( data => 
+          {
+            sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
+            console.log("params" + sessionStorage.getItem("placesFromRoute"));
+            window.location.replace("/mapRoutePage");
+          } );
+      }
+
+
       console.log(this.startPoint);
       console.log( this.endPoint);
 
-      /*this.parametersService.sendParams(this.parameters).subscribe( data => 
-        {
-          sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
-          console.log("params" + sessionStorage.getItem("placesFromRoute"));
-          window.location.replace("/mapRoutePage");
-        }
-      );*/
+      
     }
 }

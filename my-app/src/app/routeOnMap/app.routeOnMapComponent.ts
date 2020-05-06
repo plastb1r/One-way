@@ -211,7 +211,7 @@ export class RouteOnMapComponent implements OnInit{
       //p['label'] = this.markersLabels[this.ind+=1];
       console.log(this.placesOnRoute);
       //this.details.push({name: results.name, address: results.formatted_address, photos: photo});
-      //his.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
+      this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
       if (this.places.length == this.placesOnRoute.length){
         this.setTravelModes();
         this.setDirections();
