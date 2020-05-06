@@ -92,6 +92,7 @@
     </agm-marker>
     <agm-direction
     *ngFor="let dir of dirWalk, let iy = index"
+    [visible]="done"
     [origin]="dirWalk[iy].origin" 
     [destination]="dirWalk[iy].destination"  
     [renderOptions]="renderOptionsWalk" 
@@ -99,6 +100,7 @@
     > </agm-direction>
     <agm-direction
     *ngFor="let dir of dirTrans, let iy = index"
+    [visible]="done"
     [origin]="dirTrans[iy].origin" 
     [destination]="dirTrans[iy].destination"  
     [renderOptions]="renderOptionsTrans" 
@@ -106,6 +108,7 @@
     > </agm-direction>
     <agm-direction
     *ngFor="let dir of dirCar, let iy = index"
+    [visible]="done"
     [origin]="dirCar[iy].origin" 
     [destination]="dirCar[iy].destination"  
     [renderOptions]="renderOptionsCar" 
@@ -114,6 +117,7 @@
     <agm-direction
     *ngFor="let dir of dirBic, let iy = index"
     [origin]="dirBic[iy].origin" 
+    [visible]="done"
     [destination]="dirBic[iy].destination"  
     [renderOptions]="renderOptionsBic" 
     [travelMode]="dirBic[0].travelMode"
