@@ -96,6 +96,7 @@ public class Graph {
         for (int i = 0; i < permutations.size() ; i++) { 
             for (int j = 0; j < permutations.get(i).size() - 1; j++) { 
                 if(j == 0) {
+                    Node c = nodeArray.get(permutations.get(i).get(j));
                     curSum += getDuration(startPoint, nodeArray.get(permutations.get(i).get(j)));
                 }
                 curSum += getDuration(nodeArray.get(permutations.get(i).get(j)),  nodeArray.get(permutations.get(i).get(j+1)));
@@ -180,15 +181,40 @@ public class Graph {
 
     
     public void simplifyGraph() {
-
+        ArrayList<Edge> result;
+        ArrayList<Edge> minEdges;
         for (Node node : nodes) {
-            ArrayList<Edge> minEdges = new ArrayList<Edge>();
-            for (Edge edge : node.getEdges()) {
-                if (edge.getTravelMode().equals("walking")) {
-                    minEdges.add(edge);
+            result = new ArrayList<Edge>();
+            for (int i = 0; i < nodes.size(); i++){
+                minEdges = new ArrayList<Edge>();
+                for (Edge edge : node.getEdges()) {
+                    if (edge.getEndNode().equals(nodes.get(i))) {
+                        minEdges.add(edge);
+                    }
+                } 
+                if(minEdges.size() != 0){
+                    Long min = minEdges.get(0).getDuration();
+                Edge minEdge = minEdges.get(0);
+                for(Edge edge: minEdges){
+                    if (edge.getDuration() < min) {
+                        min = edge.getDuration();
+                        minEdge = edge;
+                    }
                 }
-            }
-            int counter = 0;
+                result.add(minEdge);
+                }
+            }      
+            node.setEdges(result);
+        }
+    }
+
+           /* int counter = 0;
+
+
+
+
+
+
             for (Edge edge0 : minEdges) {
                 Edge minEdge = edge0;
                 for (Edge edge : node.getEdges()) {
@@ -200,7 +226,7 @@ public class Graph {
                 counter++;
             }
             node.setEdges(minEdges);
-        }
-    }
+        
+    }*/
 
 }

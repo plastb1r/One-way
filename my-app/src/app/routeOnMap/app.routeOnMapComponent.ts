@@ -86,6 +86,7 @@ export class RouteOnMapComponent implements OnInit{
       this.service = new google.maps.places.PlacesService(this.map);
       this.placesOnRoute.forEach(p => {
         console.log("id точки, переданной в функцию", p.place);
+        
         this.loadPlaces(p);
         this.timeToNext.push((Math.round(p.timeToNext/60)));
         this.travelModes.push(p.transportToNext);
@@ -133,7 +134,7 @@ export class RouteOnMapComponent implements OnInit{
           var dir = {
             origin: {lat: lat, lng: lng},
             destination: {lat: nextlat, lng: nextlng},
-            travelMode: google.maps.TravelMode.WALKING
+            travelMode: google.maps.TravelMode.TRANSIT
             }
             this.dirTrans.push(dir);
         }
@@ -196,7 +197,7 @@ export class RouteOnMapComponent implements OnInit{
   
     getPlaces(results, status,p) {
       var photo = [];
-      if(results.photos.length != 0){
+      if(results.photos != null){
         photo.push(results.photos[0].getUrl());
       }
       else{

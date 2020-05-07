@@ -41,11 +41,7 @@
              </div><!-- .main-search__group -->
 
              
-             <div class="main-search__group main-search__group--tertiary">
-               <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">
-                 <i class="fa fa-search"></i> Построить маршрут
-               </button>
-             </div>
+          
         </div><!-- .main-search-container -->
        </ul>
      </div>
@@ -58,11 +54,6 @@
         <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
         <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
       </div><!-- .main-search__group -->
-
-      <div class="main-search__group">
-      <label for="freeHours" class="c-primary">Количество свободного времени</label>
-      <input type="text" name="freeHours" id="freeHours" class="form-input form-input--pill form-input--border-c-gallery"  required [(ngModel)]="freeHours" placeholder="2 часа">
-    </div><!-- .main-search__group -->
 
       <ul class="pricing-table__features min-list">
           <div class="main-search__group main-search__group--primary">
@@ -122,6 +113,12 @@
      <label for="main-search-number-of-pl" class="c-primary bold">Количество мест для посещения</label>
      <input type="text" name="placesToVisit" id="placesToVisit" class="form-input form-input--pill form-input--border-c-gallery" required [(ngModel)]="placesToVisit" placeholder="3">
    </div><!-- .main-search__group -->
+
+   <div class="main-search__group main-search__group--tertiary">
+    <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">
+      <i class="fa fa-search"></i> Построить маршрут
+    </button>
+  </div>
    </div>
   </div><!-- .pricing-table -->
   </form>

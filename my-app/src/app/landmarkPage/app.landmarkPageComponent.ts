@@ -114,10 +114,15 @@ export class LandmarkPageComponent implements OnInit{
       this.types = results.types;
       this.number = results.international_phone_number;
       this.address = results.formatted_address;
-      this.lat = results.geometry.location.lat;
-      this.lng = results.geometry.location.lng;
-      for (var i = 0; i < results.photos.length ; i++) {
-        this.photo.push(results.photos[i].getUrl());
+
+      if(results.photos != null)
+        {
+          for (var i = 0; i < results.photos.length ; i++) {
+              this.photo.push(results.photos[i].getUrl());
+          }
+        }
+      else{
+        this.photo.push("/assets/img/place.jpeg");
       }
       this.lat = results.geometry.location.lat();
       this.lng = results.geometry.location.lng();

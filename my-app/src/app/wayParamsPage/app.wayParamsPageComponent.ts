@@ -65,11 +65,16 @@ export class WayParamsPageComponent implements OnInit{
   
     ngOnInit() {
       this.way_options = [
-        {name: 'культурный', types: ['art_gallery','painter','library'],selected: false},
+        {name: 'галереи', types: ['art_gallery'],selected: false},
         {name: 'музеи', types: ['museum'],selected: false},
-        {name: 'гастрономический гид', types: ['restaurant','cafe', 'bakery', 'food'],selected: false},
-        {name: 'бары', types: ['bar','liquor_store'],selected: false},
-        {name: 'активный отдых', types: ['amusement_park','bowling_alley','casino','night_club','movie_theater','establishment'],selected: false},
+        {name: 'рестораны', types: ['restaurant'],selected: false},
+        {name: 'кофейни', types: ['bakery'],selected: false},
+        {name: 'кафе', types: ['cafe'],selected: false},
+        {name: 'бары', types: ['bar'],selected: false},
+        {name: 'развлечения', types: ['establishment'],selected: false},
+        {name: 'кинотеатры', types: ['movie_theater'],selected: false},
+        {name: 'парки', types: ['park'],selected: false},
+        {name: 'магазины', types: ['shopping_mall'],selected: false}
       ];
 
       this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
@@ -364,7 +369,66 @@ export class WayParamsPageComponent implements OnInit{
         this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
         let service = new google.maps.places.PlacesService(this.map);
 
-        service.nearbySearch({
+        service.textSearch(
+          {location: city,
+          radius: 1000,
+          query: types[0]
+        },
+        (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+
+            for (let i = 0; i < placeCount; i++) {
+                console.log(this.index);
+                locats.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: false, addedToWay: false});
+                locats[this.index]['rating'] = results[i]['rating'];
+                this.index ++;
+            }
+
+            for(var t = 0; t < locats.length; t++)
+            {
+              for(var j = t + 1; j < locats.length; j++){
+                if (locats[t].placeId == locats[j].placeId){
+      
+                  locats.splice(t, 1);
+                  console.log("locats after filtering",locats);
+                }
+              }
+            };
+
+            var transportations = this.setTransportations(form)
+            console.log("transport",transportations);
+
+            locats.sort(function (a, b) {
+              if (a['rating'] < b['rating']) {
+                return 1;
+              }
+              if (a['rating'] > b['rating']) {
+                return -1;
+              }
+              // a должно быть равным b
+              return 0;
+            });
+            console.log("locats after sorting",locats);
+
+            this.route_places = [];
+            console.log(placeCount);
+            for(var t = 0; t < placeCount; t++){
+              this.route_places.push(locats[t]);
+            }
+            this.parameters = new Parameters(this.startPoint, this.endPoint, this.route_places, transportations);
+            console.log("parameters" +  JSON.stringify(this.parameters));
+
+           this.parametersService.sendParams(this.parameters).subscribe( data => 
+              {
+                sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
+                console.log("params" + sessionStorage.getItem("placesFromRoute"));
+                window.location.replace("/mapRoutePage");
+              }
+            );
+        }
+        });
+
+        /*service.nearbySearch({
           location: city,
           radius: 70000,
           types: types
@@ -422,10 +486,10 @@ export class WayParamsPageComponent implements OnInit{
             );
         }
         });
-  
+  */
       }, (err) => {
         console.log(err);
-      });
+      })
     }
 
     setPlacesToVisit(count: number, form: NgForm): Array<Location>{
@@ -444,6 +508,21 @@ export class WayParamsPageComponent implements OnInit{
       }
       if(this.way_options[4].selected){
         this.loadPlacesForWay(this.way_options[4].types,count,locats, form);
+      }
+      if(this.way_options[5].selected){
+        this.loadPlacesForWay(this.way_options[5].types,count,locats, form);
+      }
+      if(this.way_options[6].selected){
+        this.loadPlacesForWay(this.way_options[6].types,count,locats, form);
+      }
+      if(this.way_options[7].selected){
+        this.loadPlacesForWay(this.way_options[7].types,count,locats, form);
+      }
+      if(this.way_options[8].selected){
+        this.loadPlacesForWay(this.way_options[8].types,count,locats, form);
+      }
+      if(this.way_options[9].selected){
+        this.loadPlacesForWay(this.way_options[9].types,count,locats, form);
       }
    
       return locats;
@@ -477,7 +556,6 @@ export class WayParamsPageComponent implements OnInit{
 
     setParams(form: NgForm) { 
       
-      let freeHours = form.controls['freeHours'].value;
       var transportations = this.setTransportations(form);
       let placesToVisit: number =  form.controls['placesToVisit'].value;
       let createWay: boolean = false;

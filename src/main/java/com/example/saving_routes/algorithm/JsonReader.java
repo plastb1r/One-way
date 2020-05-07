@@ -118,13 +118,20 @@ public class JsonReader {
                     JSONArray elements = (JSONArray) array.get("elements");
                     JSONObject element = (JSONObject) elements.get(counter2);
                     JSONObject duration = (JSONObject) element.get("duration");
-                    Object val = duration.get("value");
-                    Edge edge = new Edge();
-                    edge.setStartNode(startNode);
-                    edge.setEndNode(endNode);
-                    edge.setDuration((Long) val);
-                    edge.setTravelMode(travelMode);
-                    startNode.getEdges().add(edge);
+                    Object val;
+                    //if(duration != null){
+                        val = duration.get("value");
+                        Edge edge = new Edge();
+                        edge.setStartNode(startNode);
+                        edge.setEndNode(endNode);
+                        edge.setDuration((Long)val);
+                        edge.setTravelMode(travelMode);
+                        //startNode.getEdges().add(edge);
+                        startNode.addEdge(edge);
+                    //}
+                    //else {
+                        //val = null;
+                   // }
                 }
                 counter2++;
             }

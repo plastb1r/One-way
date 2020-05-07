@@ -85,6 +85,10 @@ public class Node {
         return edges;
     }
 
+    public void addEdge(Edge edge){
+        this.edges.add(edge);
+    }
+
     public void setEdges(ArrayList<Edge> edges) {
         this.edges = edges;
     }

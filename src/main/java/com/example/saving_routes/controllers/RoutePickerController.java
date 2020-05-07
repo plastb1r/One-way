@@ -88,9 +88,9 @@ class RouteGeneratorController {
                     e.printStackTrace();
                 }
 
-                /*while ((inputLine = in.readLine()) != null) {
+                while ((inputLine = in.readLine()) != null) {
                     content.append(inputLine);
-                }*/
+                }
                 queryContent.put(travelMode, content.toString());
                 logger.info("Data from GoogleAPI was received");
 
