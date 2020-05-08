@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { ParametersService } from 'src/app/services/parameters.service';
 import {MapRoutePageComponent} from './mapRoutePage/app.mapRoutePageComponent';
+import { MessageBoxModule } from  'message-box-plugin';
 
 import {
     GoogleApiModule,
@@ -98,6 +99,7 @@ let gapiClientConfig: NgGapiClientConfig = {
     Ng5SliderModule,
     NgbModule,
     AgmDirectionModule,
+    MessageBoxModule,
     RouterModule.forRoot([{
       path: 'redirect',
       component: AppComponent

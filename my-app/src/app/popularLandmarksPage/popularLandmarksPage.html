@@ -31,60 +31,69 @@
         </div><!-- .d-md-flex -->
       </div><!-- .listing-search -->
       <div [ngClass]="{invisible: visibility}" class="d-lg-flex justify-content-lg-between align-items-lg-center hideDiv listing-keyword--on-map ">
-          <ul class="min-list inline-list listing-filter listing-filter--list">
-            <li>
-              <div class="form-group">
-                <label for="accommodation" class="icheck_label">
-                  <input type="radio" (click)="setIndex(0);loadPlaces()" name="accommodation" id="accommodation">
-                  Гастрономический гид
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class="form-group">
-                <label for="apartments" class="icheck_label">
-                  <input type="radio" (click)="setIndex(1);loadPlaces()" name="apartments" id="apartments">
-                  Отели
-                </label>
-              </div>
-            </li>
+        <ul class="min-list inline-list listing-filter listing-filter--list">
+          <li>
+            <div class="form-group">
+              <label for="food" class="icheck_label">
+                <input type="radio" (click)="setIndex(0);loadPlaces()" name="food" id="food">
+                Гастрономический гид
+              </label>
+            </div>
+          </li>
+          <li>
+            <div class="form-group">
+              <label for="hotels" class="icheck_label">
+                <input type="radio" (click)="setIndex(1);loadPlaces()" name="hotels" id="hotels">
+                Отели
+              </label>
+            </div>
+          </li>
 
-            <li>
-              <div class="form-group">
-                <label for="car-rental" class="icheck_label">
-                  <input type="radio" (click)="setIndex(2);loadPlaces()" name="car-rental" id="car-rental">
-                  Бары
-                </label>
-              </div>
-            </li>
+          <li>
+            <div class="form-group">
+              <label for="bars" class="icheck_label">
+                <input type="radio" (click)="setIndex(2);loadPlaces()" name="bars" id="bars">
+                Бары
+              </label>
+            </div>
+          </li>
 
-            <li>
-              <div class="form-group">
-                <label for="street-parking" class="icheck_label">
-                  <input type="radio" (click)="setIndex(3);loadPlaces()" name="street-parking" id="street-parking">
-                  Активный отдых
-                </label>
-              </div>
-            </li>
+          <li>
+            <div class="form-group">
+              <label for="active" class="icheck_label">
+                <input type="radio" (click)="setIndex(3);loadPlaces()" name="active" id="active">
+                Активный отдых
+              </label>
+            </div>
+          </li>
 
-            <li>
-              <div class="form-group">
-                <label for="smoking-allowed" class="icheck_label">
-                  <input type="radio" (click)="setIndex(4);loadPlaces()" name="smoking-allowed" id="smoking-allowed">
-                  Галереи и музеи
-                </label>
-              </div>
-            </li>
+          <li>
+            <div class="form-group">
+              <label for="museums" class="icheck_label">
+                <input type="radio" (click)="setIndex(4);loadPlaces()" name="museums" id="museums">
+                Галереи и музеи
+              </label>
+            </div>
+          </li>
 
-            <li>
-              <div class="form-group">
-                <label for="wireless-internet" class="icheck_label">
-                  <input type="radio" (click)="setIndex(5);loadPlaces()" name="wireless-internet" id="wireless-internet">
-                  Аутлеты и ТЦ
-                </label>
-              </div>
-            </li>
-          </ul>
+          <li>
+            <div class="form-group">
+              <label for="shops" class="icheck_label">
+                <input type="radio" (click)="setIndex(5);loadPlaces()" name="shops" id="shops">
+                Аутлеты и ТЦ
+              </label>
+            </div>
+          </li>
+
+          <li>
+            <div class="form-group">
+              <label for="parks" class="icheck_label">
+                <input type="radio" (click)="setIndex(6);loadPlaces()" name="parks" id="parks">
+                Парки 
+              </label>
+            </div>
+          </li>
+        </ul>
         </div>
   </div><!-- .row -->
 </div><!-- .container -->

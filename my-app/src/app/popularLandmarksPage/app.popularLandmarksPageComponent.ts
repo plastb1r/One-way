@@ -22,7 +22,7 @@ export class PopularLandmarksPageComponent implements OnInit{
   cityName: string;
   placeDetails: Array<PlaceDetails> = new Array<PlaceDetails>();
   locations: Array<Location> = new Array<Location>();
-  types = [];
+  types = ['park','tourist_attraction','establishment'];
   places = [];
   visibility: boolean = true;
   wayPlaces:Array<Location> = new Array<Location>();
@@ -57,14 +57,26 @@ export class PopularLandmarksPageComponent implements OnInit{
 
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       let service = new google.maps.places.PlacesService(this.map);
-      service.nearbySearch({
-        location: city,
-        radius: 70000,
-        types: this.types
-       
-      }, (results, status) => {
+      if(this.types[0] == "restaurant" || this.types[0] == "bar"){
+        service.textSearch(
+          {location: city,
+          radius: 10000,
+          query: this.types[0]
+        },
+        (results, status) => {
           this.getPlaces(results, status)
-      });
+        });
+      }
+      else{
+        service.nearbySearch({
+          location: city,
+          radius: 10000,
+          types: this.types
+        
+        }, (results, status) => {
+            this.getPlaces(results, status)
+        });
+      }
 
     }, (err) => {
       console.log(err);
@@ -86,7 +98,7 @@ export class PopularLandmarksPageComponent implements OnInit{
           return 0;
         });
 
-        for (var i = 1; i < results.length ; i++) {
+        for (var i = 0; i < results.length ; i++) {
           var choose = false;
           var addedToWay = false;
           if(results[i].photos){
@@ -134,7 +146,7 @@ export class PopularLandmarksPageComponent implements OnInit{
 
   setIndex(index: number){
     if(index == 0){
-      this.types = ['restaurant','cafe', 'bakery', 'food'];
+      this.types = ['restaurant','cafe', 'bakery'];
     }
     if(index == 1){
       this.types = ['lodging'];
@@ -143,16 +155,16 @@ export class PopularLandmarksPageComponent implements OnInit{
       this.types= ['bar','liquor_store'];
     }
     if(index == 3){
-      this.types = ['amusement_park','bowling_alley','casino','night_club','movie_theater','establishment'];
+      this.types = ['establishment','bowling_alley','casino','night_club','movie_theater'];
     }
     if(index == 4){
       this.types = ['museum','art_gallery','painter','library'];
     }
     if(index == 5){
-      this.types = ['clothing_store','shoe_store','shopping_mall'];
+      this.types = ['shopping_mall'];
     }
     if(index == 6){
-      this.types = ['park','tourist_attraction','aquarium'];
+      this.types = ['park','tourist_attraction'];
     }
   }
 

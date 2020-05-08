@@ -18,7 +18,7 @@ export class MapFormComponent implements OnInit{
   public details: Array<PlaceDetails>;
   public way: Way;
   private previous;
-
+  private cityLoc;
   public zoom: number = 12;
   public visibility: Array<boolean> = new Array<boolean>(); //for places in way
 
@@ -32,11 +32,11 @@ export class MapFormComponent implements OnInit{
    ) { }
 
    ngOnInit() {
-    //load Places Autocomplete
+    this.cityLoc = JSON.parse(sessionStorage.getItem("cityAddressLocat"));
     this.mapsAPILoader.load().then(() => {
-
-    this.locations2 = JSON.parse(sessionStorage.getItem('locatsToShowOnMap'));
-    this.details = JSON.parse(sessionStorage.getItem('detailsToShowOnMap'));
+      
+      this.locations2 = JSON.parse(sessionStorage.getItem('locatsToShowOnMap'));
+      this.details = JSON.parse(sessionStorage.getItem('detailsToShowOnMap'));
 
     let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
     });

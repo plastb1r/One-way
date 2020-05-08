@@ -174,9 +174,9 @@ public class Graph {
             ArrayList<Integer> temp = new ArrayList<>(result);
             results.add(temp);
         }        
-        for (int i=0; i<nums.size(); i++) {
-            if (!result.contains(nums.get(i))) {
-                result.add(nums.get(i));
+        for (Integer n: nums){
+            if (!result.contains(n)) {
+                result.add(n);
                 dfs(nums, results, result);
                 result.remove(result.size() - 1);
             }

@@ -8,6 +8,8 @@ import { PlacesService } from '../services/places.service';
 import { ParametersService } from '../services/parameters.service';
 import { PlaceOnRoute } from '../domens/placeOnRoute';
 import { WayType } from 'src/app/domens/way_type';
+import { MessageBoxService, MessageBox, ButtonType } from  'message-box-plugin';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   templateUrl: './wayParamsPage.html',
@@ -31,6 +33,8 @@ export class WayParamsPageComponent implements OnInit{
     start = false;
     end = false;
 
+    public message = "Необходимо ввести начальную и конечную точки маршрута!";
+
     @ViewChild('map', {static: false})
     mapElement: ElementRef;
   
@@ -39,7 +43,7 @@ export class WayParamsPageComponent implements OnInit{
     cityName: string;
     placeDetails: Array<PlaceDetails> = new Array<PlaceDetails>();
     locations: Array<Location> = new Array<Location>();
-    types = ['park','tourist_attraction','aquarium'];
+    types = ['establishment','park','tourist_atraction'];
     favorites: Array<boolean> = new Array<boolean>();
     places = [];
     visibility: boolean = false;
@@ -59,7 +63,9 @@ export class WayParamsPageComponent implements OnInit{
       private mapsAPILoader2: MapsAPILoader,
       private placeService: PlacesService,
       private ngZone: NgZone,
-      private parametersService: ParametersService
+      private parametersService: ParametersService,
+      private messageBoxService: MessageBoxService,
+      private tokenStorageService: TokenStorageService
     )
     {}
   
@@ -139,15 +145,27 @@ export class WayParamsPageComponent implements OnInit{
   
         this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
         let service = new google.maps.places.PlacesService(this.map);
-        service.nearbySearch({
-          location: city,
-          radius: 70000,
-          types: this.types
-         
-        }, (results, status) => {
+        if(this.types[0] == "restaurant" || this.types[0] == "bar"){
+          service.textSearch(
+            {location: city,
+            radius: 10000,
+            query: this.types[0]
+          },
+          (results, status) => {
             this.getPlaces(results, status)
-        });
-  
+          });
+        }
+        else{
+          service.nearbySearch({
+            location: city,
+            radius: 10000,
+            types: this.types
+          
+          }, (results, status) => {
+              this.getPlaces(results, status)
+          });
+        }
+
       }, (err) => {
         console.log(err);
       });
@@ -209,7 +227,7 @@ export class WayParamsPageComponent implements OnInit{
   
     setIndex(index: number){
       if(index == 0){
-        this.types = ['restaurant','cafe', 'bakery', 'food'];
+        this.types = ['restaurant','cafe', 'bakery'];
       }
       if(index == 1){
         this.types = ['lodging'];
@@ -218,16 +236,16 @@ export class WayParamsPageComponent implements OnInit{
         this.types= ['bar','liquor_store'];
       }
       if(index == 3){
-        this.types = ['amusement_park','bowling_alley','casino','night_club','movie_theater','establishment'];
+        this.types = ['establishment','bowling_alley','casino','night_club','movie_theater'];
       }
       if(index == 4){
         this.types = ['museum','art_gallery','painter','library'];
       }
       if(index == 5){
-        this.types = ['clothing_store','shoe_store','shopping_mall'];
+        this.types = ['shopping_mall'];
       }
       if(index == 6){
-        this.types = ['park','tourist_attraction','aquarium'];
+        this.types = ['park','tourist_attraction'];
       }
     }
   
@@ -565,7 +583,14 @@ export class WayParamsPageComponent implements OnInit{
     }
 
     setParams(form: NgForm) { 
-      
+      if(this.startPoint == null || this.endPoint ==null){
+        const user = this.tokenStorageService.getUser();
+        let messageBox = MessageBox
+        .Create('Хэй,' + user.username,'Необходимо указать начальную и конечную точки маршрута :)')
+        this.messageBoxService.present(messageBox);
+        window.scroll(0,0);
+      }
+
       var transportations = this.setTransportations(form);
       let placesToVisit: number =  form.controls['placesToVisit'].value;
       let createWay: boolean = false;
@@ -576,7 +601,6 @@ export class WayParamsPageComponent implements OnInit{
         locats = JSON.parse(sessionStorage.getItem("LocatsToWay"));
         createWay = true;
       }
-
 
       if(locats.length == 0){
         createWay = false;
@@ -595,7 +619,6 @@ export class WayParamsPageComponent implements OnInit{
           } 
         );
       }
-
 
       console.log(this.startPoint);
       console.log( this.endPoint);
