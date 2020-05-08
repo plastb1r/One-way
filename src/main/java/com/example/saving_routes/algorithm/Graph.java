@@ -23,6 +23,10 @@ public class Graph {
             while (minWay.get(i).getEdges().get(j).getEndNode()!=minWay.get(i+1))
             {
                 j++;
+                if (j == minWay.size()-1){
+                    j--;
+                    break;
+                }
             }
             Edge rEdge=minWay.get(i).getEdges().get(j);
             minWay.get(i).getEdges().clear();
@@ -195,7 +199,7 @@ public class Graph {
                 } 
                 if(minEdges.size() != 0){
                     Long min = minEdges.get(0).getDuration();
-                Edge minEdge = minEdges.get(0);
+                    Edge minEdge = minEdges.get(0);
                 for(Edge edge: minEdges){
                     if (edge.getDuration() < min) {
                         min = edge.getDuration();
