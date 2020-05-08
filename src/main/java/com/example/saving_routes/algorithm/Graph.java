@@ -75,7 +75,7 @@ public class Graph {
     // function uses permutations to combine all nodes between start and end;
     // then shouls check edges(-) and count durations - sum;
     // returns time for each permutation ;
-    public Long[] shortWayPermute(Node startPoint,
+    public List<Long> shortWayPermute(Node startPoint,
                                 Node endPoint,
                                 ArrayList<Node> nodeArray,
                                 Long curSum,
@@ -83,15 +83,16 @@ public class Graph {
                                 ){
                                     
         int counter = resSize;
-        Integer[] firstpermutation = new Integer[counter];
+        //Integer[] firstpermutation = new Integer[counter];
+        List<Integer> firstpermutation = new ArrayList<>();
         for(int i = 0; i< counter; i++){
-            firstpermutation[i] = i;
+            firstpermutation.add(i);
         }
-        ArrayList<ArrayList<Integer>> permutations = new ArrayList<ArrayList<Integer>>();
+        List<ArrayList<Integer>> permutations = new ArrayList<ArrayList<Integer>>();
 
         permutations.addAll(permute(firstpermutation));
         int permuteArraySize = permutations.size();
-        Long[] sums = new Long[permuteArraySize];
+        List<Long> sums = new ArrayList<Long>();
 
         for (int i = 0; i < permutations.size() ; i++) { 
             for (int j = 0; j < permutations.get(i).size() - 1; j++) { 
@@ -105,7 +106,7 @@ public class Graph {
                     curSum += getDuration(nodeArray.get(permutations.get(i).get(j)), endPoint);
                 }
             } 
-            sums[i] = curSum;
+            sums.add(i, curSum);;
             curSum =  Long.valueOf(0);
         } 
         ArrayList<Node> permuteNodes = new ArrayList<Node>();
@@ -118,11 +119,11 @@ public class Graph {
 
     }
 
-    public int getIndexOfMinTime(Long[] sums){
+    public int getIndexOfMinTime(List<Long> sums){
         int indexOfMin = 0;
-        for (int i = 1; i < sums.length; i++)
+        for (int i = 1; i < sums.size(); i++)
         {
-            if (sums[i] < sums[indexOfMin])
+            if (sums.get(i) < sums.get(indexOfMin))
             {
                 indexOfMin = i;
             }
@@ -152,9 +153,9 @@ public class Graph {
 
 
     // function returns ArrayList of permutations
-    public ArrayList<ArrayList<Integer>> permute(Integer[] nums) { 
+    public ArrayList<ArrayList<Integer>> permute(List<Integer> nums) { 
         ArrayList<ArrayList<Integer>> results = new ArrayList<ArrayList<Integer>>();
-        if (nums == null || nums.length == 0) {
+        if (nums == null || nums.size() == 0) {
             return results;
         }
         ArrayList<Integer> result = new ArrayList<>();
@@ -164,14 +165,14 @@ public class Graph {
     
 
     
-    public void dfs(Integer[] nums, ArrayList<ArrayList<Integer>> results, ArrayList<Integer> result) { 
-        if (nums.length == result.size()) {
+    public void dfs(List<Integer> nums, ArrayList<ArrayList<Integer>> results, ArrayList<Integer> result) { 
+        if (nums.size() == result.size()) {
             ArrayList<Integer> temp = new ArrayList<>(result);
             results.add(temp);
         }        
-        for (int i=0; i<nums.length; i++) {
-            if (!result.contains(nums[i])) {
-                result.add(nums[i]);
+        for (int i=0; i<nums.size(); i++) {
+            if (!result.contains(nums.get(i))) {
+                result.add(nums.get(i));
                 dfs(nums, results, result);
                 result.remove(result.size() - 1);
             }

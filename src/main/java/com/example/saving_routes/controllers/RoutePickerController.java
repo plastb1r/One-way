@@ -133,7 +133,7 @@ class RouteGeneratorController {
         LinkedList<Edge> resWay = new LinkedList<Edge>();
         int counter = 0;
         Long sum = Long.valueOf(0);
-        Long sums[] = new Long[distances.factorial(test1.size())];
+        List<Long> sums = new ArrayList<>();
         sums = distances.shortWayPermute(start, end, test1, sum, test1.size());
         logger.debug("Graph was permuted");
         ArrayList<Node> minWay =  new ArrayList<Node>();

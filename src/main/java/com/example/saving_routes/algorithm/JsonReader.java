@@ -13,6 +13,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 public class JsonReader {
 
     public HashMap<String, Node> readNodes(String path, ArrayList<String> placesIds) throws IOException, ParseException {
@@ -117,10 +119,11 @@ public class JsonReader {
                     JSONObject array = (JSONObject) rows.get(counter1);
                     JSONArray elements = (JSONArray) array.get("elements");
                     JSONObject element = (JSONObject) elements.get(counter2);
-                    JSONObject duration = (JSONObject) element.get("duration");
-                    Object val;
-                    //if(duration != null){
-                        val = duration.get("value");
+                    String status = (String) element.get("status");
+                   
+                    if(!status.equals("ZERO_RESULTS")){
+                        JSONObject duration = (JSONObject) element.get("duration");
+                        Object val = duration.get("value");
                         Edge edge = new Edge();
                         edge.setStartNode(startNode);
                         edge.setEndNode(endNode);
@@ -128,10 +131,8 @@ public class JsonReader {
                         edge.setTravelMode(travelMode);
                         //startNode.getEdges().add(edge);
                         startNode.addEdge(edge);
-                    //}
-                    //else {
-                        //val = null;
-                   // }
+                    }
+                    
                 }
                 counter2++;
             }

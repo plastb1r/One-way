@@ -91,32 +91,36 @@
   </agm-info-window >
     </agm-marker>
     <agm-direction
-      *ngFor="let dir of dirWalk, let iy = index"
-      [origin]="dirWalk[iy].origin" 
-      [destination]="dirWalk[iy].destination"  
-      [renderOptions]="renderOptionsWalk" 
-      [travelMode]="dirWalk[0].travelMode"
+    *ngFor="let dir of dirWalk, let iy = index"
+    [visible]="done"
+    [origin]="dirWalk[iy].origin" 
+    [destination]="dirWalk[iy].destination"  
+    [renderOptions]="renderOptionsWalk" 
+    [travelMode]="dirWalk[0].travelMode"
     > </agm-direction>
     <agm-direction
-      *ngFor="let dir of dirTrans, let iy = index"
-        [origin]="dirTrans[iy].origin" 
-        [destination]="dirTrans[iy].destination"  
-        [renderOptions]="renderOptionsTrans" 
-        [travelMode]="dirTrans[0].travelMode"
+    *ngFor="let dir of dirTrans, let iy = index"
+    [visible]="done"
+    [origin]="dirTrans[iy].origin" 
+    [destination]="dirTrans[iy].destination"  
+    [renderOptions]="renderOptionsTrans" 
+    [travelMode]="dirTrans[0].travelMode"
     > </agm-direction>
     <agm-direction
-      *ngFor="let dir of dirCar, let iy = index"
-      [origin]="dirCar[iy].origin" 
-      [destination]="dirCar[iy].destination"  
-      [renderOptions]="renderOptionsCar" 
-      [travelMode]="dirCar[0].travelMode"
+    *ngFor="let dir of dirCar, let iy = index"
+    [visible]="done"
+    [origin]="dirCar[iy].origin" 
+    [destination]="dirCar[iy].destination"  
+    [renderOptions]="renderOptionsCar" 
+    [travelMode]="dirCar[0].travelMode"
     > </agm-direction>
     <agm-direction
-      *ngFor="let dir of dirBic, let iy = index"
-      [origin]="dirBic[iy].origin" 
-      [destination]="dirBic[iy].destination"  
-      [renderOptions]="renderOptionsBic" 
-      [travelMode]="dirBic[0].travelMode"
+    *ngFor="let dir of dirBic, let iy = index"
+    [origin]="dirBic[iy].origin" 
+    [visible]="done"
+    [destination]="dirBic[iy].destination"  
+    [renderOptions]="renderOptionsBic" 
+    [travelMode]="dirBic[0].travelMode"
     > </agm-direction>
    
   </agm-map>

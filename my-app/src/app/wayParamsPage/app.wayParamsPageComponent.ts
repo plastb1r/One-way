@@ -548,9 +548,19 @@ export class WayParamsPageComponent implements OnInit{
         transportations.push("bicycling");
       }
 
+      if(transportations.length == 1 && form.controls['BICYCLING'].value){
+        transportations = ["walking", "bicycling"];
+      }
+
+      if(transportations.length == 1 && form.controls['TRANSIT'].value){
+        transportations = ["walking", "transit"];
+      }
+
       if(transportations.length == 0){
         transportations = ["walking"];
       }
+
+      console.log(transportations);
       return transportations;
     }
 
@@ -582,7 +592,8 @@ export class WayParamsPageComponent implements OnInit{
             sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
             console.log("params" + sessionStorage.getItem("placesFromRoute"));
             window.location.replace("/mapRoutePage");
-          } );
+          } 
+        );
       }
 
 

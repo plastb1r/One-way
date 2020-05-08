@@ -100,7 +100,12 @@ export class WayPageComponent{
   getPlaces(results, status, p){
     console.log("place"+results.photos);
     var photo = [];
-    photo.push(results.photos[0].getUrl());
+    if(results.photos != null){
+      photo.push(results.photos[0].getUrl());
+    }
+    else{
+      photo.push("/assets/img/place.jpeg");
+    }
 
     p['name'] = results.name;
     p['address'] = results.formatted_address;

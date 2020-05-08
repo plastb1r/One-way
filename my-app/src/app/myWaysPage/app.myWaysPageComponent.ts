@@ -31,7 +31,7 @@ export class MyWaysPageComponent implements OnInit{
     this.routeService.getAll().subscribe(data => {
       this.myWays=data;
       console.log(this.myWays);
-      this.myWays.forEach(p => this.loadPlaces(p.places[0].place));
+      this.myWays.forEach(p => this.loadPlaces(p.places[1].place));
     });
   }
     

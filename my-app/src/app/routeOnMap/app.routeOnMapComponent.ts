@@ -17,6 +17,7 @@ import { THIS_EXPR, IfStmt } from '@angular/compiler/src/output/output_ast';
 import { NgForm } from '@angular/forms';
 import { RoutesService } from '../services/routes.service';
 import { City } from '../domens/city';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -27,6 +28,7 @@ import { City } from '../domens/city';
 })
 @Injectable()
 export class RouteOnMapComponent implements OnInit{
+  public done: boolean = false;
   public locations: Array<Location>;
   public placesOnRoute: Array<PlaceOnRoute>;
   public way: Way;
@@ -67,7 +69,8 @@ export class RouteOnMapComponent implements OnInit{
 
    constructor(
      private mapsAPILoader: MapsAPILoader,
-     private routeService: RoutesService
+     private routeService: RoutesService,
+     private cd: ChangeDetectorRef
    ) { }
 
   ngOnInit() {
@@ -157,6 +160,11 @@ export class RouteOnMapComponent implements OnInit{
             this.dirBic.push(dir);
         }
       }
+
+      setTimeout(() => {
+        this.done = true;
+        this.cd.detectChanges();
+      }, 1000);
     }
     
     setTravelModes(){
