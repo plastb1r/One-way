@@ -7,6 +7,7 @@ import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { User } from 'src/app/domens/user';
 import { RoutesService } from '../services/routes.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './myWaysPage.html',
@@ -24,7 +25,8 @@ export class MyWaysPageComponent implements OnInit{
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private routeService:RoutesService
+    private routeService:RoutesService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -71,8 +73,11 @@ export class MyWaysPageComponent implements OnInit{
   }
 
   deleteWay(id){
-    this.routeService.deleteById(id).subscribe(data => console.log(data));
-    window.location.reload();
-    }
+    this.routeService.deleteById(id).subscribe(data => {
+        console.log(data);
+        window.location.reload();
+      }
+    );
+  }
 }
 

@@ -9,6 +9,7 @@ import { User } from 'src/app/domens/user';
 import {NgForm} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../_services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './signUpPage.html',
@@ -21,7 +22,10 @@ export class SignUpPageComponent implements OnInit{
     isSignUpFailed = false;
     errorMessage = '';
   
-    constructor(private authService: AuthService) { }
+    constructor(
+      private authService: AuthService,
+      private router: Router
+      ) { }
   
     ngOnInit() {
     }
@@ -43,6 +47,7 @@ export class SignUpPageComponent implements OnInit{
 
     reloadPageToLogIn() {
       //window.location.reload();
-      window.location.replace("http://localhost:4200/logInPage");
+      this.router.navigate(['/logInPage']);
+      //window.location.replace("http://localhost:4200/logInPage");
   }
   }

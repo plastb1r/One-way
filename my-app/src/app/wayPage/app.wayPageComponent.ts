@@ -7,8 +7,10 @@ import { HttpClient } from '@angular/common/http';
 import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
 import { PlaceDetails } from '../domens/placeDetails';
-import { IfStmt } from '@angular/compiler';
+import { IfStmt, ConditionalExpr } from '@angular/compiler';
 import { PlacesService } from '../services/places.service';
+import { RoutesService } from '../services/routes.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './wayPage.html',
@@ -31,7 +33,9 @@ export class WayPageComponent{
   label:Array<string> = new Array<string>();
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private placeService: PlacesService
+    private placeService: PlacesService,
+    private routeService: RoutesService,
+    private router: Router
   ) { }
 
 
@@ -39,7 +43,7 @@ export class WayPageComponent{
     this.way = JSON.parse(sessionStorage.getItem("Way"));
     this.way.places.forEach(p => {
       this.loadPlaces(p);
-      this.timeToNext.push(p.timeToNext);
+      this.timeToNext.push(Math.round(p.timeToNext/60));
       this.transportToNext.push(p.transportToNext);
       this.label.push('');
     }
@@ -50,7 +54,7 @@ export class WayPageComponent{
 
   setLastPlacesInArrays(){
     this.timeToNext.splice(this.timeToNext.length-1,1);
-    this.timeToNext.push(this.way.timeToGo);
+    this.timeToNext.push(Math.round(this.way.timeToGo/60));
     this.transportToNext.splice(this.transportToNext.length-1,1);
     this.transportToNext.push("Маршрут окончен");
     this.label.splice(this.label.length-1,1);
@@ -115,6 +119,18 @@ export class WayPageComponent{
 
     //this.details.push({name: results.name, address: results.formatted_address, photos: photo});
     //this.places.push({lat: results.geometry.location.lat(), lng: results.geometry.location.lng(),placeId: results.place_id});
+  }
+
+  showWay(){
+    sessionStorage.setItem("placesFromRoute", JSON.stringify(this.way.places));
+    this.router.navigate(['/mapRoutePage']);
+  }
+
+  deleteWay(id){
+    this.routeService.deleteById(id).subscribe(error => {
+      console.log(error)
+      this.router.navigate(['/myWaysPage']);});
+   
   }
 
   public setTravelModes(){

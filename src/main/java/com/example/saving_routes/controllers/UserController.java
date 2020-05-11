@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ import com.example.saving_routes.payload.request.LoginRequest;
 import com.example.saving_routes.payload.request.SignupRequest;
 import com.example.saving_routes.payload.response.JwtResponse;
 import com.example.saving_routes.payload.response.MessageResponse;
-import com.example.saving_routes.repositories.CityRepository;
+
 import com.example.saving_routes.repositories.PlaceOnRouteRepository;
 import com.example.saving_routes.repositories.PlaceRepository;
 import com.example.saving_routes.repositories.RoleRepository;
@@ -62,8 +63,7 @@ public class UserController {
     private PlaceRepository placeRepository;
     @Autowired
     private PlaceOnRouteRepository placeOnRouteRepository;
-    @Autowired
-	private CityRepository cityRepository;
+
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -183,8 +183,9 @@ public class UserController {
 		newRoute.setId(route.getId());
 		newRoute.setName(route.getName());
 		newRoute.setTimeToGo(route.getTimeToGo());
-        City city = cityRepository.saveAndFlush(route.getCity());
-        newRoute.setCity(city);
+		newRoute.setCity(route.getCity());
+        //City city = cityRepository.saveAndFlush(route.getCity());
+       // newRoute.setCity(city);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); 
 		UserDetailsImpl us = (UserDetailsImpl)authentication.getPrincipal();
 		User user = userRepository.findById(us.getId()).get();	
@@ -203,14 +204,14 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/routes/{routeId}")
-    public String deleteRoute(@PathVariable Integer routeId) {
+    public ResponseEntity<Long> deleteRoute(@PathVariable Integer routeId) {
 		Route route = routeRepository.findAllById(routeId);
 		Iterable<PlaceOnRoute> pl =placeOnRouteRepository.findAllByRoute(route);
 		for(PlaceOnRoute p: pl){
 			placeOnRouteRepository.deleteById(p.getId());
 		}
         routeRepository.deleteById(routeId);
-        return routeRepository.existsById(routeId) ? "error" : "deleted";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(path = "/places/{placeId}")

@@ -39,9 +39,12 @@ public class Route {
     @Column(name = "route_time_to_go") // hours
     private float timeToGo;
 
-    @ManyToOne
+    @Column(name = "route_city")
+    private String city;
+
+    /*@ManyToOne
     @JoinColumn(name = "city_id")
-    private City city;
+    private City city;*/
 
     @JsonIgnore
     @ManyToOne

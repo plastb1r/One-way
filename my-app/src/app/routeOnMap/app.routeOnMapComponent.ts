@@ -16,7 +16,6 @@ import { PlaceOnRoute } from '../domens/placeOnRoute';
 import { THIS_EXPR, IfStmt } from '@angular/compiler/src/output/output_ast';
 import { NgForm } from '@angular/forms';
 import { RoutesService } from '../services/routes.service';
-import { City } from '../domens/city';
 import { ChangeDetectorRef } from '@angular/core';
 
 
@@ -236,11 +235,10 @@ export class RouteOnMapComponent implements OnInit{
     saveWay(form: NgForm){
       let name = form.controls['name'].value;
       this.placesOnRoute.forEach(p => {
-        p.timeToNext = ((Math.round(p.timeToNext/60)));
+        p.timeToNext = (p.timeToNext);
       })
-
       let way: Way = new Way(name, this.placesOnRoute[this.placesOnRoute.length -1].timeToNext, 
-        this.placesOnRoute, new City(sessionStorage.getItem("cityAddress")));
+        this.placesOnRoute, sessionStorage.getItem("cityAddress"));
       this.routeService.addWay(way).subscribe(data => console.log(data));
     }
 

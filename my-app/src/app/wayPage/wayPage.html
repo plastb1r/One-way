@@ -21,13 +21,13 @@
                     </ul>
                     <ul class="min-list inline-list listing-actions t-center">
                       <li class="t-center listing-action listing-action--favorite">
-                        <a href="#">
+                        <a  (click)="deleteWay(way.id)">
                           <i class="fa fa-trash c-silver-charlice"></i>
                           Удалить маршрут
                         </a>
                       </li>
                       <li class="t-center listing-action listing-action--share">
-                        <a href="#">
+                        <a (click)="showWay()">
                           <i class="fa fa-share-alt c-silver-charlice"></i>
                           Посмотреть на карте
                         </a>
@@ -194,7 +194,7 @@
               <ul class="min-list listing-contact-list">
                 <li class="d-flex align-items-center c-silver-charlice listing-contact">
                   <i class="fa fa-compass listing-contact__icon"></i>
-                  <span class="c-primary">{{way.city.name}}</span>
+                  <span class="c-primary">{{way.city}}</span>
                 </li>
               </ul><!-- .listing-contact-list -->
 

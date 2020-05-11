@@ -1,6 +1,7 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { Router } from '@angular/router';
 // import { url } from 'inspector';
 
 @Component({
@@ -16,7 +17,7 @@ export class LogInPageComponent implements OnInit {
     errorMessage = '';
     roles: string[] = [];
   
-    constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+    constructor(private authService: AuthService, private tokenStorage: TokenStorageService,private router: Router) { }
   
     ngOnInit() {
       if (this.tokenStorage.getToken()) {
@@ -45,6 +46,7 @@ export class LogInPageComponent implements OnInit {
   
     reloadPage() {
       //window.location.reload();
-      window.location.replace("http://localhost:4200/profilePage");
+      this.router.navigate(['/profilePage']);
+      //window.location.replace("http://localhost:4200/profilePage");
     }
 }

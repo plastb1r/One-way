@@ -10,6 +10,7 @@ import { PlaceOnRoute } from '../domens/placeOnRoute';
 import { WayType } from 'src/app/domens/way_type';
 import { MessageBoxService, MessageBox, ButtonType } from  'message-box-plugin';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './wayParamsPage.html',
@@ -65,7 +66,8 @@ export class WayParamsPageComponent implements OnInit{
       private ngZone: NgZone,
       private parametersService: ParametersService,
       private messageBoxService: MessageBoxService,
-      private tokenStorageService: TokenStorageService
+      private tokenStorageService: TokenStorageService,
+      private router: Router
     )
     {}
   
@@ -615,7 +617,8 @@ export class WayParamsPageComponent implements OnInit{
           {
             sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
             console.log("params" + sessionStorage.getItem("placesFromRoute"));
-            window.location.replace("/mapRoutePage");
+            this.router.navigate(['/mapRoutePage']);
+            //window.location.replace("/mapRoutePage");
           } 
         );
       }
