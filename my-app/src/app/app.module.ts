@@ -19,6 +19,7 @@ import { ParametersService } from 'src/app/services/parameters.service';
 import {MapRoutePageComponent} from './mapRoutePage/app.mapRoutePageComponent';
 import { MessageBoxModule } from  'message-box-plugin';
 
+
 import {
     GoogleApiModule,
     GoogleApiService,

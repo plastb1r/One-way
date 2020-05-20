@@ -4,6 +4,8 @@ import { Location } from 'src/app/domens/location';
 import {DataService} from 'src/app/services/data.service';
 import { Way } from 'src/app/domens/way';
 import { PlaceDetails } from '../domens/placeDetails';
+import { PlacesService } from '../services/places.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   templateUrl: './landmarkPage.html',
@@ -43,7 +45,8 @@ export class LandmarkPageComponent implements OnInit{
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    private data: DataService
+    private data: DataService,
+    private placeService: PlacesService,
   ) { }
 
   /*checkLocInArray(){
@@ -80,6 +83,19 @@ export class LandmarkPageComponent implements OnInit{
     this.loadPlaces();
   }
 
+  addToWay(i: number){
+    var locs = [];
+    if(JSON.parse(sessionStorage.getItem("LocatsToWay")) != null){
+      locs = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+    }
+    locs.push({lat: this.lat, lng: this.lng, placeId: this.placeId});
+    sessionStorage.setItem("LocatsToWay", JSON.stringify(locs));
+    //this.locations[i].addedToWay = true;
+    //sessionStorage.removeItem('locatsToShowOnMap');
+    //sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+    console.log("Way" + sessionStorage.getItem("LocatsToWay"));
+  }
+
   loadPlaces(){
     this.mapsAPILoader.load().then(() => {
       let city = {lat: 147.4984232, lng:  19.0705289};
@@ -105,6 +121,15 @@ export class LandmarkPageComponent implements OnInit{
       console.log(err);
     });
 
+  }
+
+
+  addToFavP(){
+    let lat: number = this.lat;
+    let lng: number = this.lng;
+
+    var loc = {lat: lat, lng: lng, placeId: this.placeId};
+    this.placeService.addPlace(loc).subscribe(data =>console.log(data));
   }
 
   getPlaces(results, status){

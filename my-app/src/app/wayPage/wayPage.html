@@ -105,7 +105,7 @@
            <div class="listing-section__header">
              <h3 class="listing-section__title">Карта</h3>
            </div>
-               <a class="" routerLink="/mapPage"> Хочешь построить этот маршрут?
+               <a class="" (click)="showWay()" routerLink="/mapPage"> Хочешь построить этот маршрут?
                </a>
          </div>
 
@@ -197,32 +197,6 @@
                   <span class="c-primary">{{way.city}}</span>
                 </li>
               </ul><!-- .listing-contact-list -->
-
-              <div class="listing-social">
-                <span class="c-dove-gray">Мы в Social</span>
-                <ul class="min-list inline-list social-list">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-facebook-f c-facebook"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-google-plus c-google-plus"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-instagram c-instagram"></i>
-                    </a>
-                  </li>
-                </ul><!-- .social-list -->
-              </div><!-- .listing-social -->
-
-              <button
-                class="button button--primary button--block button--pill button--large"
-              >Присоединиться
-              </button>
               <!-- .listing-actions -->
             </div><!-- .listing-widget -->
 

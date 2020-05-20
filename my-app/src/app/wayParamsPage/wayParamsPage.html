@@ -1,4 +1,43 @@
 <div class="header-container teal darken-3">
+  
+ 
+  <div ngbDropdown #myDrop="ngbDropdown" [autoClose]="true" class="d-inline-block">
+    <button (click)="showWay()" class="btn current-way" id="dropdownForm1" ngbDropdownToggle>Текущий маршрут</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownForm1">
+      <form class="px-4 py-3">
+        <div class="form-group" *ngFor="let l of locs, let i = index"> 
+
+            <div class="accordion-container">
+                <div class="accordion__header">
+                  {{l.name}}
+                </div><!-- .accordion__header -->
+ 
+                <div class=" toggle">
+                  <div class="d-sm-flex accordion__inner ">
+                    <div class="c-dove-gray accordion__desc" >
+                      <li class="d-flex align-items-center c-silver-charlice listing-contact">
+                        <i class="fa fa-compass listing-contact__icon"></i>
+                        {{l.address}}
+                      </li>
+                      <ul class="min-list listing-contact-list">
+                          <a  (click)="sendPlaceIdWay(l.placeId)" routerLink="/landmarkPage">
+                            <i class="fa fa-share-alt c-silver-charlice"></i>
+                            Подробнее
+                          </a>
+                        <a (click)="deleteFromWayW(i); loadPlaces()">
+                          <i class="fa fa-share-alt c-silver-charlice"></i>
+                          Удалить
+                        </a>
+                    </ul><!-- .listing-contact-list -->
+                    </div><!-- .accordion__desc -->
+                  </div><!-- .accordion__inner -->
+                </div><!-- .accordion__content -->
+          </div><!-- .listing-section -->
+      </div>
+      </form>
+    </div>
+  </div>
+
 </div><!-- .listing-header-map-container -->
 <div class="d-xl-flex">
   <div #map></div>
@@ -24,7 +63,7 @@
                <label for="startPoint" class="c-primary">Начало маршрута</label>
                <input type="text" 
                required 
-                name="startPoint" id="startPoint" class="form-input form-input--pill form-input--border-c-gallery form-control" placeholder="Красная площадь"  autocorrect="off" autocapitalize="off"  spellcheck="off" #startPoint>
+                name="startPoint" id="startPoint" class="form-input form-input--pill form-input--border-c-gallery form-control" placeholder="Начало маршрута"  autocorrect="off" autocapitalize="off"  spellcheck="off" #startPoint>
                <div class="alert" *ngIf="startPoint.required && !start">
                 Начало маршрута обязательно для построения маршрута!
               </div>
@@ -34,7 +73,7 @@
   
              <div class="main-search__group">
                <label for="main-search-location" class="c-primary">Конец маршрута</label>
-               <input required type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery form-control" placeholder="Парк Победы"  autocorrect="off" autocapitalize="off"  spellcheck="off" #endPoint>
+               <input required type="text" name="location" id="main-search-location" class="form-input form-input--pill form-input--border-c-gallery form-control" placeholder="Конец маршрута"  autocorrect="off" autocapitalize="off"  spellcheck="off" #endPoint>
                <div class="alert" *ngIf="endPoint.required && !end">
                 Конец маршрута обязателен для построения маршрута!
               </div>  
@@ -52,7 +91,7 @@
   
       <div class="main-search__group main-search__group--primary">
         <label for="main-search-place" class="c-primary bold">Достопримечательность</label>
-        <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Красная площадь" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
+        <input type="text" name="place" id="main-search-place" (keydown.enter)="findPlace()" class="form-input form-input--pill form-input--border-c-gallery" placeholder="Поиск достопримечательности" autocorrect="off" autocapitalize="off"  spellcheck="off" #searchpl>
       </div><!-- .main-search__group -->
 
       <ul class="pricing-table__features min-list">
@@ -135,7 +174,7 @@
           <ul class="min-list inline-list listing-filter listing-filter--list">
             <li>
               <a (click)="clearAddedPlaces()">
-                Удалить точки из машрута
+                Очистить весь маршрут
               </a>
             </li>
             <li>
@@ -154,6 +193,7 @@
       </div><!-- .listing-filter-container -->
 
     </div><!-- .d-md-flex -->
+
     
     <div [ngClass]="{invisible: visibility}" class="d-lg-flex justify-content-lg-between align-items-lg-center hideDiv listing-keyword--on-map ">
 
@@ -247,7 +287,7 @@
           <div class="d-flex justify-content-between align-items-center listing__detail">
             <div class="listing__detail-left">
               <h3 class="listing__title">
-                <a href="">{{lm.name}}</a>
+                <a>{{lm.name}}</a>
               </h3>
               <a>
                 <span *ngIf="locations[i].addedToWay" class="favoriteLabel c-secondary">Добавлена к маршруту

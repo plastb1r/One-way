@@ -17,6 +17,9 @@ import { THIS_EXPR, IfStmt } from '@angular/compiler/src/output/output_ast';
 import { NgForm } from '@angular/forms';
 import { RoutesService } from '../services/routes.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { TokenStorageService } from '../_services/token-storage.service';
+import { MessageBox, MessageBoxService, ButtonType } from 'message-box-plugin';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -69,7 +72,10 @@ export class RouteOnMapComponent implements OnInit{
    constructor(
      private mapsAPILoader: MapsAPILoader,
      private routeService: RoutesService,
-     private cd: ChangeDetectorRef
+     private cd: ChangeDetectorRef,
+     private messageBoxService: MessageBoxService,
+     private tokenStorageService: TokenStorageService,
+     private router: Router
    ) { }
 
   ngOnInit() {
@@ -239,7 +245,25 @@ export class RouteOnMapComponent implements OnInit{
       })
       let way: Way = new Way(name, this.placesOnRoute[this.placesOnRoute.length -1].timeToNext, 
         this.placesOnRoute, sessionStorage.getItem("cityAddress"));
-      this.routeService.addWay(way).subscribe(data => console.log(data));
+
+      if(!this.tokenStorageService.getUser()){
+        let messageBox = MessageBox
+        .Create('Хэй, друг)','Необходимо войти в систему или зарегистрироваться :) Твой маршрут будет сохранен!Ты сможешь посмотреть его в личном кабинете в разделе "Мои маршруты"')
+        .AddButton('Ok', () => {
+          this.router.navigate(['/logInPage']);
+          sessionStorage.setItem("WayToSave", JSON.stringify(way));
+        }, ButtonType.primary)
+        this.messageBoxService.present(messageBox);
+        window.scroll(0,0);
+      }
+
+     
+      this.routeService.addWay(way).subscribe(data => {
+          let messageBox = MessageBox
+          .Create('Хэй, ' + this.tokenStorageService.getUser().username,'Твой маршрут успешно сохранен!Ты сможешь посмотреть его в личном кабинете в разделе "Мои маршруты"')
+          this.messageBoxService.present(messageBox);
+          window.scroll(0,0);
+      });
     }
 
     public markerClicked(infowindow) {
@@ -287,6 +311,6 @@ export class RouteOnMapComponent implements OnInit{
         suppressInfoWindows: false,
         markerOptions: { // effect all markers
         },
-        polylineOptions: { strokeColor: '#0D632F' }
+        polylineOptions: { strokeColor: '#FF4500' }
       }
 }

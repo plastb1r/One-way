@@ -32,7 +32,7 @@
                     </ul>
                     <ul class="min-list inline-list listing-actions t-center">
                       <li class="t-center listing-action listing-action--favorite">
-                        <a href="#">
+                        <a (click)="addToFavP()">
                           <i class="fa fa-heart c-silver-charlice"></i>
                           Сохранить
                         </a>
@@ -41,12 +41,6 @@
                         <a (click)="addToWay()">
                           <i class="fa fa-exclamation c-silver-charlice"></i>
                           Добавить к маршруту
-                        </a>
-                      </li>
-                      <li class="t-center listing-action listing-action--share">
-                        <a href="#">
-                          <i class="fa fa-share-alt c-silver-charlice"></i>
-                          Посмотреть на карте
                         </a>
                       </li>
                     </ul><!-- .listing__header-detail -->
@@ -99,84 +93,7 @@
                 </a>
           </div> 
 
-          <div id="add-review" class="listing-section bg-white hover-effect" data-matching-link="#add-review-link">
-            <div class="listing-section__header">
-              <h3 class="listing-section__title">Оставить отзыв</h3>
-            </div><!-- .listing-section__header -->
 
-            <form action="/" method="post">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <span class="form-label">Ваш рейтинг</span>
-                    <ul class="min-list inline-list stars">
-                      <li class="star" data-rating="1">
-                        <i class="fa fa-star"></i>
-                      </li>
-                      <li class="star" data-rating="2">
-                        <i class="fa fa-star"></i>
-                      </li>
-                      <li class="star" data-rating="3">
-                        <i class="fa fa-star"></i>
-                      </li>
-                      <li class="star" data-rating="4">
-                        <i class="fa fa-star"></i>
-                      </li>
-                      <li class="star" data-rating="5">
-                        <i class="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div><!-- .form-group -->
-                </div><!-- .col -->
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="review-name">Имя и фамилия *</label>
-                    <input
-                      type="text"
-                      id="review-name"
-                      name="name"
-                      class="form-input form-input--large form-input--border-c-alto"
-                      placeholder="John Doe"
-                      required
-                    >
-                  </div><!-- .form-group -->
-                </div><!-- .col -->
-
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="review-email">Ваш email *</label>
-                    <input
-                      type="email"
-                      id="review-email"
-                      name="email"
-                      class="form-input form-input--large form-input--border-c-alto"
-                      placeholder="johndoe@gmail.com"
-                      required
-                    >
-                  </div><!-- .form-group -->
-                </div><!-- .col -->
-
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label for="review-message">Отзыв</label>
-                    <textarea
-                      name="message"
-                      id="review-message"
-                      rows="10"
-                      class="form-input form-input--large form-input--border-c-alto"
-                      placeholder="Your review"></textarea>
-                  </div><!-- .form-group -->
-                </div><!-- .col -->
-
-                <div class="col-md-12">
-                  <div class="form-group--submit">
-                    <button class="button button--large button--square button--primary" type="submit">Отправить отзыв
-                    </button>
-                  </div>
-                </div><!-- .col -->
-              </div><!-- .row -->
-            </form>
-          </div><!-- .listing-section -->
         </div><!-- .col -->
 
           <div class="widget-top">
@@ -191,32 +108,6 @@
                   <span class="c-primary">{{number}}</span>
                 </li>
               </ul><!-- .listing-contact-list -->
-
-              <div class="listing-social">
-                <span class="c-dove-gray">Мы в Social</span>
-                <ul class="min-list inline-list social-list">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-facebook-f c-facebook"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-google-plus c-google-plus"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-instagram c-instagram"></i>
-                    </a>
-                  </li>
-                </ul><!-- .social-list -->
-              </div><!-- .listing-social -->
-
-              <button
-                class="button button--primary button--block button--pill button--large"
-              >Присоединиться
-              </button>
               <!-- .listing-actions -->
             </div><!-- .listing-widget -->
 

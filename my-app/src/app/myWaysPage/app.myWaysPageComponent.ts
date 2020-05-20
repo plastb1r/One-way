@@ -74,8 +74,14 @@ export class MyWaysPageComponent implements OnInit{
 
   deleteWay(id){
     this.routeService.deleteById(id).subscribe(data => {
+
         console.log(data);
-        window.location.reload();
+        this.routeService.getAll().subscribe(data => {
+          this.myWays=data;
+          console.log(this.myWays);
+          this.myWays.forEach(p => this.loadPlaces(p.places[1].place));
+        });
+        //window.location.reload();
       }
     );
   }

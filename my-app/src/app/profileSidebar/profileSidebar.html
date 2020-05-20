@@ -3,7 +3,7 @@
     <div class="setting-group">
       <h3 class="setting-group__title c-gray">Аккаунт</h3>
       <ul class="setting-container min-list">
-        <li class="setting setting--current">
+        <li class="setting">
           <i class="fa fa-user setting__icon"></i>
           <a routerLink="/profilePage" class="setting__link">Мой профиль</a>
         </li>
@@ -30,10 +30,6 @@
 
     <div class="setting-group">
       <ul class="setting-container min-list">
-        <li class="setting">
-          <i class="fa fa-lock setting__icon"></i>
-          <a  class="setting__link">Изменить пароль</a>
-        </li>
         <li class="setting">
           <i class="fa fa-power-off setting__icon"></i>
           <a (click)="logout()"  class="setting__link">Выйти</a>

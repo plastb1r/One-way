@@ -34,6 +34,8 @@ export class WayParamsPageComponent implements OnInit{
     start = false;
     end = false;
 
+  service;
+
     public message = "Необходимо ввести начальную и конечную точки маршрута!";
 
     @ViewChild('map', {static: false})
@@ -134,43 +136,107 @@ export class WayParamsPageComponent implements OnInit{
         });
       })
     }
+    locs: Array<Location> = new Array<Location>();
+
+    showWay(){
+      this.mapsAPILoader.load().then(() => {
+        this.locs = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+        let city = {lat: 51.673727, lng: 39.21114};
+        let mapOptions = {
+        center: city,
+        zoom: 15
+        }
+  
+        let map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+        this.service = new google.maps.places.PlacesService(map);
+        this.locs.forEach(p => {
+          this.loadPlacesW(p);
+        })
+        }, (err) => {
+            console.log(err);
+      });
+    }
+  
+    deleteFromWayW(ind){
+      this.locs = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      console.log("before delete" + this.locs);
+      console.log(ind);
+      this.locs.splice(ind, 1);
+      sessionStorage.setItem("LocatsToWay", JSON.stringify(this.locs));
+      console.log("Way" + sessionStorage.getItem("LocatsToWay"));
+      this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      console.log("way" + this.locs);
+      this.showWay();
+    }
+  
+    loadPlacesW(p){
+      var request = {
+      placeId: p.placeId,
+      fields: ['name', 'formatted_address',  'photos', "place_id", "geometry", "address_components"]
+      };
+  
+      this.service.getDetails(request, (place, status) => {
+          this.getPlacesW(place, status, p);
+      });
+    }
+  
+    getPlacesW(results, status,p) {
+      var photo = [];
+      if(results.photos != null){
+        photo.push(results.photos[0].getUrl());
+      }
+      else{
+        photo.push("/assets/img/place.jpeg");
+      }
+      console.log("точка, пришедшая в функцию", results.place_id);
+      p['name'] = results.name;
+      p['address'] = results.formatted_address;
+      p['photo'] = photo;
+      p['lat'] = results.geometry.location.lat();
+      p['lng'] = results.geometry.location.lng();
+    }
   
     loadPlaces(){
       this.placeDetails = [];
-      this.locations = [];
-      this.mapsAPILoader.load().then(() => {
-        let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
-        let mapOptions = {
-          center: city,
-          zoom: 15
-        }
-  
-        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        let service = new google.maps.places.PlacesService(this.map);
-        if(this.types[0] == "restaurant" || this.types[0] == "bar"){
-          service.textSearch(
-            {location: city,
-            radius: 10000,
-            query: this.types[0]
-          },
-          (results, status) => {
-            this.getPlaces(results, status)
+      if(sessionStorage.getItem("LocatsToWay")){
+        this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      }
+          this.locations = [];
+          this.mapsAPILoader.load().then(() => {
+            let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
+            let mapOptions = {
+              center: city,
+              zoom: 15
+            }
+      
+            this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+            let service = new google.maps.places.PlacesService(this.map);
+            if(this.types[0] == "restaurant" || this.types[0] == "bar"){
+              service.textSearch(
+                {location: city,
+                radius: 10000,
+                query: this.types[0]
+              },
+              (results, status) => {
+                this.getPlaces(results, status)
+              });
+            }
+            else{
+              service.nearbySearch({
+                location: city,
+                radius: 10000,
+                types: this.types
+              
+              }, (results, status) => {
+                  this.getPlaces(results, status)
+              });
+            }
+    
+          }, (err) => {
+            console.log(err);
           });
-        }
-        else{
-          service.nearbySearch({
-            location: city,
-            radius: 10000,
-            types: this.types
-          
-          }, (results, status) => {
-              this.getPlaces(results, status)
-          });
-        }
-
-      }, (err) => {
-        console.log(err);
-      });
+        
+     
     }
   
     getPlaces(results, status){
@@ -206,8 +272,16 @@ export class WayParamsPageComponent implements OnInit{
                   break CancelLoop2;
                 }
               }
+            let address;
+            if(results[i].vicinity == null)
+            {
+              address= results[i].formatted_address;
+            }
+            else{
+              address = results[i].vicinity;
+            }
               this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: choose, addedToWay: addedToWay});
-              this.placeDetails.push({name: results[i].name, address: results[i].vicinity,photos: [results[i].photos[0].getUrl()],
+              this.placeDetails.push({name: results[i].name, address: address,photos: [results[i].photos[0].getUrl()],
                 types: results[i].types, rating: results[i].rating});
                   
             }
@@ -218,6 +292,10 @@ export class WayParamsPageComponent implements OnInit{
     sendPlaceId(index){
       sessionStorage.removeItem('landmark');
       sessionStorage.setItem("landmark", this.locations[index].placeId);
+    }
+
+    sendPlaceIdWay(place){
+      sessionStorage.setItem("landmark", place);
     }
   
     sendPopularLocations(){
@@ -255,7 +333,6 @@ export class WayParamsPageComponent implements OnInit{
       this.visibility=!this.visibility;
     }
 
-
     setAutocompliteToStartPoint(){
       this.mapsAPILoader2.load().then(() => {
         this.circle = new google.maps.Circle(
@@ -286,10 +363,10 @@ export class WayParamsPageComponent implements OnInit{
         {
           l.addedToWay = false;
           sessionStorage.setItem("LocatsToWay", JSON.stringify(locs));
-          return 0;
+          sessionStorage.removeItem('locatsToShowOnMap');
+          sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
         });
-      sessionStorage.removeItem('locatsToShowOnMap');
-      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+     
       console.log("way" + sessionStorage.getItem("LocatsToWay"));
     }
 
@@ -324,17 +401,23 @@ export class WayParamsPageComponent implements OnInit{
       this.locations[index].choose = true;
       sessionStorage.removeItem('locatsToShowOnMap');
       sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+      this.placeService.getAll().subscribe(data => 
+        { this.places=data;});
     }
   
     deleteFromFavP(loc: Location, ind){
-      var i;
-      this.places.forEach(p => {
-        if(p.placeId == loc.placeId)
-          i = this.places.indexOf(p);
-      });
-  
-      this.placeService.deleteById(this.places[i].placeId).subscribe(data =>console.log(data));
-      this.places.splice(i, 1);
+      this.placeService.getAll().subscribe(data => 
+        { this.places=data;
+          var i;
+          this.places.forEach(p => {
+            if(p.placeId == loc.placeId)
+              i = this.places.indexOf(p);
+          });
+      
+          this.placeService.deleteById(this.places[i].placeId).subscribe(data =>console.log(data));
+        });
+      
+      //this.places.splice(i, 1);
       this.locations[ind].choose = false;
   
       sessionStorage.removeItem('locatsToShowOnMap');
@@ -368,12 +451,13 @@ export class WayParamsPageComponent implements OnInit{
             locs.splice(ind, 1);
             sessionStorage.setItem("LocatsToWay", JSON.stringify(locs));
             console.log("Way" + sessionStorage.getItem("LocatsToWay"));
+            this.locations[j].addedToWay = false;
+            sessionStorage.removeItem('locatsToShowOnMap');
+            sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
             return 0;
           }
         });
-      this.locations[j].addedToWay = false;
-      sessionStorage.removeItem('locatsToShowOnMap');
-      sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+     
       console.log("way" + locs);
     }
 
@@ -586,9 +670,17 @@ export class WayParamsPageComponent implements OnInit{
 
     setParams(form: NgForm) { 
       if(this.startPoint == null || this.endPoint ==null){
-        const user = this.tokenStorageService.getUser();
+        let user;
+        if(this.tokenStorageService.getUser())
+        {
+            user = this.tokenStorageService.getUser().username;
+        }
+        else{
+            user = ' друг)';
+        }
+       
         let messageBox = MessageBox
-        .Create('Хэй,' + user.username,'Необходимо указать начальную и конечную точки маршрута :)')
+        .Create('Хэй,' + user,'Необходимо указать начальную и конечную точки маршрута :)')
         this.messageBoxService.present(messageBox);
         window.scroll(0,0);
       }

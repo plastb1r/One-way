@@ -48,7 +48,10 @@ export class PopularLandmarksPageComponent implements OnInit{
   loadPlaces(){
     this.placeDetails = [];
     this.locations = [];
-    this.mapsAPILoader.load().then(() => {
+    if(sessionStorage.getItem("LocatsToWay")){
+      this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+    }
+      this.mapsAPILoader.load().then(() => {
       let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
       let mapOptions = {
         center: city,
@@ -80,7 +83,7 @@ export class PopularLandmarksPageComponent implements OnInit{
 
     }, (err) => {
       console.log(err);
-    });
+    })
 
   }
 
@@ -120,7 +123,16 @@ export class PopularLandmarksPageComponent implements OnInit{
               }
             }
             this.locations.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: choose, addedToWay: addedToWay});
-            this.placeDetails.push({name: results[i].name, address: results[i].vicinity,photos: [results[i].photos[0].getUrl()],
+            console.log(results[i]);
+            let address;
+            if(results[i].vicinity == null)
+            {
+              address= results[i].formatted_address;
+            }
+            else{
+              address = results[i].vicinity;
+            }
+            this.placeDetails.push({name: results[i].name, address: address,photos: [results[i].photos[0].getUrl()],
               types: results[i].types, rating: results[i].rating});
                 
           }
@@ -174,17 +186,23 @@ export class PopularLandmarksPageComponent implements OnInit{
     this.locations[index].choose = true;
     sessionStorage.removeItem('locatsToShowOnMap');
     sessionStorage.setItem('locatsToShowOnMap', JSON.stringify(this.locations));
+    this.placeService.getAll().subscribe(data => 
+      { this.places=data;});
   }
 
   deleteFromFavP(loc: Location, ind){
-    var i;
-    this.places.forEach(p => {
-      if(p.placeId == loc.placeId)
-        i = this.places.indexOf(p);
-    });
-
-    this.placeService.deleteById(this.places[i].placeId).subscribe(data =>console.log(data));
-    this.places.splice(i, 1);
+    this.placeService.getAll().subscribe(data => 
+      { this.places=data;
+        var i;
+        this.places.forEach(p => {
+          if(p.placeId == loc.placeId)
+            i = this.places.indexOf(p);
+        });
+    
+        this.placeService.deleteById(this.places[i].placeId).subscribe(data =>console.log(data));
+      });
+    //this.places.splice(i, 1);
+    //this.locations.splice(i, 1);
     this.locations[ind].choose = false;
 
     sessionStorage.removeItem('locatsToShowOnMap');

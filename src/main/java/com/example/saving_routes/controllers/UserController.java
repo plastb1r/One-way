@@ -238,9 +238,9 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/places/{placeId}")
-    public String deletePlace(@PathVariable String placeId) {
+    public ResponseEntity<Long> deletePlace(@PathVariable String placeId) {
         placeRepository.deleteById(placeId);
-        return placeRepository.existsById(placeId) ? "error" : "deleted";
+		return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(path = "/routes/{routeId}/placesOnRoute")
