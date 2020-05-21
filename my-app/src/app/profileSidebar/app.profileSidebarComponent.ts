@@ -32,7 +32,7 @@ export class ProfileSidebarComponent implements OnInit{
   
   logout() {
     this.tokenStorageService.signOut();
-    window.location.replace("http://localhost:4200/logInPage");
+    window.location.replace("http://167.172.117.75:8080/onestep4ward/logInPage");
   }
   
 }

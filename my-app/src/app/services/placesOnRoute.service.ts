@@ -4,6 +4,7 @@ import {TokenStorageService} from '../_services/token-storage.service';
  import {Observable} from 'rxjs';
 import { Injectable } from '@angular/core';
 import { PlaceOnRoute } from '../domens/placeOnRoute';
+import { GlobalVariable } from '../services/global';
 
  @Injectable()
  export class PlaceOnRouteService {
@@ -14,7 +15,7 @@ import { PlaceOnRoute } from '../domens/placeOnRoute';
      private token: TokenStorageService
    ) {
      this.currentUser = this.token.getUser();
-     this.routeUrl =  'http://localhost:8181/api/auth/routes/';
+     this.routeUrl =  GlobalVariable.BASE_API_URL + 'routes/';
    }
 
    getAll(routeId): Observable<PlaceOnRoute[]> {

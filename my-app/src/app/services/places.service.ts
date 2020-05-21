@@ -3,6 +3,7 @@ import {TokenStorageService} from '../_services/token-storage.service';
  import {Observable} from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Location } from 'src/app/domens/location';
+import { GlobalVariable } from '../services/global';
 
  @Injectable()
  export class PlacesService {
@@ -13,7 +14,7 @@ import { Location } from 'src/app/domens/location';
      private token: TokenStorageService
    ) {
      this.currentUser = this.token.getUser();
-     this.placesUrl = 'http://localhost:8181/api/auth/places';
+     this.placesUrl = GlobalVariable.BASE_API_URL + 'places';
    }
      getById(id): Observable<Location> {
        return this.http.get<Location>(this.placesUrl + '/' + id);

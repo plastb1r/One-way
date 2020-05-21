@@ -52,6 +52,7 @@ export class LogInPageComponent implements OnInit {
     reloadPage() {
       //window.location.reload();
       //this.router.navigate(['/profilePage']);
-      window.location.replace("http://localhost:4200/profilePage");
+      //window.location.replace("http://localhost:4200/profilePage");
+      window.location.replace("http://167.172.117.75:8080/onestep4ward/profilePage");
     }
 }

@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Location } from 'src/app/domens/location';
 import { Parameters } from 'src/app/domens/params';
 import { Way } from '../domens/way';
+import { GlobalVariable } from '../services/global';
 
  @Injectable()
  export class ParametersService {
@@ -12,7 +13,7 @@ import { Way } from '../domens/way';
    constructor(
      private http: HttpClient
    ) {
-     this.paramsUrl = 'http://localhost:8181/api/auth/generate';
+     this.paramsUrl = GlobalVariable.BASE_API_URL + 'generate';
    }
 
      sendParams(params: Parameters): Observable<any> {

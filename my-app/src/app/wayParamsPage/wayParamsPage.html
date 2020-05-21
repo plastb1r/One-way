@@ -98,14 +98,30 @@
           <div class="main-search__group main-search__group--primary">
             <label for="main-search-relax-types" class="c-primary bold">Вид отдыха</label>
         </div><!-- .main-search__group -->
-        <li *ngFor="let item of way_options">
+        <div class="alert">
+          Выберите не более, чем 8 промежуточных точек
+      </div> 
+      <label class="icheck_label">Количество точек:  {{placeCount}}</label>
+        <div class="alert" *ngIf="placeCount > 7">
+            Вы выбрали более 8 точек
+        </div> 
+
+        <li *ngFor="let item of way_options, let i = index">
           <div class="form-group">
             <label for="culture_type" class="icheck_label">
-              <input type="checkbox" [checked]="item.selected" (change)="item.selected = !item.selected">
+              <input type="checkbox" [checked]="item.selected"(change)="item.selected = !item.selected;sum()">
                 {{item.name}}
+                <li class="selection">
+                      <select (change)="onChange($event.target.value, i)">
+                        <option  *ngFor="let count of places_options"  value="{{count}}" >
+                          {{count}}
+                        </option>
+                      </select>
+                </li>
             </label>
           </div>
         </li>
+    
     </ul>
   
      <ul class="pricing-table__features min-list">
@@ -148,10 +164,7 @@
      </li>
   
   </ul>
-   <div class="main-search__group">
-     <label for="main-search-number-of-pl" class="c-primary bold">Количество мест для посещения</label>
-     <input type="text" name="placesToVisit" id="placesToVisit" class="form-input form-input--pill form-input--border-c-gallery" required [(ngModel)]="placesToVisit" placeholder="3">
-   </div><!-- .main-search__group -->
+  
 
    <div class="main-search__group main-search__group--tertiary">
     <button type="submit" class="button button--medium button--pill button--primary" (click)="setParams(paramsForm)">

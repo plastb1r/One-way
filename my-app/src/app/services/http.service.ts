@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Location } from 'src/app/domens/location';
+import { GlobalVariable } from './global';
 
 @Injectable()
 export class HttpService{
@@ -24,7 +25,7 @@ export class HttpService{
 
     sendPlacesToAlgorythm(pl: Array<Location>){
       const places = pl;
-      return this.http.post('http://localhost:8181/api/routes/generate', places);
+      //return this.http.post('http://localhost:8181/api/routes/generate', places);
     }
 
     sendParamsToAlgorythm(pl: Array<Location>, st: Location, ed: Location)
@@ -32,7 +33,7 @@ export class HttpService{
       const start = st;
       const end = ed;
       const places = pl;
-      return this.http.post('http://localhost:8181/api/routes/generate', [places, start, end]);
+      //return this.http.post('http://localhost:8181/api/routes/generate', [places, start, end]);
     }
 
 

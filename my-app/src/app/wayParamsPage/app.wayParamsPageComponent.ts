@@ -8,6 +8,7 @@ import { PlacesService } from '../services/places.service';
 import { ParametersService } from '../services/parameters.service';
 import { PlaceOnRoute } from '../domens/placeOnRoute';
 import { WayType } from 'src/app/domens/way_type';
+import { PlaceCount } from 'src/app/domens/place_count';
 import { MessageBoxService, MessageBox, ButtonType } from  'message-box-plugin';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { Router } from '@angular/router';
@@ -53,7 +54,21 @@ export class WayParamsPageComponent implements OnInit{
     startPoint: Location;
     endPoint: Location;
     parameters: Parameters;
-    way_options: Array<WayType>;
+    places_options : Array<number> = [0,1,2,3,4,5,6,7,8,9,10];
+
+    way_options: Array<WayType>  = [
+      {name: 'музеи', types: ['museum'],selected: false, places_count:0},
+      {name: 'рестораны', types: ['restaurant'],selected: false, places_count: 0},
+      {name: 'кофейни', types: ['bakery'],selected: false, places_count: 0},
+      {name: 'кафе', types: ['cafe'],selected: false, places_count: 0},
+      {name: 'бары', types: ['bar'],selected: false, places_count: 0},
+      {name: 'развлечения', types: ['establishment'],selected: false, places_count: 0},
+      {name: 'кинотеатры', types: ['movie_theater'],selected: false, places_count: 0},
+      {name: 'парки', types: ['park'],selected: false, places_count: 0},
+      {name: 'магазины', types: ['shopping_mall'],selected: false, places_count: 0}
+    ];
+
+    
     route_places: Array<Location>;
     index = 0;
 
@@ -74,18 +89,7 @@ export class WayParamsPageComponent implements OnInit{
     {}
   
     ngOnInit() {
-      this.way_options = [
-        {name: 'галереи', types: ['art_gallery'],selected: false},
-        {name: 'музеи', types: ['museum'],selected: false},
-        {name: 'рестораны', types: ['restaurant'],selected: false},
-        {name: 'кофейни', types: ['bakery'],selected: false},
-        {name: 'кафе', types: ['cafe'],selected: false},
-        {name: 'бары', types: ['bar'],selected: false},
-        {name: 'развлечения', types: ['establishment'],selected: false},
-        {name: 'кинотеатры', types: ['movie_theater'],selected: false},
-        {name: 'парки', types: ['park'],selected: false},
-        {name: 'магазины', types: ['shopping_mall'],selected: false}
-      ];
+
 
       this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
       this.cityName = sessionStorage.getItem('cityAddress');
@@ -196,6 +200,14 @@ export class WayParamsPageComponent implements OnInit{
       p['lng'] = results.geometry.location.lng();
     }
   
+    test(){
+      console.log(this.way_options);
+    }
+
+    onChange(newObj, i) {
+      console.log(newObj);
+      this.way_options[i].places_count = newObj;
+    }
     loadPlaces(){
       this.placeDetails = [];
       if(sessionStorage.getItem("LocatsToWay")){
@@ -460,9 +472,9 @@ export class WayParamsPageComponent implements OnInit{
      
       console.log("way" + locs);
     }
+    placeCount: number = 0;
 
     loadPlacesForWay(types, placeCount, locats, form: NgForm){
-      
       this.mapsAPILoader.load().then(() => {
         let city = {lat: this.cityLocation[0].lat, lng:  this.cityLocation[0].lng};
         let mapOptions = {
@@ -515,21 +527,27 @@ export class WayParamsPageComponent implements OnInit{
             console.log("locats after sorting",locats);
 
             this.route_places = [];
-            console.log(placeCount);
-            for(var t = 0; t < placeCount; t++){
+            console.log("count" + this.placeCount);
+            for(var t = 0; t < this.placeCount; t++){
               this.route_places.push(locats[t]);
+              console.log(this.route_places);
             }
-            this.parameters = new Parameters(this.startPoint, this.endPoint, this.route_places, transportations);
-            console.log("parameters" +  JSON.stringify(this.parameters));
 
-           this.parametersService.sendParams(this.parameters).subscribe( data => 
-              {
-                sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
-                console.log("params" + sessionStorage.getItem("placesFromRoute"));
-                window.location.replace("/mapRoutePage");
-              }
-            );
-        }
+            
+             this.parameters = new Parameters(this.startPoint, this.endPoint, this.route_places, transportations);
+              console.log("parameters" +  JSON.stringify(this.parameters));
+  
+    
+             this.parametersService.sendParams(this.parameters).subscribe( data => 
+                {
+                  sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
+                  console.log("params" + sessionStorage.getItem("placesFromRoute"));
+                  window.location.replace("/mapRoutePage");
+                }
+              );
+            }
+            
+        
         });
 
         /*service.nearbySearch({
@@ -596,39 +614,15 @@ export class WayParamsPageComponent implements OnInit{
       })
     }
 
-    setPlacesToVisit(count: number, form: NgForm): Array<Location>{
+    setPlacesToVisit(form: NgForm): Array<Location>{
       let locats = new Array<Location>();
-      if(this.way_options[0].selected){
-        this.loadPlacesForWay(this.way_options[0].types,count,locats, form);
-      }
-      if(this.way_options[1].selected){
-        this.loadPlacesForWay(this.way_options[1].types,count,locats, form);
-      }
-      if(this.way_options[2].selected){
-        this.loadPlacesForWay(this.way_options[2].types,count,locats, form);
-      }
-      if(this.way_options[3].selected){
-        this.loadPlacesForWay(this.way_options[3].types,count,locats, form);
-      }
-      if(this.way_options[4].selected){
-        this.loadPlacesForWay(this.way_options[4].types,count,locats, form);
-      }
-      if(this.way_options[5].selected){
-        this.loadPlacesForWay(this.way_options[5].types,count,locats, form);
-      }
-      if(this.way_options[6].selected){
-        this.loadPlacesForWay(this.way_options[6].types,count,locats, form);
-      }
-      if(this.way_options[7].selected){
-        this.loadPlacesForWay(this.way_options[7].types,count,locats, form);
-      }
-      if(this.way_options[8].selected){
-        this.loadPlacesForWay(this.way_options[8].types,count,locats, form);
-      }
-      if(this.way_options[9].selected){
-        this.loadPlacesForWay(this.way_options[9].types,count,locats, form);
-      }
-   
+      this.way_options.forEach(el => {
+        if(el.selected){
+          //this.placeCount += Number(el.places_count);
+          this.loadPlacesForWay(el.types,el.places_count,locats, form);
+        }
+      });
+    
       return locats;
     }
 
@@ -669,6 +663,7 @@ export class WayParamsPageComponent implements OnInit{
     }
 
     setParams(form: NgForm) { 
+
       if(this.startPoint == null || this.endPoint ==null){
         let user;
         if(this.tokenStorageService.getUser())
@@ -686,7 +681,7 @@ export class WayParamsPageComponent implements OnInit{
       }
 
       var transportations = this.setTransportations(form);
-      let placesToVisit: number =  form.controls['placesToVisit'].value;
+      //let placesToVisit: number =  form.controls['placesToVisit'].value;
       let createWay: boolean = false;
 
       let locats = new Array<Location>();
@@ -700,7 +695,7 @@ export class WayParamsPageComponent implements OnInit{
         createWay = false;
         this.index = 0;
         this.route_places = [];
-        locats = this.setPlacesToVisit(placesToVisit, form);
+        this.setPlacesToVisit(form);
       }
 
       if(createWay){
@@ -715,9 +710,21 @@ export class WayParamsPageComponent implements OnInit{
         );
       }
 
+
+
       console.log(this.startPoint);
       console.log( this.endPoint);
 
       
+    }
+
+    sum(){
+      this.placeCount = 0;
+      this.way_options.forEach(el => {
+        if(el.selected){
+          this.placeCount += Number(el.places_count);
+        }
+      });
+
     }
 }

@@ -3,6 +3,7 @@ import {TokenStorageService} from '../_services/token-storage.service';
  import {Observable} from 'rxjs';
  import {Way} from '../domens/way';
 import { Injectable } from '@angular/core';
+import { GlobalVariable } from '../services/global';
 
  @Injectable()
  export class RoutesService {
@@ -13,7 +14,7 @@ import { Injectable } from '@angular/core';
      private token: TokenStorageService
    ) {
      this.currentUser = this.token.getUser();
-     this.routeUrl =  'http://localhost:8181/api/auth/routes';
+     this.routeUrl =  GlobalVariable.BASE_API_URL + 'routes';
    }
    getById(id): Observable<Way> {
      return this.http.get<Way>(this.routeUrl + '/' + id);
