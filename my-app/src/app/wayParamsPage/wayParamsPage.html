@@ -307,10 +307,8 @@
                 </span>
               </a>
               <p class="listing__review c-dusty-gray">
-                <span class="stars-outer" data-rating="5"> {{lm.rating}}
-                  <span class="stars-inner"></span>
-                </span>
-                <span></span>
+
+                <ngx-stars [readonly]="true" [size]="1" [color]="'#FFD700'" [initialStars]="lm.rating"></ngx-stars> {{lm.rating}}
               </p>
               <p class="listing__location c-dusty-gray no-b-margin">
                 <i class="fa fa-map-marker"></i>

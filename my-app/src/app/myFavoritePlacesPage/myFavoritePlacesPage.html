@@ -26,9 +26,7 @@
            <a>{{l.name}}</a>
          </h3>
          <p class="listing__review c-dusty-gray">
-           <span class="stars-outer" data-rating="4.5"> {{l.rating}}
-             <span class="stars-inner"></span>
-           </span>
+          <ngx-stars [readonly]="true" [size]="1" [color]="'#FFD700'" [initialStars]="l.rating"></ngx-stars> {{l.rating}}
          </p>
          <p class="listing__location c-dusty-gray">
            <i class="fa fa-map-marker"></i>

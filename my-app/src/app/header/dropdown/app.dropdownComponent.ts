@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, NgZone, Input, Output, EventE
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { Location } from 'src/app/domens/location';
 import {DataService} from 'src/app/services/data.service';
+import { TriggerService } from 'src/app/services/trigger.service';
 
 @Component({
   selector: 'dropdown',
@@ -19,7 +20,8 @@ export class DropDownComponent {
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    private data: DataService
+    private data: DataService,
+    private triggerService: TriggerService
   ) { }
 
 
@@ -27,7 +29,6 @@ export class DropDownComponent {
     //load Places Autocomplete
 
     this.mapsAPILoader.load().then(() => {
-      this.geoCoder = new google.maps.Geocoder;
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
         types: ["(regions)"]
       });
@@ -42,7 +43,7 @@ export class DropDownComponent {
           }
         this.address = place.formatted_address;
         this.location = [{lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), placeId: place.place_id}];
-
+        this.changeCity();
         });
       });
     });
@@ -53,5 +54,6 @@ export class DropDownComponent {
     sessionStorage.setItem('cityAddress', this.address);
     sessionStorage.removeItem('cityAddressLocat');
     sessionStorage.setItem('cityAddressLocat', JSON.stringify(this.location));
+    this.triggerService.triggerOnMyButton();
   }
 }

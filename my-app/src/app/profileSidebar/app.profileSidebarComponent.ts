@@ -6,6 +6,8 @@ import {HttpService} from 'src/app/services/http.service';
 import { Data } from 'src/app/domens/data';
 import { Way } from 'src/app/domens/way';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { Router } from '@angular/router';
+import { TriggerService } from '../services/trigger.service';
 
 @Component({
   selector: 'profile-sidebar',
@@ -17,7 +19,9 @@ export class ProfileSidebarComponent implements OnInit{
   isLoggedIn = false;
   username: string;
   constructor(private data: DataService ,
-    private tokenStorageService: TokenStorageService
+    private tokenStorageService: TokenStorageService,
+    private triggerService: TriggerService,
+    private router: Router
   )
   {}
 
@@ -32,7 +36,9 @@ export class ProfileSidebarComponent implements OnInit{
   
   logout() {
     this.tokenStorageService.signOut();
-    window.location.replace("http://167.172.117.75:8080/onestep4ward/logInPage");
+    this.router.navigate(['/logInPage']);
+    this.triggerService.triggerOnMyButton();
+    //window.location.replace("http://167.172.117.75:8080/onestep4ward/logInPage");
   }
   
 }

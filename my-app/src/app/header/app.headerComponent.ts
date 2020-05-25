@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { TriggerService } from '../services/trigger.service';
 
 @Component({
   selector: 'header',
@@ -11,9 +12,15 @@ export class HeaderComponent implements OnInit{
   isLoggedIn = false;
   username: string;
 
-  constructor(private tokenStorageService: TokenStorageService) { }
+  constructor(private tokenStorageService: TokenStorageService,
+    private triggerService: TriggerService) { }
 
   ngOnInit() {
+    this.checkLogin();
+    this.triggerService.trigger$.subscribe(() => this.checkLogin());
+  }
+
+  checkLogin(){
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {
@@ -21,14 +28,5 @@ export class HeaderComponent implements OnInit{
       this.username = user.username;
     }
   }
-  /*ngOnInit(){
-    if(sessionStorage.getItem("UserName")){
-      this.data.linkName$.next(sessionStorage.getItem("UserName"));
-      this.data.link$.next("/profilePage");
-    }
-    else {
-      this.data.linkName$.next("Войти");
-      this.data.link$.next("/logInPage");
-    }
-  }*/
+  
 }

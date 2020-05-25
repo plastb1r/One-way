@@ -6,6 +6,8 @@ import { Way } from 'src/app/domens/way';
 import { PlaceDetails } from '../domens/placeDetails';
 import { PlacesService } from '../services/places.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { MessageBox, MessageBoxService } from 'message-box-plugin';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   templateUrl: './landmarkPage.html',
@@ -47,6 +49,8 @@ export class LandmarkPageComponent implements OnInit{
     private ngZone: NgZone,
     private data: DataService,
     private placeService: PlacesService,
+    private messageBoxService: MessageBoxService,
+    private tokenStorageService: TokenStorageService,
   ) { }
 
   /*checkLocInArray(){
@@ -125,6 +129,13 @@ export class LandmarkPageComponent implements OnInit{
 
 
   addToFavP(){
+    if(!this.tokenStorageService.getUser()){
+      let messageBox = MessageBox
+      .Create('Хэй, друг)' ,'Войди в систему, чтобы сохранить место :)')
+      this.messageBoxService.present(messageBox);
+      window.scroll(0,0);
+      return 0;
+    }
     let lat: number = this.lat;
     let lng: number = this.lng;
 

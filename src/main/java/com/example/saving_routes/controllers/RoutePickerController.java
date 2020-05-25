@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping(path = "api/auth")
+@RequestMapping(path = "/api/auth")
 class RouteGeneratorController {
 
     public static Logger logger = LogManager.getLogger();

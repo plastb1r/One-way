@@ -67,6 +67,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/api/test/**").permitAll()
 		.anyRequest().authenticated();
 
+		/*.antMatchers("/login","/signup","/onestep4ward/api/auth/**", "/onestep4ward/api/auth/places/**", "/onestep4ward/api/auth/routes/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/onestep4ward/api/auth/**",  "/onestep4ward/api/auth/places/**", "/onestep4ward/api/auth/routes/**").permitAll()
+		.antMatchers(HttpMethod.DELETE, "/onestep4ward/api/auth/**", "/onestep4ward/api/auth/places/**", "/onestep4ward/api/auth/routes/**").permitAll()
+		.antMatchers(HttpMethod.PUT,"/onestep4ward/api/auth/**",  "/onestep4ward/api/auth/places", "/onestep4ward/api/auth/routes").permitAll()
+		.antMatchers("/api/test/**").permitAll()
+		.anyRequest().authenticated();*/
+
 		/*http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

@@ -3,7 +3,7 @@ import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { Router } from '@angular/router';
 import { RoutesService } from '../services/routes.service';
-// import { url } from 'inspector';
+import { TriggerService } from '../services/trigger.service';
 
 @Component({
   templateUrl: './logInPage.html',
@@ -17,8 +17,9 @@ export class LogInPageComponent implements OnInit {
     isLoginFailed = false;
     errorMessage = '';
     roles: string[] = [];
+
   
-    constructor(private authService: AuthService, private tokenStorage: TokenStorageService,private router: Router,     private routeService: RoutesService,) { }
+    constructor(private authService: AuthService, private tokenStorage: TokenStorageService,private router: Router,     private routeService: RoutesService,  private triggerService: TriggerService) { }
   
     ngOnInit() {
       if (this.tokenStorage.getToken()) {
@@ -48,11 +49,17 @@ export class LogInPageComponent implements OnInit {
         }
       );
     }
-  
     reloadPage() {
+      //window.location.reload();
+      this.router.navigate(['/profilePage']);
+      this.triggerService.triggerOnMyButton();
+      //window.location.replace("http://localhost:4200/profile");
+      
+      }
+    //reloadPage() {
       //window.location.reload();
       //this.router.navigate(['/profilePage']);
       //window.location.replace("http://localhost:4200/profilePage");
-      window.location.replace("http://167.172.117.75:8080/onestep4ward/profilePage");
-    }
+      //window.location.replace("http://167.172.117.75:8080/onestep4ward/profilePage");
+    //}
 }

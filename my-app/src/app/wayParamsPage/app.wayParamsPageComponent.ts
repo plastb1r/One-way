@@ -12,6 +12,7 @@ import { PlaceCount } from 'src/app/domens/place_count';
 import { MessageBoxService, MessageBox, ButtonType } from  'message-box-plugin';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { Router } from '@angular/router';
+import { TriggerService } from '../services/trigger.service';
 
 @Component({
   templateUrl: './wayParamsPage.html',
@@ -84,15 +85,16 @@ export class WayParamsPageComponent implements OnInit{
       private parametersService: ParametersService,
       private messageBoxService: MessageBoxService,
       private tokenStorageService: TokenStorageService,
-      private router: Router
+      private router: Router,
+      private triggerService: TriggerService
     )
     {}
   
     ngOnInit() {
 
+      this.setCity();
+      this.triggerService.trigger$.subscribe(() => this.setCity());
 
-      this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
-      this.cityName = sessionStorage.getItem('cityAddress');
 
       this.geolocation = {
         lat: this.cityLocation[0].lat,
@@ -106,11 +108,6 @@ export class WayParamsPageComponent implements OnInit{
       this.setAutocompliteToStartPoint();
       this.setAutocompliteToEndPoint();
 
-      this.placeService.getAll().subscribe(data =>  this.places=data);
-      this.loadPlaces();
-      if(sessionStorage.getItem("LocatsToWay")){
-        this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
-      }
       console.log("Way" + JSON.stringify(this.wayPlaces));
       
       this.mapsAPILoader.load().then(() => {
@@ -139,6 +136,17 @@ export class WayParamsPageComponent implements OnInit{
             });
         });
       })
+    }
+
+    setCity(){
+      this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
+      this.cityName = sessionStorage.getItem('cityAddress');
+
+      this.placeService.getAll().subscribe(data =>  this.places=data);
+      this.loadPlaces();
+      if(sessionStorage.getItem("LocatsToWay")){
+        this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
+      }
     }
     locs: Array<Location> = new Array<Location>();
 
@@ -408,6 +416,13 @@ export class WayParamsPageComponent implements OnInit{
     }
 
     addToFavP(index){
+      if(!this.tokenStorageService.getUser()){
+        let messageBox = MessageBox
+        .Create('Хэй, друг)' ,'Войди в систему, чтобы сохранить место :)')
+        this.messageBoxService.present(messageBox);
+        window.scroll(0,0);
+        return 0;
+      }
       var loc = {lat: this.locations[index].lat, lng: this.locations[index].lng, placeId: this.locations[index].placeId};
       this.placeService.addPlace(loc).subscribe(data =>console.log(data));
       this.locations[index].choose = true;
@@ -493,12 +508,20 @@ export class WayParamsPageComponent implements OnInit{
         (results, status) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
 
-            for (let i = 0; i < placeCount; i++) {
+            if (results.length < placeCount){
+              this.placeCount -= Number(placeCount) - Number(results.length);
+              console.log("res",results);
+              console.log("res",placeCount);
+              console.log("res",results.length);
+            }
+              for (let i = 0; i < placeCount; i++) {
                 console.log(this.index);
                 locats.push({lat: results[i].geometry.location.lat(), lng:  results[i].geometry.location.lng(),placeId: results[i].place_id , choose: false, addedToWay: false});
                 locats[this.index]['rating'] = results[i]['rating'];
                 this.index ++;
             }
+            
+           
 
             for(var t = 0; t < locats.length; t++)
             {
@@ -542,7 +565,7 @@ export class WayParamsPageComponent implements OnInit{
                 {
                   sessionStorage.setItem("placesFromRoute", JSON.stringify(data));
                   console.log("params" + sessionStorage.getItem("placesFromRoute"));
-                  window.location.replace("/mapRoutePage");
+                  this.router.navigate(['/mapRoutePage']);
                 }
               );
             }

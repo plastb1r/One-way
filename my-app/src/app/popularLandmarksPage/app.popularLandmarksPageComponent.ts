@@ -5,6 +5,9 @@ import { PlaceDetails } from '../domens/placeDetails';
 import { PlacesService } from '../services/places.service';
 import { DataService } from '../services/data.service';
 import { ThrowStmt } from '@angular/compiler';
+import { TriggerService } from '../services/trigger.service';
+import { MessageBox, MessageBoxService } from 'message-box-plugin';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'popular_landmarks',
@@ -29,11 +32,20 @@ export class PopularLandmarksPageComponent implements OnInit{
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private placeService: PlacesService
+    private placeService: PlacesService,
+    private triggerService: TriggerService,
+    private messageBoxService: MessageBoxService,
+    private tokenStorageService: TokenStorageService,
   )
   {}
   
   ngOnInit() {
+    this.setCity();
+    this.triggerService.trigger$.subscribe(() => this.setCity());
+
+  }
+
+  setCity(){
     this.cityLocation = JSON.parse(sessionStorage.getItem('cityAddressLocat'));
     this.cityName = sessionStorage.getItem('cityAddress');
     this.placeService.getAll().subscribe(data => this.places=data);
@@ -41,8 +53,6 @@ export class PopularLandmarksPageComponent implements OnInit{
     if(sessionStorage.getItem("LocatsToWay")){
       this.wayPlaces = JSON.parse(sessionStorage.getItem("LocatsToWay"));
     }
-    console.log("Way" + this.wayPlaces);
-
   }
 
   loadPlaces(){
@@ -181,6 +191,13 @@ export class PopularLandmarksPageComponent implements OnInit{
   }
 
   addToFavP(index){
+    if(!this.tokenStorageService.getUser()){
+      let messageBox = MessageBox
+      .Create('Хэй, друг)' ,'Войди в систему, чтобы сохранить место :)')
+      this.messageBoxService.present(messageBox);
+      window.scroll(0,0);
+      return 0;
+    }
     var loc = {lat: this.locations[index].lat, lng: this.locations[index].lng, placeId: this.locations[index].placeId};
     this.placeService.addPlace(loc).subscribe(data =>console.log(data));
     this.locations[index].choose = true;

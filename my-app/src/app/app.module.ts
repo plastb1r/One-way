@@ -18,15 +18,13 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { ParametersService } from 'src/app/services/parameters.service';
 import {MapRoutePageComponent} from './mapRoutePage/app.mapRoutePageComponent';
 import { MessageBoxModule } from  'message-box-plugin';
+import { RatingModule } from 'ng-starrating';
 
 
 import {
     GoogleApiModule,
-    GoogleApiService,
-    GoogleAuthService,
     NgGapiClientConfig,
     NG_GAPI_CONFIG,
-    GoogleApiConfig
 } from "ng-gapi";
 import { HeaderComponent } from './header/app.headerComponent';
 import {FooterComponent } from './footer/app.footerComponent';
@@ -53,6 +51,11 @@ import { PlacesService } from './services/places.service';
 import { RoutesService } from './services/routes.service';
 import { PlaceOnRouteService } from './services/placesOnRoute.service';
 import {RouteOnMapComponent} from './routeOnMap/app.routeOnMapComponent';
+import{TriggerService}from './services/trigger.service';
+import { StarRatingModule } from 'angular-star-rating';
+import { NgxStarsModule } from 'ngx-stars';
+
+
 
 let gapiClientConfig: NgGapiClientConfig = {
     client_id: "951523443973-82b3n43cgkbntlrv9gcucinukkl5n36a.apps.googleusercontent.com",
@@ -101,6 +104,10 @@ let gapiClientConfig: NgGapiClientConfig = {
     NgbModule,
     AgmDirectionModule,
     MessageBoxModule,
+    RatingModule,
+    StarRatingModule,
+    
+    NgxStarsModule,
     RouterModule.forRoot([{
       path: 'redirect',
       component: AppComponent
@@ -114,7 +121,8 @@ let gapiClientConfig: NgGapiClientConfig = {
       libraries: ['places']
     })
   ],
-  providers: [DataService, HttpService, UserService, FooService,ParametersService, authInterceptorProviders, PlacesService, RoutesService, PlaceOnRouteService],
+
+  providers: [DataService, HttpService, UserService, FooService,ParametersService, authInterceptorProviders, PlacesService, RoutesService, PlaceOnRouteService, TriggerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

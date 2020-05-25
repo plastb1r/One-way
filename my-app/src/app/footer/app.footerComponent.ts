@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { TriggerService } from '../services/trigger.service';
 
 @Component({
   selector: 'my-footer',
@@ -11,12 +12,15 @@ import { TokenStorageService } from '../_services/token-storage.service';
 export class FooterComponent implements OnInit{
   isLoggedIn = false;
   username: string;
-  constructor(private data: DataService ,
-    private tokenStorageService: TokenStorageService
-  )
-  {}
+  constructor(private tokenStorageService: TokenStorageService,
+    private triggerService: TriggerService) { }
 
-  ngOnInit(){
+  ngOnInit() {
+    this.checkLogin();
+    this.triggerService.trigger$.subscribe(() => this.checkLogin());
+  }
+
+  checkLogin(){
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {
@@ -24,4 +28,5 @@ export class FooterComponent implements OnInit{
       this.username = user.username;
     }
   }
+  
 }

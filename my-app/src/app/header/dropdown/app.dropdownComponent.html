@@ -1,14 +1,13 @@
 <div class="row">
   <div class="col">
-    <div ngbDropdown #myDrop="ngbDropdown" [autoClose]="true" class="d-inline-block">
+    <div ngbDropdown  class="d-inline-block">
       <button class="btn" id="dropdownForm1" ngbDropdownToggle>Выбрать город</button>
       <div ngbDropdownMenu aria-labelledby="dropdownForm1">
         <form class="px-4 py-3">
           <div class="form-group">
             <label for="exampleDropdownFormEmail1">Какой город ищем?</label>
-            <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Москва" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #searche>
+            <input type="text" class="form-control"  placeholder="Москва"  #searche>
           </div>
-          <button class="btn btn-grey my-2 my-sm-2" type="submit" (click)="changeCity(); myDrop.close();">Сохранить</button>
         </form>
         <li class="setting"> 
           <a class ="setting__link" routerLink="/signUpPage" ngbDropdownItem> Зарегистрируйся!</a>

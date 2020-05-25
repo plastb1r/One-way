@@ -16,21 +16,14 @@
                     </div>
 
                     <ul class="min-list listing-header__detail">
-                      <li>
-                        <span class="listing__score t-center">{{rating}}</span>
-                        <span class="listing__review c-dusty-gray">
-                        <span class="stars-outer" data-rating="4.5">
-                          <span class="stars-inner"></span>
-                        </span>
-                      </span>
-                      </li>
+                        <span class="listing__score t-center">{{rating}}</span>  |
                       <li>
                         <span *ngFor="let type of types">{{type}} |</span>
                       </li>
                       <li>
                       </li>
                     </ul>
-                    <ul class="min-list inline-list listing-actions t-center">
+                    <ul class="min-list inline-list listing-actions">
                       <li class="t-center listing-action listing-action--favorite">
                         <a (click)="addToFavP()">
                           <i class="fa fa-heart c-silver-charlice"></i>
