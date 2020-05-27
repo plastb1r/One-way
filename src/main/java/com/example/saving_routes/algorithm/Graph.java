@@ -107,7 +107,8 @@ public class Graph {
                 curSum += getDuration(nodeArray.get(permutations.get(i).get(j)),  nodeArray.get(permutations.get(i).get(j+1)));
                 if(j + 1 == permutations.get(i).size() - 1)
                 { 
-                    curSum += getDuration(nodeArray.get(permutations.get(i).get(j)), endPoint);
+                    int r = permutations.get(i).get(j + 1);
+                    curSum += getDuration(nodeArray.get(permutations.get(i).get(j + 1)), endPoint);
                 }
             } 
             sums.add(i, curSum);;
@@ -116,6 +117,7 @@ public class Graph {
         ArrayList<Node> permuteNodes = new ArrayList<Node>();
         int index = getIndexOfMinTime(sums);
         for (int i = 0; i < nodeArray.size(); i++){
+
             permuteNodes.add( nodeArray.get(permutations.get(index).get(i))); 
         }
         setMinWay(startPoint, permuteNodes, endPoint);
@@ -146,13 +148,12 @@ public class Graph {
     }
 
     public boolean haveEdge(Node n1, Node n2){ // function checks if there is an edge between two nodes
-        boolean res = false;
         for (Edge edge : n1.getEdges()) {
             if(edge.getEndNode().equals(n2)){
-               res = true;
+               return true;
             }
         }
-        return res;
+        return false;
     }
 
 

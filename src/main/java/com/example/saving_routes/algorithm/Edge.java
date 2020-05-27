@@ -8,22 +8,22 @@ public class Edge {
     private Node endNode;
     private Long duration;
     private String travelMode;
-    private BigDecimal cost;
+    //private BigDecimal cost;
 
     public Edge() {
         startNode = new Node();
         endNode = new Node();
         duration = Long.valueOf(0);
         travelMode = "driving";
-        cost = BigDecimal.valueOf(0.0);
+        //cost = BigDecimal.valueOf(0.0);
     }
 
-    public Edge(Node startNode, Node endNode, Long duration, String travelMode, BigDecimal cost) {
+    public Edge(Node startNode, Node endNode, Long duration, String travelMode/*, BigDecimal cost*/) {
         this.startNode = startNode;
         this.endNode = endNode;
         this.duration = duration;
         this.travelMode = travelMode;
-        this.cost = cost;
+        //this.cost = cost;
     }
 
     public Node getStartNode() {
@@ -58,13 +58,13 @@ public class Edge {
         this.travelMode = travelMode;
     }
 
-    public BigDecimal getCost() {
+    /*public BigDecimal getCost() {
         return cost;
     }
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
@@ -74,12 +74,12 @@ public class Edge {
         return Objects.equals(startNode, edge.startNode) &&
                 Objects.equals(endNode, edge.endNode) &&
                 Objects.equals(duration, edge.duration) &&
-                Objects.equals(travelMode, edge.travelMode) &&
-                Objects.equals(cost, edge.cost);
+                Objects.equals(travelMode, edge.travelMode);// &&
+                //Objects.equals(cost, edge.cost);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startNode, endNode, duration, travelMode, cost);
+        return Objects.hash(startNode, endNode, duration, travelMode/*, cost*/);
     }
 }

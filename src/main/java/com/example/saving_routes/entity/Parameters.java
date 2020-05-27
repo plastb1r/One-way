@@ -16,6 +16,13 @@ public class Parameters {
     private ArrayList<Place> locats;
     private String[] transportations;
 
+    public Parameters(Place startPoint, Place endPoint,ArrayList<Place> locats, String[] transportations) {
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.locats = locats;
+        this.transportations=transportations;
+    }
+
     public Place getStartPoint() {
         return startPoint;
     }

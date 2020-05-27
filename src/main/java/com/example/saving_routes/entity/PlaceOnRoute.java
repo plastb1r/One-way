@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "places_on_route")
 public class PlaceOnRoute {
